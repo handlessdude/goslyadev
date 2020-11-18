@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour
     public Transform left_ground;
     public Transform right_ground;
     public Transform middle_ground;
-    public LayerMask groundLayer = 8;
+    //2^(ИД слоя), поэтому 256
+    public int groundLayer = 256;
 
     public float movementSpeed = 4.0f;
 
@@ -18,7 +19,7 @@ public class PlayerController : MonoBehaviour
     float horizontalDirection = 0.0f;
 
     float verticalDirection = 0.0f;
-    float jumpForce = 400.0f;
+    float jumpForce = 600.0f;
     bool isInAir = false;
     bool jumping = false;
 
@@ -54,14 +55,29 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        horizontalDirection = Input.GetAxis("Horizontal");
+        //TODO: сделать нормальную систему назначения клавиш
 
-        //сделано для того, чтобы не присваивать 0 в поле "Horizontal" в аниматоре,
-        //ибо если это делать, то при остановке персонаж будет поворачиваться в дефолтное положение,
-        //то есть вправо, что не имеет смысла, если игрок до остановки шёл влево.
-        if (horizontalDirection != 0)
+        if (Input.GetKey("a"))
         {
+            horizontalDirection = -1.0f;
             animator.SetFloat(475924382, horizontalDirection); //по сути animator.SetFloat("Horizontal", horizontalDirection);
+        }
+        else if (Input.GetKey("d"))
+        {
+            horizontalDirection = 1.0f;
+            animator.SetFloat(475924382, horizontalDirection);
+        }
+        else
+        {
+            //сделано для того, чтобы не присваивать 0 в поле "Horizontal" в аниматоре,
+            //ибо если это делать, то при остановке персонаж будет поворачиваться в дефолтное положение,
+            //то есть вправо, что не имеет смысла, если игрок до остановки шёл влево.
+            
+            if (horizontalDirection != 0)
+            {
+                animator.SetFloat(475924382, horizontalDirection/100); 
+            }
+            horizontalDirection = 0.0f;
         }
 
         if (Input.GetButtonDown("Jump") && !jumping && IsOnGround())
@@ -72,19 +88,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log(horizontalDirection);
-        if (horizontalDirection == 0)
-        {
-            rb.velocity = new Vector2(0.0f, rb.velocity.y);
-        }
-        else if (horizontalDirection > 0)
-        {
-            rb.position = new Vector2(rb.position.x + movementSpeed * Time.deltaTime, rb.position.y);
-        }
-        else
-        {
-            rb.position = new Vector2(rb.position.x - movementSpeed * Time.deltaTime, rb.position.y);
-        }
+        rb.position = new Vector2(rb.position.x + horizontalDirection*movementSpeed * Time.deltaTime, rb.position.y);
 
         if (jumping)
         {
@@ -94,7 +98,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                if (isInAir)
+                if (isInAir && IsOnGround())
                 {
                     Grounded();
                 }
@@ -104,9 +108,9 @@ public class PlayerController : MonoBehaviour
 
     bool IsOnGround()
     {
-        return (Physics2D.OverlapCircleAll(middle_ground.position, checkRadius, ~groundLayer).Any() ||
-            Physics2D.OverlapCircleAll(left_ground.position, checkRadius, ~groundLayer).Any() ||
-            Physics2D.OverlapCircleAll(right_ground.position, checkRadius, ~groundLayer).Any()) && rb.velocity.y < 0.0001f;
+        return (Physics2D.OverlapCircleAll(middle_ground.position, checkRadius, groundLayer).Any() ||
+            Physics2D.OverlapCircleAll(left_ground.position, checkRadius, groundLayer).Any() ||
+            Physics2D.OverlapCircleAll(right_ground.position, checkRadius, groundLayer).Any()) && rb.velocity.y < 0.0001f;
     }
 
     void Jump()
