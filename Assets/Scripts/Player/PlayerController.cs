@@ -55,8 +55,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //TODO: сделать нормальную систему назначения клавиш
-
         if (InputManager.GetKey(KeyAction.MoveLeft))
         {
             horizontalDirection = -1.0f;

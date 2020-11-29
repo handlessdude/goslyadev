@@ -7,6 +7,7 @@ public enum KeyAction
     MoveLeft,
     MoveRight,
     Jump,
+    Pause
 }
 
 public static class InputManager
@@ -18,7 +19,8 @@ public static class InputManager
         {
             [KeyAction.MoveLeft] = new System.Tuple<KeyCode, KeyCode>(KeyCode.LeftArrow, KeyCode.A),
             [KeyAction.MoveRight] = new System.Tuple<KeyCode, KeyCode>(KeyCode.RightArrow, KeyCode.D),
-            [KeyAction.Jump] = new System.Tuple<KeyCode, KeyCode>(KeyCode.UpArrow, KeyCode.Space)
+            [KeyAction.Jump] = new System.Tuple<KeyCode, KeyCode>(KeyCode.UpArrow, KeyCode.Space),
+            [KeyAction.Pause] = new System.Tuple<KeyCode, KeyCode>(KeyCode.P, KeyCode.Escape)
         };
 
     static bool isInit = false;

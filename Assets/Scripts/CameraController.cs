@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour
         if (target)
         {
             Vector3 targetPosition = new Vector3(target.transform.position.x, target.transform.position.y, z);
-            pixCamera.pixelSnapping = targetPosition == transform.position ? true : false;
+            pixCamera.pixelSnapping = targetPosition == transform.position;
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref __currentVelocity, smoothingTime);
         }
     }

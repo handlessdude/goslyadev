@@ -10,3 +10,5 @@
 "options_windowed","windowed","оконный","Fenstermodus"
 "options_fullscreen","fullscreen","полноэкранный","Vollbildmodus"
 "not_implemented_warning","not implemented yet!","данная функция ещё не добавлена!"," Diese Funktion ist noch nicht implementiert"
+"pause_save_game","SAVE GAME","СОХРАНИТЬ","SPIEL SPEICHERN"
+"pause_main_menu","MAIN MENU","ГЛАВНОЕ МЕНЮ","HAUPTMENÜ"
