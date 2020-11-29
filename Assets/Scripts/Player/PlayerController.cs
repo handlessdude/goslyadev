@@ -57,12 +57,12 @@ public class PlayerController : MonoBehaviour
     {
         //TODO: сделать нормальную систему назначения клавиш
 
-        if (Input.GetKey("a"))
+        if (InputManager.GetKey(KeyAction.MoveLeft))
         {
             horizontalDirection = -1.0f;
             animator.SetFloat(475924382, horizontalDirection); //по сути animator.SetFloat("Horizontal", horizontalDirection);
         }
-        else if (Input.GetKey("d"))
+        else if (InputManager.GetKey(KeyAction.MoveRight))
         {
             horizontalDirection = 1.0f;
             animator.SetFloat(475924382, horizontalDirection);
@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
             horizontalDirection = 0.0f;
         }
 
-        if (Input.GetButtonDown("Jump") && !jumping && IsOnGround())
+        if (InputManager.GetKeyDown(KeyAction.Jump) && !jumping && IsOnGround())
         {
             Jump();
         }
