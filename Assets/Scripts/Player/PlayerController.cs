@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public Transform left_ground;
     public Transform right_ground;
     public Transform middle_ground;
+    public Transform cameraTarget;
     //2^(ИД слоя), поэтому 256
     public int groundLayer = 256;
 
@@ -24,6 +25,20 @@ public class PlayerController : MonoBehaviour
     bool jumping = false;
 
     float checkRadius = 0.05f;
+
+    TargetPosition cameraTargetPosition = TargetPosition.OnCharacter;
+
+    //объекты создаются здесь, чтобы потом не создавать их каждый раз
+    Vector3 CameraUpPosition = new Vector3(0, 3);
+    Vector3 CameraDownPosistion = new Vector3(0, -3);
+    bool movementInput = false;
+
+    enum TargetPosition
+    {
+        Up,
+        OnCharacter,
+        Down
+    }
 
     void Start()
     {
@@ -51,6 +66,11 @@ public class PlayerController : MonoBehaviour
         {
             animator = GetComponent<Animator>();
         }
+
+        if (!cameraTarget)
+        {
+            cameraTarget = transform.Find("CameraTarget");
+        }
     }
 
     void Update()
@@ -59,11 +79,16 @@ public class PlayerController : MonoBehaviour
         {
             horizontalDirection = -1.0f;
             animator.SetFloat(475924382, horizontalDirection); //по сути animator.SetFloat("Horizontal", horizontalDirection);
+            //TODO: movementInput это костыль. Надо убрать.
+            movementInput = true;
+            ResetCamera();
         }
         else if (InputManager.GetKey(KeyAction.MoveRight))
         {
             horizontalDirection = 1.0f;
             animator.SetFloat(475924382, horizontalDirection);
+            movementInput = true;
+            ResetCamera();
         }
         else
         {
@@ -78,10 +103,33 @@ public class PlayerController : MonoBehaviour
             horizontalDirection = 0.0f;
         }
 
+        if (InputManager.GetKey(KeyAction.LookUp) && !jumping && !movementInput)
+        {
+            LookUp();
+        }
+
+        if (InputManager.GetKey(KeyAction.LookDown) && !jumping && !movementInput)
+        {
+            LookDown();
+        }
+
+        if (InputManager.GetKeyUp(KeyAction.LookUp))
+        {
+            ResetCamera(TargetPosition.Up);
+        }
+
+        if (InputManager.GetKeyUp(KeyAction.LookDown))
+        {
+            ResetCamera(TargetPosition.Down);
+        }
+
         if (InputManager.GetKeyDown(KeyAction.Jump) && !jumping && IsOnGround())
         {
             Jump();
+            ResetCamera();
         }
+
+        movementInput = false;
     }
 
     private void FixedUpdate()
@@ -101,6 +149,36 @@ public class PlayerController : MonoBehaviour
                     Grounded();
                 }
             }
+        }
+    }
+
+    void LookUp()
+    {
+        cameraTargetPosition = TargetPosition.Up;
+        cameraTarget.localPosition = CameraUpPosition;
+    }
+
+    void LookDown()
+    {
+        cameraTargetPosition = TargetPosition.Down;
+        cameraTarget.localPosition = CameraDownPosistion;
+    }
+
+    void ResetCamera(TargetPosition tp)
+    {
+        if (tp == cameraTargetPosition)
+        {
+            cameraTargetPosition = TargetPosition.OnCharacter;
+            cameraTarget.localPosition = Vector3.zero;
+        }
+    }
+
+    void ResetCamera()
+    {
+        if (cameraTargetPosition != TargetPosition.OnCharacter)
+        {
+            cameraTargetPosition = TargetPosition.OnCharacter;
+            cameraTarget.localPosition = Vector3.zero;
         }
     }
 

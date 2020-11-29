@@ -22,8 +22,10 @@ public static class InputManager
         {
             [KeyAction.MoveLeft] = new System.Tuple<KeyCode, KeyCode>(KeyCode.LeftArrow, KeyCode.A),
             [KeyAction.MoveRight] = new System.Tuple<KeyCode, KeyCode>(KeyCode.RightArrow, KeyCode.D),
-            [KeyAction.Jump] = new System.Tuple<KeyCode, KeyCode>(KeyCode.UpArrow, KeyCode.Space),
-            [KeyAction.Pause] = new System.Tuple<KeyCode, KeyCode>(KeyCode.P, KeyCode.Escape)
+            [KeyAction.Jump] = new System.Tuple<KeyCode, KeyCode>(KeyCode.None, KeyCode.Space),
+            [KeyAction.Pause] = new System.Tuple<KeyCode, KeyCode>(KeyCode.P, KeyCode.Escape),
+            [KeyAction.LookDown] = new System.Tuple<KeyCode, KeyCode>(KeyCode.S, KeyCode.DownArrow),
+            [KeyAction.LookUp] = new System.Tuple<KeyCode, KeyCode>(KeyCode.W, KeyCode.UpArrow)
         };
 
     static bool isInit = false;
@@ -59,5 +61,18 @@ public static class InputManager
             return false;
         }
         return Input.GetKeyDown(bindings[kA].Item1) || Input.GetKeyDown(bindings[kA].Item2);
+    }
+
+    public static bool GetKeyUp(KeyAction kA)
+    {
+        if (!isInit)
+        {
+            Init();
+        }
+        if (!bindings.ContainsKey(kA))
+        {
+            return false;
+        }
+        return Input.GetKeyUp(bindings[kA].Item1) || Input.GetKeyUp(bindings[kA].Item2);
     }
 }

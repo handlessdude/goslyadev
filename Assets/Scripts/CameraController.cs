@@ -8,7 +8,6 @@ public class CameraController : MonoBehaviour
     public GameObject target;
     public PixelPerfectCamera pixCamera;
     
-    public 
     float z = -10f;
     float smoothingTime = 0.2f;
     Vector3 __currentVelocity;
