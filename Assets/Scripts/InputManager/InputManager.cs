@@ -7,7 +7,10 @@ public enum KeyAction
     MoveLeft,
     MoveRight,
     Jump,
-    Pause
+    Pause,
+    LookUp,
+    LookDown,
+
 }
 
 public static class InputManager
