@@ -82,4 +82,36 @@ public static class InputManager
         }
         return Input.GetKeyUp(bindings[kA].Item1) || Input.GetKeyUp(bindings[kA].Item2);
     }
+
+    public static KeyCode GetPrimaryBinding(KeyAction kA)
+    {
+        if (!isInit)
+        {
+            Init();
+        }
+        if (!bindings.ContainsKey(kA))
+        {
+            return KeyCode.None;
+        }
+        else
+        {
+            return bindings[kA].Item1;
+        }
+    }
+
+    public static KeyCode GetSecondaryBinding(KeyAction kA)
+    {
+        if (!isInit)
+        {
+            Init();
+        }
+        if (!bindings.ContainsKey(kA))
+        {
+            return KeyCode.None;
+        }
+        else
+        {
+            return bindings[kA].Item2;
+        }
+    }
 }
