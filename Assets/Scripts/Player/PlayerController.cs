@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
             ResetCamera(TargetPosition.Down);
         }
 
-        if (InputManager.GetKeyDown(KeyAction.Jump) && !jumping && IsOnGround())
+        if (InputManager.GetKey(KeyAction.Jump) && !jumping && IsOnGround())
         {
             Jump();
             ResetCamera();

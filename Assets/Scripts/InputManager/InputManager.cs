@@ -10,7 +10,10 @@ public enum KeyAction
     Pause,
     LookUp,
     LookDown,
-
+    WorldCyan,
+    WorldMagenta,
+    WorldGreen,
+    CameraScale
 }
 
 public static class InputManager
@@ -25,7 +28,11 @@ public static class InputManager
             [KeyAction.Jump] = new System.Tuple<KeyCode, KeyCode>(KeyCode.None, KeyCode.Space),
             [KeyAction.Pause] = new System.Tuple<KeyCode, KeyCode>(KeyCode.P, KeyCode.Escape),
             [KeyAction.LookDown] = new System.Tuple<KeyCode, KeyCode>(KeyCode.S, KeyCode.DownArrow),
-            [KeyAction.LookUp] = new System.Tuple<KeyCode, KeyCode>(KeyCode.W, KeyCode.UpArrow)
+            [KeyAction.LookUp] = new System.Tuple<KeyCode, KeyCode>(KeyCode.W, KeyCode.UpArrow),
+            [KeyAction.WorldCyan] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Alpha1, KeyCode.C),
+            [KeyAction.WorldMagenta] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Alpha2, KeyCode.F),
+            [KeyAction.WorldGreen] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Alpha3, KeyCode.G),
+            [KeyAction.CameraScale] = new System.Tuple<KeyCode, KeyCode>(KeyCode.V, KeyCode.None)
         };
 
     static bool isInit = false;

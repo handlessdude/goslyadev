@@ -4,7 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Ground
+  - CyanWorld
+  - MagentaWorld
+  - GreenWorld
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - 
   - Ground
   - PostProcessing
-  - 
+  - Bloom
   - 
   - 
   - 
