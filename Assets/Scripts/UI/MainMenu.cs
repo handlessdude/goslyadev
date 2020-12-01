@@ -37,7 +37,10 @@ public class MainMenu : MonoBehaviour
     public void NewGame()
     {
         Debug.Log("STARTING NEW GAME");
+        //TODO: [!] !!!!! это плохое решение. когда-нибудь мы застрянем в неверном PlayerControllability
+        GameplayState.controllability = PlayerControllability.Full;
         SceneManager.LoadScene(1);
+        
     }
 
     public void LoadGame()

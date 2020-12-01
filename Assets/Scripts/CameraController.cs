@@ -49,6 +49,7 @@ public class CameraController : MonoBehaviour
                 ZoomOut();
             }
         }
+        
 
         if (zoomState == ZoomState.ZoomingIn)
         {
@@ -81,13 +82,13 @@ public class CameraController : MonoBehaviour
         
     }
 
-    void ZoomIn()
+    public void ZoomIn()
     {
         zoomedOut = false;
         zoomState = ZoomState.ZoomingIn;
     }
 
-    void ZoomOut()
+    public void ZoomOut()
     {
         zoomedOut = true;
         zoomState = ZoomState.ZoomingOut;

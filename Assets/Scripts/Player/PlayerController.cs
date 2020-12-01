@@ -75,58 +75,69 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (InputManager.GetKey(KeyAction.MoveLeft))
+        if (GameplayState.controllability == PlayerControllability.Full)
         {
-            horizontalDirection = -1.0f;
-            animator.SetFloat(475924382, horizontalDirection); //по сути animator.SetFloat("Horizontal", horizontalDirection);
-            //TODO: movementInput это костыль. Надо убрать.
-            movementInput = true;
-            ResetCamera();
-        }
-        else if (InputManager.GetKey(KeyAction.MoveRight))
-        {
-            horizontalDirection = 1.0f;
-            animator.SetFloat(475924382, horizontalDirection);
-            movementInput = true;
-            ResetCamera();
-        }
+            if (InputManager.GetKey(KeyAction.MoveLeft))
+            {
+                horizontalDirection = -1.0f;
+                animator.SetFloat(475924382, horizontalDirection); //по сути animator.SetFloat("Horizontal", horizontalDirection);
+                                                                   //TODO: movementInput это костыль. Надо убрать.
+                movementInput = true;
+                ResetCamera();
+            }
+            else if (InputManager.GetKey(KeyAction.MoveRight))
+            {
+                horizontalDirection = 1.0f;
+                animator.SetFloat(475924382, horizontalDirection);
+                movementInput = true;
+                ResetCamera();
+            }
+            else
+            {
+                //сделано для того, чтобы не присваивать 0 в поле "Horizontal" в аниматоре,
+                //ибо если это делать, то при остановке персонаж будет поворачиваться в дефолтное положение,
+                //то есть вправо, что не имеет смысла, если игрок до остановки шёл влево.
+
+                if (horizontalDirection != 0)
+                {
+                    animator.SetFloat(475924382, horizontalDirection / 100);
+                }
+                horizontalDirection = 0.0f;
+            }
+
+            if (InputManager.GetKey(KeyAction.LookUp) && !jumping && !movementInput)
+            {
+                LookUp();
+            }
+
+            if (InputManager.GetKey(KeyAction.LookDown) && !jumping && !movementInput)
+            {
+                LookDown();
+            }
+
+            if (InputManager.GetKeyUp(KeyAction.LookUp))
+            {
+                ResetCamera(TargetPosition.Up);
+            }
+
+            if (InputManager.GetKeyUp(KeyAction.LookDown))
+            {
+                ResetCamera(TargetPosition.Down);
+            }
+
+            if (InputManager.GetKey(KeyAction.Jump) && !jumping && IsOnGround())
+            {
+                Jump();
+                ResetCamera();
+            }
+        } //ветка else здесь костыль
         else
         {
-            //сделано для того, чтобы не присваивать 0 в поле "Horizontal" в аниматоре,
-            //ибо если это делать, то при остановке персонаж будет поворачиваться в дефолтное положение,
-            //то есть вправо, что не имеет смысла, если игрок до остановки шёл влево.
-            
             if (horizontalDirection != 0)
             {
-                animator.SetFloat(475924382, horizontalDirection/100); 
+                animator.SetFloat(475924382, horizontalDirection / 100);
             }
             horizontalDirection = 0.0f;
-        }
-
-        if (InputManager.GetKey(KeyAction.LookUp) && !jumping && !movementInput)
-        {
-            LookUp();
-        }
-
-        if (InputManager.GetKey(KeyAction.LookDown) && !jumping && !movementInput)
-        {
-            LookDown();
-        }
-
-        if (InputManager.GetKeyUp(KeyAction.LookUp))
-        {
-            ResetCamera(TargetPosition.Up);
-        }
-
-        if (InputManager.GetKeyUp(KeyAction.LookDown))
-        {
-            ResetCamera(TargetPosition.Down);
-        }
-
-        if (InputManager.GetKey(KeyAction.Jump) && !jumping && IsOnGround())
-        {
-            Jump();
-            ResetCamera();
         }
 
         movementInput = false;

@@ -26,25 +26,9 @@ public class OptionsMenu : MonoBehaviour
         {
             float val;
             audioMixer.GetFloat("SFXVolume", out val);
-            if (val == 0)
-            {
-                SFXSlider.value = 1f;
-            }
-            else
-            {
-                SFXSlider.value = Mathf.Pow(10, val/20);
-            }
+            SFXSlider.value = Mathf.Pow(10, val/20);
             audioMixer.GetFloat("MusicVolume", out val);
-            Debug.Log("val" + val);
-            if (val == 0)
-            {
-                SFXSlider.value = 1f;
-            }
-            else
-            { 
-                MusicSlider.value = Mathf.Pow(10, val/20);
-                Debug.Log(MusicSlider.value );
-            }
+            MusicSlider.value = Mathf.Pow(10, val/20);
         }
     }
 

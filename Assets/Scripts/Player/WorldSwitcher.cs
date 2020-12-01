@@ -67,37 +67,40 @@ public class WorldSwitcher : MonoBehaviour
 
     void Update()
     {
-        if (InputManager.GetKeyDown(KeyAction.WorldGreen))
-        {
-            if (currentWorld == World.green)
+        if (GameplayState.controllability == PlayerControllability.Full)
+        { 
+            if (InputManager.GetKeyDown(KeyAction.WorldGreen))
             {
-                DefaultWorld();
+                if (currentWorld == World.green)
+                {
+                    DefaultWorld();
+                }
+                else
+                {
+                    GreenWorld();
+                }
             }
-            else
+            else if (InputManager.GetKeyDown(KeyAction.WorldCyan))
             {
-                GreenWorld();
+                if (currentWorld == World.cyan)
+                {
+                    DefaultWorld();
+                }
+                else
+                {
+                    CyanWorld();
+                }
             }
-        }
-        else if (InputManager.GetKeyDown(KeyAction.WorldCyan))
-        {
-            if (currentWorld == World.cyan)
+            else if (InputManager.GetKeyDown(KeyAction.WorldMagenta))
             {
-                DefaultWorld();
-            }
-            else
-            {
-                CyanWorld();
-            }
-        }
-        else if (InputManager.GetKeyDown(KeyAction.WorldMagenta))
-        {
-            if (currentWorld == World.magenta)
-            {
-                DefaultWorld();
-            }
-            else
-            {
-                MagentaWorld();
+                if (currentWorld == World.magenta)
+                {
+                    DefaultWorld();
+                }
+                else
+                {
+                    MagentaWorld();
+                }
             }
         }
     }
@@ -128,15 +131,18 @@ public class WorldSwitcher : MonoBehaviour
         }
     }
 
-    void DefaultWorld()
+    public void DefaultWorld()
     {
-        DisableAberration();
-        foreach (GameObject go in objects[currentWorld])
+        if (currentWorld != World.none)
         {
-            go.SetActive(false);
+            DisableAberration();
+            foreach (GameObject go in objects[currentWorld])
+            {
+                go.SetActive(false);
+            }
+            currentWorld = World.none;
+            currentGlow.SetActive(false);
         }
-        currentWorld = World.none;
-        currentGlow.SetActive(false);
     }
 
     void CyanWorld()
