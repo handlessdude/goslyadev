@@ -25,6 +25,12 @@ public class MainMenu : MonoBehaviour
         {
             optionsMenu = gameObject.FindObject("Settings").gameObject;
         }
+
+        if (!optionsMenu.GetComponent<OptionsMenu>().mainMenu)
+        {
+            optionsMenu.GetComponent<OptionsMenu>().mainMenu = mainMenu;
+            optionsMenu.GetComponent<OptionsMenu>().mainMenuScript = this;
+        }
     }
 
     //MAIN MENU BUTTONS
@@ -51,35 +57,6 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("EXITING GAME");
         Application.Quit();
-    }
-
-    
-
-    //OPTIONS CONTROLS
-
-    public void ChangeWindowed(int n)
-    {
-        if (n == 0)
-        {
-            Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-        }
-        else if (n == 1)
-        {
-            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-        }
-    }
-
-    public void Controls()
-    {
-        Debug.Log("OPENING CONTROLS");
-        ShowNotImplementedWarning();
-    }
-
-
-    public void ExitOptions()
-    {
-        optionsMenu.SetActive(false);
-        mainMenu.SetActive(true);
     }
 
     public void OnLangChange(int lang)

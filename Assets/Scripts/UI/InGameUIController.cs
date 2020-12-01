@@ -5,6 +5,7 @@ using UnityEngine;
 public class InGameUIController : MonoBehaviour
 {
     public GameObject pauseMenu;
+    public GameObject PauseVolume;
 
     bool isPaused = false;
 
@@ -33,6 +34,10 @@ public class InGameUIController : MonoBehaviour
 
     void Pause()
     {
+        if (PauseVolume)
+        {
+            PauseVolume.SetActive(true);
+        }
         pauseMenu.SetActive(true);
         Cursor.visible = true;
         Time.timeScale = 0.0f;
@@ -41,6 +46,10 @@ public class InGameUIController : MonoBehaviour
 
     void ExitPause()
     {
+        if (PauseVolume)
+        {
+            PauseVolume.SetActive(false);
+        }
         pauseMenu.SetActive(false);
         Cursor.visible = false;
         Time.timeScale = 1.0f;

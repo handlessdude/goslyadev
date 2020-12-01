@@ -12,4 +12,4 @@
 "not_implemented_warning","not implemented yet!","данная функция ещё не добавлена!"," Diese Funktion ist noch nicht implementiert"
 "pause_save_game","SAVE GAME","СОХРАНИТЬ","SPIEL SPEICHERN"
 "pause_main_menu","MAIN MENU","ГЛАВНОЕ МЕНЮ","HAUPTMENÜ"
-"hint_look_up_down","press <LookUpKey>/<LookDownKey> to look up/down respectively","нажмите <LookUpKey>/<LookDownKey>, что посмотреть вверх/вниз соответственно","drücke <LookUpKey>/<LookDownKey>, um nach oben/unten zu schauen"
+"hint_look_up_down","press <LookUpKey>/<LookDownKey> to look up/down respectively","нажмите <LookUpKey>/<LookDownKey>, чтобы посмотреть вверх/вниз соответственно","drücke <LookUpKey>/<LookDownKey>, um nach oben/unten zu schauen"
