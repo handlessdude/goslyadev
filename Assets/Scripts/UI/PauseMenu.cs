@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-//TODO?: вынести опции в отедльный скрипт, общий для главного меню и этого меню
 public class PauseMenu : MainMenu
 {
 

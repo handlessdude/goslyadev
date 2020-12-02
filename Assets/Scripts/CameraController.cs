@@ -7,11 +7,22 @@ public class CameraController : MonoBehaviour
 {
     public GameObject target;
     public PixelPerfectCamera pixCamera;
-    
+
+    bool zoomedOut = true;
+
+    int resolutionX = 0;
+    int resolutionY = 0;
+
+    int refResX = 640;
+    int refResY = 360;
+
+    int zoomedRefResX = 448;
+    int zoomedRefResY = 252;
+
     float z = -10f;
     float smoothingTime = 0.2f;
     Vector3 __currentVelocity;
-    bool zoomedOut = true;
+    
     ZoomState zoomState = ZoomState.None;
 
     enum ZoomState
@@ -27,6 +38,11 @@ public class CameraController : MonoBehaviour
         {
             pixCamera = GetComponent<PixelPerfectCamera>();
         }
+    }
+
+    public bool ZoomedOut()
+    {
+        return zoomedOut;
     }
 
     void Update()
@@ -49,30 +65,78 @@ public class CameraController : MonoBehaviour
                 ZoomOut();
             }
         }
-        
 
-        if (zoomState == ZoomState.ZoomingIn)
+        //точно есть способ обыграть это лучше, но пока так
+        if ((resolutionX != Screen.width) || (resolutionY != Screen.height))
         {
-            if (pixCamera.refResolutionX > 448)
-            {
-                pixCamera.refResolutionX -= 16;
-                pixCamera.refResolutionY -= 9;
-            }
-            else
-            {
-                zoomState = ZoomState.None;
-            }
+            resolutionX = Screen.width;
+            resolutionY = Screen.height;
+            OnResolutionChanged();
         }
-        else if (zoomState == ZoomState.ZoomingOut)
+        
+    }
+
+    void OnResolutionChanged()
+    {
+        if (resolutionX % 640 == 0)
         {
-            if (pixCamera.refResolutionX < 640)
+            refResX = 640;
+        }
+        else
+        {
+            bool nSet = false;
+            bool nPlusOneSet = false;
+            int multiplier = (resolutionX / 640) + 1;
+            for (int i = resolutionX; i > 0; i--)
             {
-                pixCamera.refResolutionX += 16;
-                pixCamera.refResolutionY += 9;
+                if (i % multiplier == 0)
+                {
+                    refResX = i / multiplier;
+                    nSet = true;
+                }
+                if (i % (multiplier + 1) == 0)
+                {
+                    zoomedRefResX = i / (multiplier + 1);
+                    nPlusOneSet = true;
+                }
+                if (nPlusOneSet && nSet)
+                {
+                    break;
+                }
+            }
+
+            nSet = false;
+            nPlusOneSet = false;
+
+            multiplier = (resolutionY / 360) + 1;
+            for (int i = resolutionY; i > 0; i--)
+            {
+                if (i % multiplier == 0)
+                {
+                    refResY = i/multiplier;
+                    nSet = true;
+                }
+                if (i % (multiplier + 1) == 0)
+                {
+                    zoomedRefResY = i / (multiplier + 1);
+                    nPlusOneSet = true;
+                }
+                if (nPlusOneSet && nSet)
+                {
+                    break;
+                }
+            }
+
+            if (zoomedOut)
+            {
+                pixCamera.refResolutionX = refResX;
+                pixCamera.refResolutionY = refResY;
             }
             else
             {
-                zoomState = ZoomState.None;
+                pixCamera.refResolutionX = zoomedRefResX;
+                pixCamera.refResolutionY = zoomedRefResY;
+
             }
         }
     }
@@ -85,12 +149,16 @@ public class CameraController : MonoBehaviour
     public void ZoomIn()
     {
         zoomedOut = false;
-        zoomState = ZoomState.ZoomingIn;
+        pixCamera.refResolutionX = zoomedRefResX;
+        pixCamera.refResolutionY = zoomedRefResY;
+        //zoomState = ZoomState.ZoomingIn;
     }
 
     public void ZoomOut()
     {
         zoomedOut = true;
-        zoomState = ZoomState.ZoomingOut;
+        pixCamera.refResolutionX = refResX;
+        pixCamera.refResolutionY = refResY;
+        //zoomState = ZoomState.ZoomingOut;
     }
 }

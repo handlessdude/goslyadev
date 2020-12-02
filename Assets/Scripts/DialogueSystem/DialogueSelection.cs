@@ -33,7 +33,7 @@ public class DialogueSelection : MonoBehaviour
 
     void Update()
     {
-        if (GameplayState.controllability == PlayerControllability.InDialogue && governingNPC != null)
+        if (GameplayState.controllability == PlayerControllability.InDialogue && governingNPC != null && !GameplayState.isPaused)
         {
             if (InputManager.GetKeyDown(KeyAction.LookUp))
             {

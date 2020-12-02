@@ -18,6 +18,8 @@ public class DialogueNPC : MonoBehaviour
     float drawnDialogShowTime = 1f;
     float backgroundRollingSpeed = 0.02f;
 
+    bool zoomedOut = false;
+
     void Start()
     {
         currentDialogElement = new SequentialDialogueElement(
@@ -57,6 +59,7 @@ public class DialogueNPC : MonoBehaviour
         player.GetComponent<WorldSwitcher>().DefaultWorld();
         Transform cameraTarget = player.transform.Find("CameraTarget");
         cameraTarget.position = new Vector2((cameraTarget.position.x+transform.position.x)/2, (cameraTarget.position.y + transform.position.y) / 2+1f);
+        zoomedOut = cc.ZoomedOut();
         cc.ZoomIn();
         DrawDialogueText();
     }
@@ -66,12 +69,12 @@ public class DialogueNPC : MonoBehaviour
         if (currentDialogElement.isOnCharacter)
         {
             currentDialogueBox = Instantiate(dialogueBoxPrefab, player.transform);
-            currentDialogueBox.transform.position = new Vector2(player.transform.position.x, player.transform.position.y + 2);
+            currentDialogueBox.transform.position = new Vector2(player.transform.position.x, player.transform.position.y + 1.5f);
         }
         else
         {
             currentDialogueBox = Instantiate(dialogueBoxPrefab, transform);
-            currentDialogueBox.transform.position = new Vector2(transform.position.x, transform.position.y + 2);
+            currentDialogueBox.transform.position = new Vector2(transform.position.x, transform.position.y + 1.5f);
         }
 
         string text = Localization.GetLocalizedString(currentDialogElement.textValue);
@@ -158,6 +161,10 @@ public class DialogueNPC : MonoBehaviour
 
     void DialogueExit()
     {
+        if (zoomedOut)
+        {
+            cc.ZoomOut();
+        }
         GameplayState.controllability = PlayerControllability.Full;
         Transform cameraTarget = player.transform.Find("CameraTarget");
         cameraTarget.localPosition = Vector3.zero;

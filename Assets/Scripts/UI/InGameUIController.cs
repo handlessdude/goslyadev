@@ -7,7 +7,6 @@ public class InGameUIController : MonoBehaviour
     public GameObject pauseMenu;
     public GameObject PauseVolume;
 
-    bool isPaused = false;
 
     void Start()
     {
@@ -21,7 +20,7 @@ public class InGameUIController : MonoBehaviour
     {
         if (InputManager.GetKeyDown(KeyAction.Pause))
         {
-            if (isPaused)
+            if (GameplayState.isPaused)
             {
                 ExitPause();
             }
@@ -41,7 +40,7 @@ public class InGameUIController : MonoBehaviour
         pauseMenu.SetActive(true);
         Cursor.visible = true;
         Time.timeScale = 0.0f;
-        isPaused = true;
+        GameplayState.isPaused = true;
     }
 
     void ExitPause()
@@ -53,6 +52,6 @@ public class InGameUIController : MonoBehaviour
         pauseMenu.SetActive(false);
         Cursor.visible = false;
         Time.timeScale = 1.0f;
-        isPaused = false;
+        GameplayState.isPaused = false;
     }
 }
