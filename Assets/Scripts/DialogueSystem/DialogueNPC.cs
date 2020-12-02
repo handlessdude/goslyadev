@@ -8,6 +8,7 @@ public class DialogueNPC : MonoBehaviour
     public GameObject dialogueBoxPrefab;
     public DialogueElement currentDialogElement;
     public CameraController cc;
+    public DialogueSelection dialogueSelection;
     public GameObject player;
 
     GameObject currentDialogueBox;
@@ -19,18 +20,18 @@ public class DialogueNPC : MonoBehaviour
 
     void Start()
     {
-        /*currentDialogElement = new SequentialDialogueElement(
-        "dialogue_test1", true, new SequentialDialogueElement(
-            "dialogue_test2", false, new SelectionDialogueElement("dialogue_test3",
-                new List<string>() { "dialogue_option_test1", "dialogue_options_test2" },
-                new List<System.Func<DialogueElement>>() {
-                    () => currentDialogElement,
-                    () => new DialogueEndElement()
-                })));;*/
-
         currentDialogElement = new SequentialDialogueElement(
         "dialogue_test1", true, new SequentialDialogueElement(
-            "dialogue_test2", false, new DialogueEndElement()));
+            "dialogue_test2", false, new SelectionDialogueElement("dialogue_test3",
+                new string[] { "dialogue_option_test1", "dialogue_options_test2" },
+                new System.Func<DialogueElement>[] {
+                    () => currentDialogElement,
+                    () => new DialogueEndElement(currentDialogElement)
+                })));;
+
+        /*currentDialogElement = new SequentialDialogueElement(
+        "dialogue_test1", true, new SequentialDialogueElement(
+            "dialogue_test2", false, new DialogueEndElement()));*/
     }
 
     void Update()
@@ -62,7 +63,6 @@ public class DialogueNPC : MonoBehaviour
 
     void DrawDialogueText()
     {
-        Invoke("OnDialogueDrawn", 2.0f);
         if (currentDialogElement.isOnCharacter)
         {
             currentDialogueBox = Instantiate(dialogueBoxPrefab, player.transform);
@@ -88,7 +88,6 @@ public class DialogueNPC : MonoBehaviour
         rtMain.sizeDelta = new Vector2(0, rtMain.sizeDelta.y);
         rtLeft.localPosition = new Vector2(0, rtLeft.localPosition.y);
         rtRight.localPosition = new Vector2(0, rtRight.localPosition.y);
-        Debug.Log(rtMain.sizeDelta.x);
         while (rtMain.sizeDelta.x < length-0.6f)
         {
             float width = rtMain.sizeDelta.x + 0.6f;
@@ -101,6 +100,15 @@ public class DialogueNPC : MonoBehaviour
         rtLeft.localPosition = new Vector2(-length / 2, rtLeft.localPosition.y);
         rtRight.localPosition = new Vector2(length / 2, rtRight.localPosition.y);
         BackgroundReady(text);
+    }
+
+    public void Response(int i)
+    {
+        if (currentDialogElement.GetType() == typeof(SelectionDialogueElement))
+        {
+            Destroy(currentDialogueBox);
+            SwitchDialogElement((currentDialogElement as SelectionDialogueElement).ChooseNext(i));
+        }
     }
 
     void BackgroundReady(string text)
@@ -144,7 +152,7 @@ public class DialogueNPC : MonoBehaviour
         }
         else if (currentDialogElement.GetType() == typeof(SelectionDialogueElement))
         {
-
+            dialogueSelection.DisplayOptions((currentDialogElement as SelectionDialogueElement).playerChoices, this);
         }
     }
 

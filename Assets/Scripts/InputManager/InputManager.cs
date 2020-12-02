@@ -13,7 +13,9 @@ public enum KeyAction
     WorldCyan,
     WorldMagenta,
     WorldGreen,
-    CameraScale
+    CameraScale,
+    Action,
+    Confirm
 }
 
 public static class InputManager
@@ -32,7 +34,9 @@ public static class InputManager
             [KeyAction.WorldCyan] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Alpha1, KeyCode.C),
             [KeyAction.WorldMagenta] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Alpha2, KeyCode.F),
             [KeyAction.WorldGreen] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Alpha3, KeyCode.G),
-            [KeyAction.CameraScale] = new System.Tuple<KeyCode, KeyCode>(KeyCode.V, KeyCode.None)
+            [KeyAction.CameraScale] = new System.Tuple<KeyCode, KeyCode>(KeyCode.V, KeyCode.None),
+            [KeyAction.Action] = new System.Tuple<KeyCode, KeyCode>(KeyCode.E, KeyCode.None),
+            [KeyAction.Confirm] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Return, KeyCode.None)
         };
 
     static bool isInit = false;

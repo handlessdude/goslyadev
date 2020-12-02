@@ -19,7 +19,7 @@ public class DialogueEndElement : DialogueElement
         nextOnNextVisit = this;
     }
 
-    public DialogueEndElement(DialogueEndElement next)
+    public DialogueEndElement(DialogueElement next)
     {
         nextOnNextVisit = next;
     }
@@ -39,13 +39,18 @@ public class SequentialDialogueElement : DialogueElement
 
 public class SelectionDialogueElement : DialogueElement
 {
-    public List<string> playerChoices;
-    public List<System.Func<DialogueElement>> next;
-    public SelectionDialogueElement(string val, List<string> choices, List<System.Func<DialogueElement>> outcomes)
+    public string[] playerChoices;
+    System.Func<DialogueElement>[] next;
+    public SelectionDialogueElement(string val, string[] choices, System.Func<DialogueElement>[] outcomes)
     {
         textValue = val;
         isOnCharacter = false;
         playerChoices = choices;
         next = outcomes;
+    }
+
+    public DialogueElement ChooseNext(int i)
+    { 
+        return next[i]();
     }
 }
