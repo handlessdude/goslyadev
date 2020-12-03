@@ -67,40 +67,37 @@ public class WorldSwitcher : MonoBehaviour
 
     void Update()
     {
-        if (GameplayState.controllability == PlayerControllability.Full)
-        { 
-            if (InputManager.GetKeyDown(KeyAction.WorldGreen))
+        if (InputManager.GetKeyDown(KeyAction.WorldGreen))
+        {
+            if (currentWorld == World.green)
             {
-                if (currentWorld == World.green)
-                {
-                    DefaultWorld();
-                }
-                else
-                {
-                    GreenWorld();
-                }
+                DefaultWorld();
             }
-            else if (InputManager.GetKeyDown(KeyAction.WorldCyan))
+            else
             {
-                if (currentWorld == World.cyan)
-                {
-                    DefaultWorld();
-                }
-                else
-                {
-                    CyanWorld();
-                }
+                GreenWorld();
             }
-            else if (InputManager.GetKeyDown(KeyAction.WorldMagenta))
+        }
+        else if (InputManager.GetKeyDown(KeyAction.WorldCyan))
+        {
+            if (currentWorld == World.cyan)
             {
-                if (currentWorld == World.magenta)
-                {
-                    DefaultWorld();
-                }
-                else
-                {
-                    MagentaWorld();
-                }
+                DefaultWorld();
+            }
+            else
+            {
+                CyanWorld();
+            }
+        }
+        else if (InputManager.GetKeyDown(KeyAction.WorldMagenta))
+        {
+            if (currentWorld == World.magenta)
+            {
+                DefaultWorld();
+            }
+            else
+            {
+                MagentaWorld();
             }
         }
     }

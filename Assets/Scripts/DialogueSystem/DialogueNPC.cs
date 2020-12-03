@@ -100,6 +100,10 @@ public class DialogueNPC : Interactable
     IEnumerator StretchBar(string text)
     {
         float length = text.Length*0.125f + 0.5f;
+        if (length > 4.5f)
+        {
+            length = 4.5f;
+        }
         RectTransform rtMain = currentDialogueBox.transform.Find("Background").GetComponent<RectTransform>();
         RectTransform rtLeft = currentDialogueBox.transform.Find("Leftbackground").GetComponent<RectTransform>();
         RectTransform rtRight = currentDialogueBox.transform.Find("Rightbackground").GetComponent<RectTransform>();
@@ -174,7 +178,7 @@ public class DialogueNPC : Interactable
         }
     }
 
-    void DialogueExit()
+    protected virtual void DialogueExit()
     {
         inDialogue = false;
         RotateSelf();
