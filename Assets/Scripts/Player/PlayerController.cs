@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public Transform right_ground;
     public Transform middle_ground;
     public Transform cameraTarget;
+    public Footsteps footsteps;
     //2^(ИД слоя), поэтому 256
     public int groundLayer = 256;
 
@@ -23,6 +24,9 @@ public class PlayerController : MonoBehaviour
     float jumpForce = 600.0f;
     bool isInAir = false;
     bool jumping = false;
+
+    bool stepCooldown = false;
+    float stepAudioLength = 0.33f;
 
     float checkRadius = 0.05f;
 
@@ -71,6 +75,11 @@ public class PlayerController : MonoBehaviour
         {
             cameraTarget = transform.Find("CameraTarget");
         }
+        
+        if (!footsteps)
+        {
+            footsteps = GetComponent<Footsteps>();
+        }
     }
 
     void Update()
@@ -83,6 +92,7 @@ public class PlayerController : MonoBehaviour
                 animator.SetFloat(475924382, horizontalDirection); //по сути animator.SetFloat("Horizontal", horizontalDirection);
                                                                    //TODO: movementInput это костыль. Надо убрать.
                 movementInput = true;
+                PlayStepSound();
                 ResetCamera();
             }
             else if (InputManager.GetKey(KeyAction.MoveRight))
@@ -90,6 +100,7 @@ public class PlayerController : MonoBehaviour
                 horizontalDirection = 1.0f;
                 animator.SetFloat(475924382, horizontalDirection);
                 movementInput = true;
+                PlayStepSound();
                 ResetCamera();
             }
             else
@@ -129,6 +140,7 @@ public class PlayerController : MonoBehaviour
             {
                 Jump();
                 ResetCamera();
+                ForcePlayStepSound();
             }
         } //ветка else здесь костыль
         else
@@ -160,6 +172,30 @@ public class PlayerController : MonoBehaviour
                     Grounded();
                 }
             }
+        }
+    }
+
+    void ResetStep()
+    {
+        CancelInvoke("ResetStep");
+        stepCooldown = false;
+    }
+
+    void PlayStepSound()
+    {
+        if (!stepCooldown && footsteps)
+        {
+            footsteps.Step();
+            stepCooldown = true;
+            Invoke("ResetStep", stepAudioLength);
+        }
+    }
+
+    void ForcePlayStepSound()
+    {
+        if (footsteps)
+        {
+            footsteps.Step();
         }
     }
 
@@ -209,6 +245,7 @@ public class PlayerController : MonoBehaviour
 
     void Grounded()
     {
+        ForcePlayStepSound();
         jumping = false;
         isInAir = false;
         animator.SetBool(125937960, false);
