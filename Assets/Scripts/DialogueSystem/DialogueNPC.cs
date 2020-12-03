@@ -19,6 +19,7 @@ public class DialogueNPC : MonoBehaviour
     float backgroundRollingSpeed = 0.02f;
 
     bool zoomedOut = false;
+    bool inDialogue = false;
 
     void Start()
     {
@@ -55,13 +56,16 @@ public class DialogueNPC : MonoBehaviour
 
     void DialogueEnter()
     {
-        GameplayState.controllability = PlayerControllability.InDialogue;
-        player.GetComponent<WorldSwitcher>().DefaultWorld();
-        Transform cameraTarget = player.transform.Find("CameraTarget");
-        cameraTarget.position = new Vector2((cameraTarget.position.x+transform.position.x)/2, (cameraTarget.position.y + transform.position.y) / 2+1f);
-        zoomedOut = cc.ZoomedOut();
-        cc.ZoomIn();
-        DrawDialogueText();
+        if (!inDialogue)
+        {
+            GameplayState.controllability = PlayerControllability.InDialogue;
+            player.GetComponent<WorldSwitcher>().DefaultWorld();
+            Transform cameraTarget = player.transform.Find("CameraTarget");
+            cameraTarget.position = new Vector2((cameraTarget.position.x + transform.position.x) / 2, (cameraTarget.position.y + transform.position.y) / 2 + 1f);
+            zoomedOut = cc.ZoomedOut();
+            cc.ZoomIn();
+            DrawDialogueText();
+        }
     }
 
     void DrawDialogueText()
@@ -168,5 +172,6 @@ public class DialogueNPC : MonoBehaviour
         GameplayState.controllability = PlayerControllability.Full;
         Transform cameraTarget = player.transform.Find("CameraTarget");
         cameraTarget.localPosition = Vector3.zero;
+        inDialogue = false;
     }
 }

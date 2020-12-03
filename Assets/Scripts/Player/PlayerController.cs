@@ -15,13 +15,13 @@ public class PlayerController : MonoBehaviour
     //2^(ИД слоя), поэтому 256
     public int groundLayer = 256;
 
-    public float movementSpeed = 4.0f;
+    public float movementSpeed = 6.0f;
 
     // -1 — влево, 1 — вправо, 0 — на месте.
     float horizontalDirection = 0.0f;
 
     float verticalDirection = 0.0f;
-    float jumpForce = 600.0f;
+    float jumpForce = 700.0f;
     bool isInAir = false;
     bool jumping = false;
 
@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     //объекты создаются здесь, чтобы потом не создавать их каждый раз
     Vector3 CameraUpPosition = new Vector3(0, 3);
     Vector3 CameraDownPosistion = new Vector3(0, -3);
+    Vector2 _currentVelocity;
     bool movementInput = false;
 
     enum TargetPosition
@@ -92,7 +93,10 @@ public class PlayerController : MonoBehaviour
                 animator.SetFloat(475924382, horizontalDirection); //по сути animator.SetFloat("Horizontal", horizontalDirection);
                                                                    //TODO: movementInput это костыль. Надо убрать.
                 movementInput = true;
-                PlayStepSound();
+                if (IsOnGround())
+                {
+                    PlayStepSound();
+                }
                 ResetCamera();
             }
             else if (InputManager.GetKey(KeyAction.MoveRight))
@@ -100,7 +104,10 @@ public class PlayerController : MonoBehaviour
                 horizontalDirection = 1.0f;
                 animator.SetFloat(475924382, horizontalDirection);
                 movementInput = true;
-                PlayStepSound();
+                if (IsOnGround())
+                {
+                    PlayStepSound();
+                }
                 ResetCamera();
             }
             else
@@ -157,7 +164,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;
+
+        //rb.position = Vector2.SmoothDamp(rb.position, new Vector2(targetPos, rb.position.y), ref _currentVelocity, 0.05f);
         rb.position = new Vector2(rb.position.x + horizontalDirection*movementSpeed * Time.deltaTime, rb.position.y);
+        //rb.velocity = new Vector2(horizontalDirection * movementSpeed*Time.deltaTime, rb.velocity.y);
 
         if (jumping)
         {
