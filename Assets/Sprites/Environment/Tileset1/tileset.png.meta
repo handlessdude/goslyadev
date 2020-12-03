@@ -380,6 +380,9 @@ TextureImporter:
   - first:
       213: -6646765574518339977
     second: tileset_120
+  - first:
+      213: -362684925555704359
+    second: tileset_121
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -2974,7 +2977,7 @@ TextureImporter:
         width: 31
         height: 53
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2995,7 +2998,7 @@ TextureImporter:
         width: 50
         height: 85
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3003,6 +3006,27 @@ TextureImporter:
       bones: []
       spriteID: 7760a811de1f1c3a0800000000000000
       internalID: -6646765574518339977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tileset_121
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 31
+        width: 104
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ddfcd65bfb77faf0800000000000000
+      internalID: -362684925555704359
       vertices: []
       indices: 
       edges: []

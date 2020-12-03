@@ -2,6 +2,7 @@
 {
     public static PlayerControllability controllability = PlayerControllability.Full;
     public static bool isPaused = false;
+    public static bool hasBarrel = false;
 
     public static void LevelStart()
     {
