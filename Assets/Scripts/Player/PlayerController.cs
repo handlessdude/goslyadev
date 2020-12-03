@@ -162,6 +162,11 @@ public class PlayerController : MonoBehaviour
         movementInput = false;
     }
 
+    public void RotateToVector(Vector2 position)
+    {
+        animator.SetFloat(475924382, (position.x - transform.position.x)/1000f);
+    }
+
     private void FixedUpdate()
     {
         float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;

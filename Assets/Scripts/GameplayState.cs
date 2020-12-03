@@ -2,7 +2,7 @@
 {
     public static PlayerControllability controllability = PlayerControllability.Full;
     public static bool isPaused = false;
-    public static bool hasBarrel = false;
+    public static int barrels = 0;
 
     public static void LevelStart()
     {

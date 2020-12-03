@@ -12,6 +12,7 @@ public static class KeywordsReplacer
             ["MoveRightKey"] = InputManager.GetPrimaryBinding(KeyAction.MoveRight).ToString,
             ["LookUpKey"] = InputManager.GetPrimaryBinding(KeyAction.LookUp).ToString,
             ["LookDownKey"] = InputManager.GetPrimaryBinding(KeyAction.LookDown).ToString,
+            ["ActionKey"] = InputManager.GetPrimaryBinding(KeyAction.Action).ToString
         };
 
     static char[] trimChars = new char[] { '<', '>'};

@@ -3,25 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class DialogueNPC : MonoBehaviour
+public class DialogueNPC : Interactable
 {
     public GameObject dialogueBoxPrefab;
     public DialogueElement currentDialogElement;
     public CameraController cc;
     public DialogueSelection dialogueSelection;
-    public GameObject player;
+    //public GameObject player;
 
-    GameObject currentDialogueBox;
+    protected GameObject currentDialogueBox;
     TextMeshProUGUI textComponent;
+
+    protected float selfBubbleHeight = 1.5f;
+    protected float characterBubbleHeight = 1.5f;
 
     float charTypingTime = 0.05f;
     float drawnDialogShowTime = 1f;
     float backgroundRollingSpeed = 0.02f;
 
     bool zoomedOut = false;
-    bool inDialogue = false;
+    protected bool inDialogue = false;
 
-    void Start()
+    /*void Start()
     {
         currentDialogElement = new SequentialDialogueElement(
         "dialogue_test1", true, new SequentialDialogueElement(
@@ -34,30 +37,38 @@ public class DialogueNPC : MonoBehaviour
 
         /*currentDialogElement = new SequentialDialogueElement(
         "dialogue_test1", true, new SequentialDialogueElement(
-            "dialogue_test2", false, new DialogueEndElement()));*/
-    }
+            "dialogue_test2", false, new DialogueEndElement()));
+    }*/
 
-    void Update()
+    protected override void Action()
     {
-        
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "Player")
+        base.Action();
+        if (currentDialogElement.GetType() != typeof(DialogueEndElement))
         {
-            if (currentDialogElement.GetType() != typeof(DialogueEndElement))
+            DialogueEnter();
+        }
+    }
+
+    protected virtual void RotateSelf()
+    {
+        if (transform.position.x < player.transform.position.x)
+        {
+            transform.localScale = new Vector2(transform.localScale.x * (-1f), 1);
+            foreach (Transform child in transform)
             {
-                player = collision.gameObject;
-                DialogueEnter();
+                child.localScale = new Vector2(child.localScale.x * (-1), child.localScale.y);
             }
         }
     }
+    
 
     void DialogueEnter()
     {
         if (!inDialogue)
         {
+            inDialogue = true;
+            RotateSelf();
+            player.GetComponent<PlayerController>().RotateToVector(transform.position);
             GameplayState.controllability = PlayerControllability.InDialogue;
             player.GetComponent<WorldSwitcher>().DefaultWorld();
             Transform cameraTarget = player.transform.Find("CameraTarget");
@@ -72,13 +83,13 @@ public class DialogueNPC : MonoBehaviour
     {
         if (currentDialogElement.isOnCharacter)
         {
-            currentDialogueBox = Instantiate(dialogueBoxPrefab, player.transform);
-            currentDialogueBox.transform.position = new Vector2(player.transform.position.x, player.transform.position.y + 1.5f);
+            currentDialogueBox = Instantiate(dialogueBoxPrefab);
+            currentDialogueBox.transform.position = new Vector2(player.transform.position.x, player.transform.position.y + characterBubbleHeight);
         }
         else
         {
-            currentDialogueBox = Instantiate(dialogueBoxPrefab, transform);
-            currentDialogueBox.transform.position = new Vector2(transform.position.x, transform.position.y + 1.5f);
+            currentDialogueBox = Instantiate(dialogueBoxPrefab);
+            currentDialogueBox.transform.position = new Vector2(transform.position.x, transform.position.y + selfBubbleHeight);
         }
 
         string text = Localization.GetLocalizedString(currentDialogElement.textValue);
@@ -109,7 +120,7 @@ public class DialogueNPC : MonoBehaviour
         BackgroundReady(text);
     }
 
-    public void Response(int i)
+    public virtual void Response(int i)
     {
         if (currentDialogElement.GetType() == typeof(SelectionDialogueElement))
         {
@@ -149,7 +160,7 @@ public class DialogueNPC : MonoBehaviour
         }
     }
 
-    void OnDialogueDrawn()
+    protected virtual void OnDialogueDrawn()
     {
         if (currentDialogElement.GetType() == typeof(SequentialDialogueElement))
         {
@@ -165,6 +176,8 @@ public class DialogueNPC : MonoBehaviour
 
     void DialogueExit()
     {
+        inDialogue = false;
+        RotateSelf();
         if (zoomedOut)
         {
             cc.ZoomOut();
@@ -172,6 +185,5 @@ public class DialogueNPC : MonoBehaviour
         GameplayState.controllability = PlayerControllability.Full;
         Transform cameraTarget = player.transform.Find("CameraTarget");
         cameraTarget.localPosition = Vector3.zero;
-        inDialogue = false;
     }
 }

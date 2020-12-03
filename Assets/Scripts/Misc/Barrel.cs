@@ -7,7 +7,7 @@ public class Barrel : Interactable
     protected override void Action()
     {
         base.Action();
-        GameplayState.hasBarrel = true;
+        GameplayState.barrels += 1;
         Destroy(gameObject);
     }
 }
