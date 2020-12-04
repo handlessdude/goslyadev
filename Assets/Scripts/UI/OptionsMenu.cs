@@ -41,14 +41,16 @@ public class OptionsMenu : MonoBehaviour
 
     public void ChangeWindowed(int n)
     {
-        if (n == 0)
+        mainMenuScript.ShowNotImplementedWarning();
+        Debug.Log("HERE");
+        /*if (n == 0)
         {
             Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
         }
         else if (n == 1)
         {
             Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-        }
+        }*/
     }
 
     public void Controls()
