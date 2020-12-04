@@ -36,7 +36,7 @@ public static class InputManager
             [KeyAction.WorldGreen] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Alpha3, KeyCode.G),
             [KeyAction.CameraScale] = new System.Tuple<KeyCode, KeyCode>(KeyCode.V, KeyCode.None),
             [KeyAction.Action] = new System.Tuple<KeyCode, KeyCode>(KeyCode.E, KeyCode.None),
-            [KeyAction.Confirm] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Return, KeyCode.None)
+            [KeyAction.Confirm] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Return, KeyCode.E)
         };
 
     static bool isInit = false;

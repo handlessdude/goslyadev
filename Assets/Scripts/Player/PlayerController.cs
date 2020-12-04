@@ -167,6 +167,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat(475924382, (position.x - transform.position.x)/1000f);
     }
 
+    //TODO: навести порядок во всех системах, которые затрагивает FixedUpdate, они все сделаны плохо
     private void FixedUpdate()
     {
         float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;
@@ -174,20 +175,32 @@ public class PlayerController : MonoBehaviour
         //rb.position = Vector2.SmoothDamp(rb.position, new Vector2(targetPos, rb.position.y), ref _currentVelocity, 0.05f);
         rb.position = new Vector2(rb.position.x + horizontalDirection*movementSpeed * Time.deltaTime, rb.position.y);
         //rb.velocity = new Vector2(horizontalDirection * movementSpeed*Time.deltaTime, rb.velocity.y);
-
-        if (jumping)
+        bool isOnGround = IsOnGround();
+        /*if (jumping)
         {
-            if (!IsOnGround())
+            if (!isOnGround)
             {
                 isInAir = true;
             }
             else
             {
-                if (isInAir && IsOnGround())
+                if (isInAir && isOnGround)
                 {
-                    Grounded();
+                    
                 }
             }
+        }*/
+
+        if (isInAir && isOnGround)
+        {
+            ForcePlayStepSound();
+            isInAir = false;
+        }
+
+        //временное решение
+        if (isOnGround && jumping)
+        {
+            Grounded();
         }
     }
 
@@ -195,6 +208,12 @@ public class PlayerController : MonoBehaviour
     {
         CancelInvoke("ResetStep");
         stepCooldown = false;
+    }
+
+    void InAir()
+    {
+        CancelInvoke("InAir");
+        isInAir = true;
     }
 
     void PlayStepSound()
@@ -254,6 +273,7 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
+        Invoke("InAir", 0.1f);
         rb.AddForce(new Vector2(0.0f, jumpForce));
         jumping = true;
         animator.SetBool(125937960, true);
@@ -261,7 +281,8 @@ public class PlayerController : MonoBehaviour
 
     void Grounded()
     {
-        ForcePlayStepSound();
+        Debug.Log("GROUNDED " + Random.Range(1, 100));
+        //ForcePlayStepSound();
         jumping = false;
         isInAir = false;
         animator.SetBool(125937960, false);

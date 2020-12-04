@@ -36,6 +36,12 @@ public static class Localization
         }
     }
 
+    public static int GetCurrentLanguage()
+    {
+        //TODO: убрать костыль
+        return (int)CurrentLang-1;
+    }
+
     public static void ChangeLanguage(Language lang)
     {
         if (lang == CurrentLang)
