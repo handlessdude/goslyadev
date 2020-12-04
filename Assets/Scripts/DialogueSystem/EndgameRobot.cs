@@ -54,6 +54,8 @@ public class EndgameRobot : DialogueNPC
     protected override void DialogueExit()
     {
         base.DialogueExit();
+        Time.timeScale = 1.0f;
+        Cursor.visible = true;
         SceneManager.LoadScene(0);
     }
 }

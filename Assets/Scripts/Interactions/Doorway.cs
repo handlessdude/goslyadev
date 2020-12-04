@@ -8,6 +8,8 @@ public class Doorway : Interactable
     public Transform destination;
     public GameObject cam;
 
+    bool cooldown = false;
+
     void Start()
     {
         
@@ -16,13 +18,19 @@ public class Doorway : Interactable
     protected override void Action()
     {
         base.Action();
-        CancelInvoke();
-        fade.FadeTransition(out float halfTime);
-        Invoke("Teleport", halfTime);
+        if (!cooldown)
+        {
+            CancelInvoke();
+            fade.FadeTransition(out float halfTime);
+            Invoke("Teleport", halfTime);
+            cooldown = true;
+        }
     }
 
     void Teleport()
     {
+        CancelInvoke("Teleport");
+        cooldown = false;
         //потому что менять Z-координату у камеры это игрушки дьявола!
         Vector2 destVector = new Vector2(destination.position.x, destination.position.y);
         cam.transform.position = destVector;

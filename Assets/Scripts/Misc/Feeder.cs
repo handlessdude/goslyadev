@@ -45,7 +45,7 @@ public class Feeder : Interactable
     {
         if (instantiated)
         {
-            Destroy(successNotification);
+            Destroy(instantiated);
         }
 
         instantiated = Instantiate(successNotification, player.transform);
@@ -58,7 +58,7 @@ public class Feeder : Interactable
         CancelInvoke("DestroyNotification");
         if (instantiated)
         {
-            Destroy(successNotification);
+            Destroy(instantiated);
         }
     }
 }
