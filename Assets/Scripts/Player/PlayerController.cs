@@ -191,16 +191,19 @@ public class PlayerController : MonoBehaviour
             }
         }*/
 
-        if (isInAir && isOnGround)
+        /*if (isInAir && isOnGround)
         {
             ForcePlayStepSound();
             isInAir = false;
-        }
+            //animator.SetBool(125937960, false);
+        }*/
 
         //временное решение
-        if (isOnGround && jumping)
+        if (isOnGround && jumping && isInAir)
         {
             Grounded();
+            animator.SetBool(125937960, false);
+
         }
     }
 
@@ -285,6 +288,6 @@ public class PlayerController : MonoBehaviour
         //ForcePlayStepSound();
         jumping = false;
         isInAir = false;
-        animator.SetBool(125937960, false);
+        
     }
 }
