@@ -45,6 +45,8 @@ public class FadeToBlack : MonoBehaviour
             yield return new WaitForSeconds(fadeTimeOnOneStep);
         }
 
+        yield return new WaitForSeconds(0.2f);
+
         while (image.color.a > 0f)
         {
             image.color = new Color(0, 0, 0, image.color.a - fadeStep);
