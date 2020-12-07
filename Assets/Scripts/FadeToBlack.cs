@@ -8,6 +8,7 @@ public class FadeToBlack : MonoBehaviour
 
     float fadeStep = 0.10f;
     float fadeTimeOnOneStep = 0.05f;
+    float blackScreenDuration = 0.2f;
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +34,7 @@ public class FadeToBlack : MonoBehaviour
 
     public void FadeTransition(out float halfTime)
     {
-        halfTime = 1 / fadeStep * fadeTimeOnOneStep;
+        halfTime = 1 / fadeStep * fadeTimeOnOneStep + blackScreenDuration/2;
         FadeTransition();
     }
 
