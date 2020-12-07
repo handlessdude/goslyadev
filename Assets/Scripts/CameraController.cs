@@ -78,15 +78,23 @@ public class CameraController : MonoBehaviour
 
     void OnResolutionChanged()
     {
-        if (resolutionX % 640 == 0)
+        int perfectX = 640;
+        int perfectY = 360;
+
+        if ((double)resolutionX / resolutionY <= (double)4/3)
         {
-            refResX = 640;
+            perfectX = 480;
+        }
+
+        if (resolutionX % perfectX == 0)
+        {
+            refResX = perfectX;
         }
         else
         {
             bool nSet = false;
             bool nPlusOneSet = false;
-            int multiplier = (resolutionX / 640) + 1;
+            int multiplier = (resolutionX / perfectX) + 1;
             for (int i = resolutionX; i > 0; i--)
             {
                 if (i % multiplier == 0)
@@ -108,7 +116,7 @@ public class CameraController : MonoBehaviour
             nSet = false;
             nPlusOneSet = false;
 
-            multiplier = (resolutionY / 360) + 1;
+            multiplier = (resolutionY / perfectY) + 1;
             for (int i = resolutionY; i > 0; i--)
             {
                 if (i % multiplier == 0)
