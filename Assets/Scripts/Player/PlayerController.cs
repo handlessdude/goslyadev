@@ -170,11 +170,11 @@ public class PlayerController : MonoBehaviour
     //TODO: навести порядок во всех системах, которые затрагивает FixedUpdate, они все сделаны плохо
     private void FixedUpdate()
     {
-        float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;
+        //float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;
 
         //rb.position = Vector2.SmoothDamp(rb.position, new Vector2(targetPos, rb.position.y), ref _currentVelocity, 0.05f);
-        rb.position = new Vector2(rb.position.x + horizontalDirection*movementSpeed * Time.deltaTime, rb.position.y);
-        //rb.velocity = new Vector2(horizontalDirection * movementSpeed*Time.deltaTime, rb.velocity.y);
+        //rb.position = new Vector2(rb.position.x + horizontalDirection*movementSpeed * Time.deltaTime, rb.position.y);
+        rb.velocity = new Vector2(horizontalDirection * movementSpeed, rb.velocity.y);
         bool isOnGround = IsOnGround();
         /*if (jumping)
         {
