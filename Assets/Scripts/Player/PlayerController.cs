@@ -269,9 +269,13 @@ public class PlayerController : MonoBehaviour
 
     bool IsOnGround()
     {
+        if (isInAir)
+        {
+            return Physics2D.OverlapCircleAll(middle_ground.position, checkRadius, groundLayer).Any() && rb.velocity.y < 0.00001f;
+        }
         return (Physics2D.OverlapCircleAll(middle_ground.position, checkRadius, groundLayer).Any() ||
             Physics2D.OverlapCircleAll(left_ground.position, checkRadius, groundLayer).Any() ||
-            Physics2D.OverlapCircleAll(right_ground.position, checkRadius, groundLayer).Any()) && rb.velocity.y < 0.0001f;
+            Physics2D.OverlapCircleAll(right_ground.position, checkRadius, groundLayer).Any()) && rb.velocity.y < 0.00001f;
     }
 
     void Jump()
