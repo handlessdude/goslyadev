@@ -1,10 +1,12 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
     SpriteRenderer sr;
+    BoxCollider2D rigidCollider;
     int playerColliders;
     static Color solidColor = new Color(1f, 1f, 1f, 1f);
     static Color transparentColor = new Color(1f, 1f, 1f, 0.5f);
@@ -15,6 +17,10 @@ public class Platform : MonoBehaviour
         if (!sr)
         {
             sr = GetComponent<SpriteRenderer>();
+        }
+        if (!rigidCollider)
+        {
+            rigidCollider = GetComponents<BoxCollider2D>().First(x => !x.isTrigger);
         }
     }
 
@@ -30,7 +36,24 @@ public class Platform : MonoBehaviour
         {
             sr = GetComponent<SpriteRenderer>();
         }
+        if (!rigidCollider)
+        {
+            rigidCollider = GetComponents<BoxCollider2D>().First(x => !x.isTrigger);
+        }
+
+        StartCoroutine(PlayerGlitchFixer());
         SetFullOpacity();
+    }
+
+    //решает проблему с проталкиванием игрока в текстуры, когда платформа спавнится в нём
+    IEnumerator PlayerGlitchFixer()
+    {
+        rigidCollider.enabled = false;
+        yield return new WaitForFixedUpdate();
+        if (playerColliders < 1)
+        {
+            rigidCollider.enabled = true;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -40,6 +63,7 @@ public class Platform : MonoBehaviour
             if (playerColliders == 0)
             {
                 SetTransparent();
+                rigidCollider.enabled = false;
             }
             playerColliders += 1;
         }
@@ -53,6 +77,7 @@ public class Platform : MonoBehaviour
             if (playerColliders == 0)
             {
                 SetFullOpacity();
+                rigidCollider.enabled = true;
             }
             
         }
