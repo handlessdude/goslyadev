@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public Transform left_ground;
     public Transform right_ground;
     public Transform middle_ground;
+    public Transform middle_ground1;
+    public Transform middle_ground2;
     public Transform cameraTarget;
     public Footsteps footsteps;
     //2^(ИД слоя), поэтому 256
@@ -65,6 +67,16 @@ public class PlayerController : MonoBehaviour
         if (!middle_ground)
         {
             middle_ground = transform.Find("MiddleGround");
+        }
+
+        if (!middle_ground1)
+        {
+            middle_ground1 = transform.Find("MiddleGround1");
+        }
+
+        if (!middle_ground2)
+        {
+            middle_ground2 = transform.Find("MiddleGround2");
         }
 
         if (!animator)
@@ -217,6 +229,7 @@ public class PlayerController : MonoBehaviour
     {
         CancelInvoke("InAir");
         isInAir = true;
+        Debug.Log("IN AIR " + Random.Range(1, 100));
     }
 
     void PlayStepSound()
@@ -271,11 +284,11 @@ public class PlayerController : MonoBehaviour
     {
         if (isInAir)
         {
-            return Physics2D.OverlapCircleAll(middle_ground.position, checkRadius, groundLayer).Any() && rb.velocity.y < 0.00001f;
+            return Physics2D.OverlapAreaAll(middle_ground1.position, middle_ground2.position, groundLayer).Any();
         }
         return (Physics2D.OverlapCircleAll(middle_ground.position, checkRadius, groundLayer).Any() ||
             Physics2D.OverlapCircleAll(left_ground.position, checkRadius, groundLayer).Any() ||
-            Physics2D.OverlapCircleAll(right_ground.position, checkRadius, groundLayer).Any()) && rb.velocity.y < 0.00001f;
+            Physics2D.OverlapCircleAll(right_ground.position, checkRadius, groundLayer).Any());
     }
 
     void Jump()
@@ -290,8 +303,10 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("GROUNDED " + Random.Range(1, 100));
         //ForcePlayStepSound();
+        rb.velocity = new Vector2(rb.velocity.x, 0);
         jumping = false;
         isInAir = false;
         
     }
 }
+
