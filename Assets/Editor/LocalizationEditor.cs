@@ -107,7 +107,7 @@ public class LocalizationEditorEditWindow : EditorWindow
 
 public class LocalizationEditorSearchWindow : EditorWindow
 {
-    public static void Open(LocalizedStringDrawer ls)
+    public static void Open(LocalizedStringDrawer ls, string obj)
     {
         LocalizationEditorSearchWindow window = new LocalizationEditorSearchWindow();
         window.titleContent = new GUIContent("Localization Search");
@@ -117,12 +117,14 @@ public class LocalizationEditorSearchWindow : EditorWindow
         window.ShowAsDropDown(r, new Vector2(500, 300));
         window.stringDrawer = ls;
         window.GetSearchResults();
+        window.obj = obj;
     }
 
     public string value;
     public Vector2 scroll;
     public Dictionary<string, string> dictionary;
     public LocalizedStringDrawer stringDrawer;
+    public string obj;
 
     private void OnEnable()
     {
@@ -157,7 +159,7 @@ public class LocalizationEditorSearchWindow : EditorWindow
 
                 if (GUILayout.Button("✓", GUILayout.MaxHeight(20), GUILayout.MaxWidth(20)))
                 {
-                    stringDrawer.modifiedProp = kv.Key;
+                    stringDrawer.modifiedProp[obj] = kv.Key;
                     this.Close();
                 }
 

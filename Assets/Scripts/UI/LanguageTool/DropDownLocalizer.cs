@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class DropDownLocalizer : Localizer
 {
     public TMP_Dropdown dropdown;
-    public List<string> text;
+    public List<LocalizedString> text;
     void Start()
     {
         if (!dropdown)
@@ -35,7 +35,7 @@ public class DropDownLocalizer : Localizer
         dropdown.options.Clear();
         for (int i = 0; i < ctr; i++)
         {
-            dropdown.options.Add(new TMP_Dropdown.OptionData(Localization.GetLocalizedString(text[i])));
+            dropdown.options.Add(new TMP_Dropdown.OptionData(Localization.GetLocalizedString(text[i].value)));
         }
     }
 }

@@ -10,7 +10,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 {
     bool dropdown;
     float height;
-    public string modifiedProp;
+    public Dictionary<string, string> modifiedProp = new Dictionary<string, string>();
     bool isInit = false;
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -43,17 +43,17 @@ public class LocalizedStringDrawer : PropertyDrawer
         SerializedProperty key = property.FindPropertyRelative("key");
         key.stringValue = EditorGUI.TextField(position, key.stringValue);
 
-        if (!isInit)
+        if (!modifiedProp.ContainsKey(property.propertyPath))
         {
-            modifiedProp = key.stringValue;
-            isInit = true;
+            modifiedProp[property.propertyPath] = default(string);
         }
-        else
+
+        //Debug.Log(string.Join(" ", modifiedProp.Keys.Select(x => x.ToString())));
+
+        if (modifiedProp[property.propertyPath] != default(string))
         {
-            if (key.stringValue != modifiedProp)
-            {
-                key.stringValue = modifiedProp;
-            }
+            key.stringValue = modifiedProp[property.propertyPath];
+            modifiedProp[property.propertyPath] = default(string);
         }
 
         position.x += position.width + 2;
@@ -62,7 +62,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 
         if (GUI.Button(position, "Search"))
         {
-            LocalizationEditorSearchWindow.Open(this);
+            LocalizationEditorSearchWindow.Open(this, property.propertyPath);
         }
 
         position.x += position.width + 2;
