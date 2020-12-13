@@ -149,7 +149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMeshProText: {fileID: 0}
-  text: success_notification
+  text:
+    key: success_notification
 --- !u!114 &4020974312664034797
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -21,24 +21,22 @@ public class DialogueNPC : Interactable
     float drawnDialogShowTime = 1f;
     float backgroundRollingSpeed = 0.02f;
 
+    Coroutine typeText;
+    Coroutine stretchBar;
+
     bool zoomedOut = false;
     protected bool inDialogue = false;
 
-    /*void Start()
+    enum DialogueState
     {
-        currentDialogElement = new SequentialDialogueElement(
-        "dialogue_test1", true, new SequentialDialogueElement(
-            "dialogue_test2", false, new SelectionDialogueElement("dialogue_test3",
-                new string[] { "dialogue_option_test1", "dialogue_options_test2" },
-                new System.Func<DialogueElement>[] {
-                    () => currentDialogElement,
-                    () => new DialogueEndElement(currentDialogElement)
-                })));;
+        Misc,
+        DrawingBox,
+        TypingText,
+        DrawnDialogDelay,
+        Selection
+    }
 
-        /*currentDialogElement = new SequentialDialogueElement(
-        "dialogue_test1", true, new SequentialDialogueElement(
-            "dialogue_test2", false, new DialogueEndElement()));
-    }*/
+    DialogueState dialogueState = DialogueState.Misc;
 
     protected override void Action()
     {
@@ -48,19 +46,6 @@ public class DialogueNPC : Interactable
             DialogueEnter();
         }
     }
-
-    protected virtual void RotateSelf()
-    {
-        if (transform.position.x < player.transform.position.x)
-        {
-            transform.localScale = new Vector2(transform.localScale.x * (-1f), 1);
-            foreach (Transform child in transform)
-            {
-                child.localScale = new Vector2(child.localScale.x * (-1), child.localScale.y);
-            }
-        }
-    }
-    
 
     void DialogueEnter()
     {
@@ -75,7 +60,20 @@ public class DialogueNPC : Interactable
             cameraTarget.position = new Vector2((cameraTarget.position.x + transform.position.x) / 2, (cameraTarget.position.y + transform.position.y) / 2 + 1f);
             zoomedOut = cc.ZoomedOut();
             cc.ZoomIn();
+            dialogueSelection.SetGoverningNPC(this);
             DrawDialogueText();
+        }
+    }
+
+    protected virtual void RotateSelf()
+    {
+        if (transform.position.x < player.transform.position.x)
+        {
+            transform.localScale = new Vector2(transform.localScale.x * (-1f), 1);
+            foreach (Transform child in transform)
+            {
+                child.localScale = new Vector2(child.localScale.x * (-1), child.localScale.y);
+            }
         }
     }
 
@@ -93,17 +91,24 @@ public class DialogueNPC : Interactable
         }
 
         string text = Localization.GetLocalizedString(currentDialogElement.textValue);
-        StartCoroutine(StretchBar(text));
         textComponent = currentDialogueBox.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+        stretchBar = StartCoroutine(StretchBar(text));
     }
 
-    IEnumerator StretchBar(string text)
+    float CalculateLineLength(string text)
     {
-        float length = text.Length*0.125f + 0.5f;
+        float length = text.Length * 0.125f + 0.5f;
         if (length > 4.5f)
         {
             length = 4.5f;
         }
+        return length;
+    }
+
+    IEnumerator StretchBar(string text)
+    {
+        dialogueState = DialogueState.DrawingBox;
+        float length = CalculateLineLength(text);
         RectTransform rtMain = currentDialogueBox.transform.Find("Background").GetComponent<RectTransform>();
         RectTransform rtLeft = currentDialogueBox.transform.Find("Leftbackground").GetComponent<RectTransform>();
         RectTransform rtRight = currentDialogueBox.transform.Find("Rightbackground").GetComponent<RectTransform>();
@@ -126,20 +131,55 @@ public class DialogueNPC : Interactable
 
     public virtual void Response(int i)
     {
-        if (currentDialogElement.GetType() == typeof(SelectionDialogueElement))
+        switch (dialogueState)
         {
-            Destroy(currentDialogueBox);
-            SwitchDialogElement((currentDialogElement as SelectionDialogueElement).ChooseNext(i));
+            case DialogueState.Selection:
+                {
+                    dialogueState = DialogueState.Misc;
+                    Destroy(currentDialogueBox);
+                    SwitchDialogElement((currentDialogElement as SelectionDialogueElement).ChooseNext(i));
+                    break;
+                }
+            case DialogueState.DrawingBox:
+                {
+                    StopCoroutine(stretchBar);
+                    string text = Localization.GetLocalizedString(currentDialogElement.textValue);
+                    float length = CalculateLineLength(text);
+                    RectTransform rtMain = currentDialogueBox.transform.Find("Background").GetComponent<RectTransform>();
+                    RectTransform rtLeft = currentDialogueBox.transform.Find("Leftbackground").GetComponent<RectTransform>();
+                    RectTransform rtRight = currentDialogueBox.transform.Find("Rightbackground").GetComponent<RectTransform>();
+                    rtMain.sizeDelta = new Vector2(length, rtMain.sizeDelta.y);
+                    rtLeft.localPosition = new Vector2(-length / 2, rtLeft.localPosition.y);
+                    rtRight.localPosition = new Vector2(length / 2, rtRight.localPosition.y);
+                    BackgroundReady(text);
+                    break;
+                }
+            case DialogueState.TypingText:
+                {
+                    CancelInvoke("OnDialogueDrawn");
+                    StopCoroutine(typeText);
+                    textComponent.text = Localization.GetLocalizedString(currentDialogElement.textValue);
+                    dialogueState = DialogueState.DrawnDialogDelay;
+                    Invoke("OnDialogueDrawn", drawnDialogShowTime);
+                    break;
+                }
+            case DialogueState.DrawnDialogDelay:
+                {
+                    CancelInvoke("OnDialogueDrawn");
+                    OnDialogueDrawn();
+                    break;
+                }
         }
     }
 
     void BackgroundReady(string text)
     {
-        StartCoroutine(TypeText(text));
+        typeText = StartCoroutine(TypeText(text));
     }
 
     IEnumerator TypeText(string text)
     {
+        dialogueState = DialogueState.TypingText;
         textComponent.text = "";
         foreach(char c in text)
         {
@@ -147,6 +187,7 @@ public class DialogueNPC : Interactable
             yield return new WaitForSeconds(charTypingTime);
         }
         CancelInvoke("OnDialogueDrawn");
+        dialogueState = DialogueState.DrawnDialogDelay;
         Invoke("OnDialogueDrawn", drawnDialogShowTime);
     }
 
@@ -175,7 +216,16 @@ public class DialogueNPC : Interactable
         else if (currentDialogElement.GetType() == typeof(SelectionDialogueElement))
         {
             dialogueSelection.DisplayOptions((currentDialogElement as SelectionDialogueElement).playerChoices, this);
+            
+            dialogueState = DialogueState.Selection;
+            //Invoke("SelectionDelay", 1f);
         }
+    }
+
+    void SelectionDelay()
+    {
+        CancelInvoke("SelectionDelay");
+        dialogueState = DialogueState.Selection;
     }
 
     protected virtual void DialogueExit()

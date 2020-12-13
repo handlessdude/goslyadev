@@ -17,6 +17,8 @@ public class DialogueSelection : MonoBehaviour
     Color selected = Color.white;
     Color unselected = Color.Lerp(Color.white,Color.gray, 0.7f);
 
+    bool optionsDisplayed;
+
     int size;
     int currentPos;
 
@@ -52,8 +54,12 @@ public class DialogueSelection : MonoBehaviour
 
     void SelectOption()
     {
+        if (optionsDisplayed)
+        {
+            HideOptions();
+            optionsDisplayed = false;
+        }
         governingNPC.Response(currentPos);
-        HideOptions();
     }
 
     void SwitchUp()
@@ -70,8 +76,14 @@ public class DialogueSelection : MonoBehaviour
         textItems[currentPos].color = selected;
     }
 
+    public void SetGoverningNPC(DialogueNPC governingNPC)
+    {
+        this.governingNPC = governingNPC;
+    }
+
     public void DisplayOptions(string[] options, DialogueNPC governingNPC)
     {
+        optionsDisplayed = true;
         this.governingNPC = governingNPC;
         size = options.Length;
         currentPos = 0;
@@ -79,6 +91,7 @@ public class DialogueSelection : MonoBehaviour
         optionItems[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 32*(size-1)+12);
         textItems[0].text = Localization.GetLocalizedString(options[0]);
         textItems[0].color = selected;
+        Debug.Log(optionItems[0].name);
         optionItems[0].SetActive(true);
         for (int i = 1; i < size; i++)
         {
@@ -93,7 +106,7 @@ public class DialogueSelection : MonoBehaviour
 
     public void HideOptions()
     {
-        for (int i = size-1; i > 0; i--)
+        for (int i = size - 1; i > 0; i--)
         {
             Destroy(optionItems[i]);
             optionItems.RemoveAt(i);
@@ -102,6 +115,5 @@ public class DialogueSelection : MonoBehaviour
 
         textItems[0].text = "";
         optionItems[0].SetActive(false);
-
     }
 }
