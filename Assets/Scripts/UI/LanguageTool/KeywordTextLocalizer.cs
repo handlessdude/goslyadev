@@ -6,6 +6,6 @@ public class KeywordTextLocalizer : TextLocalizer
 {
     public override void UpdateLocalization()
     {
-        textMeshProText.SetText(KeywordsReplacer.ReplaceKeywords(Localization.GetLocalizedString(text)));
+        textMeshProText.SetText(KeywordsReplacer.ReplaceKeywords(Localization.GetLocalizedString(text.key)));
     }
 }

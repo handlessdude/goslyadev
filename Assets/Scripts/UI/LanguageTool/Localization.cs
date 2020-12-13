@@ -38,7 +38,6 @@ public static class Localization
 
     public static int GetCurrentLanguage()
     {
-        //TODO: убрать костыль
         return (int)CurrentLang-1;
     }
 
@@ -59,9 +58,11 @@ public static class Localization
             Initialize();
         }
 
-        //если нет переведённого слова, просто возвращаем ключ
-        //clusterfuck, зато меньше копирований строк
-        CurrentLangDict.TryGetValue(key, out key);
+        string value;
+        if (CurrentLangDict.TryGetValue(key, out value))
+        {
+            return value;
+        }
         return key;
     }
 }
