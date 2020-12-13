@@ -81,8 +81,6 @@ public class CameraController : MonoBehaviour
         int boundX = 840;
         int boundY = 360;
 
-        Debug.Log(resolutionX + " " + resolutionY);
-
         bool hyperWide = (float)resolutionX / resolutionY >= (float)boundX / boundY;
 
         int ingamePixelMul = hyperWide ? (resolutionX / boundX + 1) : resolutionY / boundY + 1;
