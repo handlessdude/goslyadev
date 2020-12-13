@@ -78,74 +78,69 @@ public class CameraController : MonoBehaviour
 
     void OnResolutionChanged()
     {
-        int perfectX = 640;
-        int perfectY = 360;
+        int boundX = 840;
+        int boundY = 360;
 
-        if ((double)resolutionX / resolutionY <= (double)4/3)
+        Debug.Log(resolutionX + " " + resolutionY);
+
+        bool hyperWide = (float)resolutionX / resolutionY >= (float)boundX / boundY;
+
+        int ingamePixelMul = hyperWide ? (resolutionX / boundX + 1) : resolutionY / boundY + 1;
+
+        bool isZoomMulSet = false;
+        bool isMulSet = false;
+
+        for (int i = resolutionX; i > 0; i--)
         {
-            perfectX = 480;
+            if (i % ingamePixelMul == 0 && !isMulSet)
+            {
+                refResX = i / ingamePixelMul;
+                isMulSet = true;
+            }
+            else if (i % (ingamePixelMul + 1) == 0 && !isZoomMulSet)
+            {
+                zoomedRefResX = i / (ingamePixelMul + 1);
+                isZoomMulSet = true;
+            }
+
+            if (isZoomMulSet && isMulSet)
+            {
+                break;
+            }
         }
 
-        if (resolutionX % perfectX == 0)
+        isZoomMulSet = false;
+        isMulSet = false;
+
+        for (int i = resolutionY; i > 0; i--)
         {
-            refResX = perfectX;
+            if (i % ingamePixelMul == 0 && !isMulSet)
+            {
+                refResY = i / ingamePixelMul;
+                isMulSet = true;
+            }
+            else if (i % (ingamePixelMul + 1) == 0 && !isZoomMulSet)
+            {
+                zoomedRefResY = i / (ingamePixelMul + 1);
+                isZoomMulSet = true;
+            }
+
+            if (isZoomMulSet && isMulSet)
+            {
+                break;
+            }
+        }
+
+        if (zoomedOut)
+        {
+            pixCamera.refResolutionX = refResX;
+            pixCamera.refResolutionY = refResY;
         }
         else
         {
-            bool nSet = false;
-            bool nPlusOneSet = false;
-            int multiplier = (resolutionX / perfectX) + 1;
-            for (int i = resolutionX; i > 0; i--)
-            {
-                if (i % multiplier == 0)
-                {
-                    refResX = i / multiplier;
-                    nSet = true;
-                }
-                if (i % (multiplier + 1) == 0)
-                {
-                    zoomedRefResX = i / (multiplier + 1);
-                    nPlusOneSet = true;
-                }
-                if (nPlusOneSet && nSet)
-                {
-                    break;
-                }
-            }
+            pixCamera.refResolutionX = zoomedRefResX;
+            pixCamera.refResolutionY = zoomedRefResY;
 
-            nSet = false;
-            nPlusOneSet = false;
-
-            multiplier = (resolutionY / perfectY) + 1;
-            for (int i = resolutionY; i > 0; i--)
-            {
-                if (i % multiplier == 0)
-                {
-                    refResY = i/multiplier;
-                    nSet = true;
-                }
-                if (i % (multiplier + 1) == 0)
-                {
-                    zoomedRefResY = i / (multiplier + 1);
-                    nPlusOneSet = true;
-                }
-                if (nPlusOneSet && nSet)
-                {
-                    break;
-                }
-            }
-
-            if (zoomedOut)
-            {
-                pixCamera.refResolutionX = refResX;
-                pixCamera.refResolutionY = refResY;
-            }
-            else
-            {
-                pixCamera.refResolutionX = zoomedRefResX;
-                pixCamera.refResolutionY = zoomedRefResY;
-
-            }
         }
     }
 
