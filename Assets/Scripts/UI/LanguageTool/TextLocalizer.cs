@@ -6,8 +6,11 @@ using UnityEngine;
 public class TextLocalizer : Localizer
 {
 
+    [HideInInspector]
     public TextMeshProUGUI textMeshProText;
-    public string text = "UNLOCALIZED";
+
+
+    public LocalizedString text = "UNLOCALIZED";
     void Start()
     {
         if (!textMeshProText)
@@ -30,6 +33,6 @@ public class TextLocalizer : Localizer
 
     public override void UpdateLocalization()
     {
-        textMeshProText.SetText(Localization.GetLocalizedString(text));
+        textMeshProText.SetText(Localization.GetLocalizedString(text.key));
     }
 }
