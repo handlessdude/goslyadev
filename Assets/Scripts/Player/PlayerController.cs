@@ -284,7 +284,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isInAir)
         {
-            return Physics2D.OverlapAreaAll(middle_ground1.position, middle_ground2.position, groundLayer).Any();
+            return Physics2D.OverlapAreaAll(middle_ground1.position, middle_ground2.position, groundLayer).Any(x => !x.isTrigger);
         }
         return (Physics2D.OverlapCircleAll(middle_ground.position, checkRadius, groundLayer).Any() ||
             Physics2D.OverlapCircleAll(left_ground.position, checkRadius, groundLayer).Any() ||
