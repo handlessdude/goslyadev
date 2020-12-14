@@ -2,13 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
+using System.Linq;
 
 public class CameraController : MonoBehaviour
 {
     public GameObject target;
+
+    [HideInInspector]
     public PixelPerfectCamera pixCamera;
 
-    bool zoomedOut = true;
+    public Transform cameraBoundsParent;
+
+    Vector2 inboundTarget;
+
+    List<PolygonCollider2D> cameraBounds;
+    PolygonCollider2D currentCollider;
+
+    Vector2 rightUpperViewBorder;
+    Vector2 leftDownViewBorder;
 
     int resolutionX = 0;
     int resolutionY = 0;
@@ -16,21 +27,16 @@ public class CameraController : MonoBehaviour
     int refResX = 640;
     int refResY = 360;
 
+    static int boundX = 840;
+    static int boundY = 360;
+
+    bool zoomedOut = true;
     int zoomedRefResX = 448;
     int zoomedRefResY = 252;
 
     float z = -10f;
     float smoothingTime = 0.2f;
     Vector3 __currentVelocity;
-    
-    ZoomState zoomState = ZoomState.None;
-
-    enum ZoomState
-    {
-        None,
-        ZoomingIn,
-        ZoomingOut
-    }
 
     void Start()
     {
@@ -38,6 +44,17 @@ public class CameraController : MonoBehaviour
         {
             pixCamera = GetComponent<PixelPerfectCamera>();
         }
+
+        cameraBounds = new List<PolygonCollider2D>();
+
+        foreach (Transform gO in cameraBoundsParent)
+        {
+            cameraBounds.Add(gO.GetComponent<PolygonCollider2D>());
+        }
+
+        currentCollider = cameraBounds[0];
+
+
     }
 
     public bool ZoomedOut()
@@ -49,9 +66,20 @@ public class CameraController : MonoBehaviour
     {
         if (target)
         {
-            Vector3 targetPosition = new Vector3(target.transform.position.x, target.transform.position.y, z);
-            pixCamera.pixelSnapping = targetPosition == transform.position;
-            transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref __currentVelocity, smoothingTime);
+            //интерполируем к точке на периметре коллайдера-ограничителя
+            Vector2 localTarget = currentCollider.ClosestPoint(target.transform.position);
+            if (!InViewBorders(localTarget, target.transform.position))
+            {
+                UpdateCurrentCollider();
+                localTarget = currentCollider.ClosestPoint(target.transform.position);
+                transform.position = new Vector3(localTarget.x, localTarget.y, z);
+            }
+            else
+            {
+                Vector3 targetPosition = new Vector3(localTarget.x, localTarget.y, z);
+                pixCamera.pixelSnapping = targetPosition == transform.position;
+                transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref __currentVelocity, smoothingTime);
+            }
         }
 
         if (InputManager.GetKeyDown(KeyAction.CameraScale))
@@ -78,9 +106,6 @@ public class CameraController : MonoBehaviour
 
     void OnResolutionChanged()
     {
-        int boundX = 840;
-        int boundY = 360;
-
         bool hyperWide = (float)resolutionX / resolutionY >= (float)boundX / boundY;
 
         int ingamePixelMul = hyperWide ? (resolutionX / boundX + 1) : resolutionY / boundY + 1;
@@ -140,6 +165,36 @@ public class CameraController : MonoBehaviour
             pixCamera.refResolutionY = zoomedRefResY;
 
         }
+
+        UpdateViewBorders();
+    }
+
+    void UpdateViewBorders()
+    {
+        rightUpperViewBorder = new Vector2((float)refResX / pixCamera.assetsPPU / 2, (float) refResY / pixCamera.assetsPPU / 2);
+        leftDownViewBorder = -rightUpperViewBorder;
+    }
+
+    bool InViewBorders(Vector2 inboundTargetPos, Vector2 targetPos)
+    {
+        return (inboundTargetPos.x + rightUpperViewBorder.x - targetPos.x > 0)
+            && (inboundTargetPos.x - rightUpperViewBorder.x - targetPos.x < 0)
+            && (inboundTargetPos.y + rightUpperViewBorder.y - targetPos.y > 0)
+            && (inboundTargetPos.y - rightUpperViewBorder.y - targetPos.y < 0);
+    }
+
+    void UpdateCurrentCollider()
+    {
+        float min = float.MaxValue;
+        foreach (PolygonCollider2D pc in cameraBounds)
+        {
+            float t = Vector2.SqrMagnitude(pc.ClosestPoint(target.transform.position) - (Vector2)target.transform.position);
+            if (t < min)
+            {
+                currentCollider = pc;
+                min = t;
+            }
+        }
     }
 
     void FixedUpdate()
@@ -152,7 +207,6 @@ public class CameraController : MonoBehaviour
         zoomedOut = false;
         pixCamera.refResolutionX = zoomedRefResX;
         pixCamera.refResolutionY = zoomedRefResY;
-        //zoomState = ZoomState.ZoomingIn;
     }
 
     public void ZoomOut()
@@ -160,6 +214,5 @@ public class CameraController : MonoBehaviour
         zoomedOut = true;
         pixCamera.refResolutionX = refResX;
         pixCamera.refResolutionY = refResY;
-        //zoomState = ZoomState.ZoomingOut;
     }
 }
