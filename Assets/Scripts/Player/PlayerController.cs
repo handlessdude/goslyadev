@@ -18,12 +18,15 @@ public class PlayerController : MonoBehaviour
     public int groundLayer = 256;
 
     public float movementSpeed = 6.0f;
+    public float jumpForce = 700.0f;
+
+
 
     // -1 — влево, 1 — вправо, 0 — на месте.
     float horizontalDirection = 0.0f;
 
     float verticalDirection = 0.0f;
-    float jumpForce = 700.0f;
+    
     bool isInAir = false;
     bool jumping = false;
 
