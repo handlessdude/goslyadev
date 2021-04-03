@@ -51,6 +51,7 @@ public static class Localization
         Initialize();
     }
 
+    //надо перенести этот функционал в LocalizedString
     public static string GetLocalizedString(string key)
     {
         if (!Init)

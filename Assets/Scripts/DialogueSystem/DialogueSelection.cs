@@ -81,7 +81,7 @@ public class DialogueSelection : MonoBehaviour
         this.governingNPC = governingNPC;
     }
 
-    public void DisplayOptions(string[] options, DialogueNPC governingNPC)
+    public void DisplayOptions(LocalizedString[] options, DialogueNPC governingNPC)
     {
         optionsDisplayed = true;
         this.governingNPC = governingNPC;
@@ -89,7 +89,7 @@ public class DialogueSelection : MonoBehaviour
         currentPos = 0;
 
         optionItems[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 32*(size-1)+12);
-        textItems[0].text = Localization.GetLocalizedString(options[0]);
+        textItems[0].text = Localization.GetLocalizedString(options[0].key);
         textItems[0].color = selected;
         Debug.Log(optionItems[0].name);
         optionItems[0].SetActive(true);
@@ -98,7 +98,7 @@ public class DialogueSelection : MonoBehaviour
             //TODO: instatiate здесь лучше было бы не использовать, их всё равно вполне ограниченное количество
             optionItems.Add(Instantiate(optionItems[0],transform));
             textItems.Add(optionItems[i].transform.Find("Text").GetComponent<TextMeshProUGUI>());
-            textItems[i].text = Localization.GetLocalizedString(options[i]);
+            textItems[i].text = Localization.GetLocalizedString(options[i].key);
             textItems[i].color = unselected;
             optionItems[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 32 * (size - 1 - i) + 12);
         }
