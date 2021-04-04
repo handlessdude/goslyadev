@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class MainMenu : SaveSerial
 {
     public GameObject notImplementedWarning;
     public GameObject mainMenu;
@@ -43,12 +43,6 @@ public class MainMenu : MonoBehaviour
         
     }
 
-    public void LoadGame()
-    {
-        Debug.Log("OPENING LOAD GAME MENU");
-        ShowNotImplementedWarning();
-    }
-
     public void OpenOptions()
     {
         Debug.Log("OPENING OPTIONS");
@@ -72,8 +66,6 @@ public class MainMenu : MonoBehaviour
             t.UpdateLocalization();
         }
     }
-
-
 
     public void ShowNotImplementedWarning()
     {

@@ -8,12 +8,6 @@ public class PauseMenu : MainMenu
     public InGameUIController Controller;
   
     //PAUSE MENU BUTTONS
-    public void SaveGame()
-    {
-        Debug.Log("SAVING THE GAME");
-        ShowNotImplementedWarning();
-    }
-
     public void MainMenu()
     {
         Debug.Log("OPENING MAIN MENU");

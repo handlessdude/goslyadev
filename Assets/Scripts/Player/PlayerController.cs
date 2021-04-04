@@ -236,12 +236,18 @@ public class PlayerController : MonoBehaviour
             //animator.SetBool(125937960, false);
         }*/
 
+        
         //временное решение
         if (isOnGround && jumping && isInAir)
         {
             Grounded();
             animator.SetBool(125937960, false);
+        }
 
+        if (GameplayState.isLoaded)
+        {
+            transform.position = GameplayState.NewPositionPlayer;
+            GameplayState.isLoaded = false;
         }
     }
 

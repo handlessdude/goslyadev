@@ -1,13 +1,23 @@
-﻿public static class GameplayState
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using UnityEngine.SceneManagement;
+using static UnityEngine.SceneManagement.SceneManager;
+
+public static class GameplayState
 {
+    public static SaveSerial save;
     public static PlayerControllability controllability = PlayerControllability.Full;
     public static bool isPaused = false;
     public static int barrels = 0;
     public static int feededBarrels = 0;
-
+    public static Vector3 NewPositionPlayer;
+    public static bool isLoaded = false;
     public static void LevelStart()
     {
-        //TODO: [!] !!!!! логика работы с этим классом плохая. когда-нибудь мы застрянем в неверном PlayerControllability
         isPaused = false;
         controllability = PlayerControllability.Full;
     }
