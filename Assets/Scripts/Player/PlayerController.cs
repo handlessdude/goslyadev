@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     Vector3 CameraDownPosistion = new Vector3(0, -3);
     Vector2 _currentVelocity;
     bool movementInput = false;
+    bool flag = false;
 
     enum TargetPosition
     {
@@ -98,15 +99,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    
+
+    //TODO: Доделать анимацию, когда персонаж стоит на маленьком ящике, нет анимации передвижения
+    public void OnTriggerStay2D(Collider2D collision)
+    {
+        if ((collision.gameObject.tag == "Boxes") && (collision.gameObject.transform.position.y >= middle_ground.position.y))
+            flag = true;
+    }
+
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Boxes")
+            flag = false;
+    }
     void Update()
     {
         if (GameplayState.controllability == PlayerControllability.Full)
         {
             if (InputManager.GetKey(KeyAction.MoveLeft))
             {
-                horizontalDirection = -1.0f;
+                if (flag)
+                    horizontalDirection = -0.6f;
+                else
+                    horizontalDirection = -1.0f;
+
                 animator.SetFloat(475924382, horizontalDirection); //по сути animator.SetFloat("Horizontal", horizontalDirection);
-                                                                   //TODO: movementInput это костыль. Надо убрать.
+                                                                  //TODO: movementInput это костыль. Надо убрать.
                 movementInput = true;
                 if (IsOnGround())
                 {
@@ -116,7 +135,11 @@ public class PlayerController : MonoBehaviour
             }
             else if (InputManager.GetKey(KeyAction.MoveRight))
             {
-                horizontalDirection = 1.0f;
+                if (flag)
+                    horizontalDirection = 0.6f;
+                else
+                    horizontalDirection = 1.0f;
+
                 animator.SetFloat(475924382, horizontalDirection);
                 movementInput = true;
                 if (IsOnGround())

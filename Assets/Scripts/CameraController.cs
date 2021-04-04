@@ -45,16 +45,15 @@ public class CameraController : MonoBehaviour
             pixCamera = GetComponent<PixelPerfectCamera>();
         }
 
-        cameraBounds = new List<PolygonCollider2D>();
-
-        foreach (Transform gO in cameraBoundsParent)
+        if (cameraBoundsParent)
         {
-            cameraBounds.Add(gO.GetComponent<PolygonCollider2D>());
+            cameraBounds = new List<PolygonCollider2D>();
+            foreach (Transform gO in cameraBoundsParent)
+            {
+                cameraBounds.Add(gO.GetComponent<PolygonCollider2D>());
+            }
+            currentCollider = cameraBounds[0];
         }
-
-        currentCollider = cameraBounds[0];
-
-
     }
 
     public bool ZoomedOut()
