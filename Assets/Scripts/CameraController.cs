@@ -53,14 +53,9 @@ public class CameraController : MonoBehaviour
                 cameraBounds.Add(gO.GetComponent<PolygonCollider2D>());
             }
             currentCollider = cameraBounds[0];
-        }
-        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
-            screenFader.fadeState = ScreenFader.FadeState.OutEnd;
-        else
-        {
+        } 
             screenFader.fadeState = ScreenFader.FadeState.OutEnd;
             screenFader.fadeState = ScreenFader.FadeState.Out;
-        }
     }
 
     public bool ZoomedOut()

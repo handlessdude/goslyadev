@@ -248,6 +248,13 @@ public class PlayerController : MonoBehaviour
         if (GameplayState.isLoaded)
         {
             transform.position = GameplayState.NewPositionPlayer;
+
+
+            foreach (var boxes in GameplayState.BoxesPosition)
+            {
+                GameObject.Find(boxes.Key).transform.position = new Vector3(boxes.Value.Item1, boxes.Value.Item2, 0);
+            }
+
             foreach (var item in GameplayState.deletedObjectsList)
             {
                 Destroy(GameObject.Find(item));

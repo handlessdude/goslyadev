@@ -31,7 +31,14 @@ public class SaveSerial : MonoBehaviour
             data.savepreparationended = GameplayState.isPreparationEnded;
             //TODO
             data.savedisDialogEnded = GameplayState.isDialogEnded;
-            //\
+            //
+
+            foreach (var boxes in GameObject.FindGameObjectsWithTag("Boxes"))
+            {
+                var p = boxes.transform.position;
+                data.savedBoxesPosition.Add(boxes.name, new Tuple<float, float>(p.x, p.y));
+            }
+
             data.savedDeletedList = GameplayState.deletedObjectsList;  
             
             (data.savedPlayerPosX, data.savedPlayerPosY, data.savedPlayerPosZ) = (player.transform.position.x,player.transform.position.y,player.transform.position.z);
@@ -49,7 +56,6 @@ public class SaveSerial : MonoBehaviour
             using (FileStream fs = new FileStream(Application.persistentDataPath + "/mynew.dat", FileMode.Open))
             {
                 SaveData data = (SaveData)bf.Deserialize(fs);
-                
                 Cursor.visible = false;
                 Time.timeScale = 1.0f;
                 SceneManager.LoadScene(data.savedsceneInd,LoadSceneMode.Single);
@@ -58,6 +64,7 @@ public class SaveSerial : MonoBehaviour
                 GameplayState.barrels = data.savedbarrels;
                 GameplayState.isPreparationEnded = data.savepreparationended;
                 GameplayState.isDialogEnded = data.savedisDialogEnded;
+                GameplayState.BoxesPosition = data.savedBoxesPosition;
                 GameplayState.deletedObjectsList = data.savedDeletedList;
                 GameplayState.NewPositionPlayer = new Vector3(data.savedPlayerPosX, data.savedPlayerPosY, data.savedPlayerPosZ);
                 GameplayState.isLoaded = true;
@@ -77,6 +84,7 @@ public class SaveSerial : MonoBehaviour
 [Serializable]
 public class SaveData
 {
+    public Dictionary<string, Tuple<float, float>> savedBoxesPosition = new Dictionary<string, Tuple<float, float>>();
     public List<string> savedDeletedList;
     public bool savedisDialogEnded;
     public bool savepreparationended;

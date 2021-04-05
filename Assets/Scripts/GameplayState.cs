@@ -18,7 +18,7 @@ public static class GameplayState
     public static bool isLoaded;
     public static bool isDialogEnded = false;
     public static List<string> deletedObjectsList = new List<string>();
-    
+    public static Dictionary<string, Tuple<float, float>> BoxesPosition = new Dictionary<string, Tuple<float, float>>();
     public static void LevelStart()
     {
         isPaused = false;
