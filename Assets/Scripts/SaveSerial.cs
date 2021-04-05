@@ -31,7 +31,7 @@ public class SaveSerial : MonoBehaviour
             data.savepreparationended = GameplayState.isPreparationEnded;
             //TODO
             data.savedisDialogEnded = GameplayState.isDialogEnded;
-            //
+            //\
             data.savedDeletedList = GameplayState.deletedObjectsList;  
             
             (data.savedPlayerPosX, data.savedPlayerPosY, data.savedPlayerPosZ) = (player.transform.position.x,player.transform.position.y,player.transform.position.z);
@@ -49,6 +49,7 @@ public class SaveSerial : MonoBehaviour
             using (FileStream fs = new FileStream(Application.persistentDataPath + "/mynew.dat", FileMode.Open))
             {
                 SaveData data = (SaveData)bf.Deserialize(fs);
+                
                 Cursor.visible = false;
                 Time.timeScale = 1.0f;
                 SceneManager.LoadScene(data.savedsceneInd,LoadSceneMode.Single);
@@ -58,7 +59,6 @@ public class SaveSerial : MonoBehaviour
                 GameplayState.isPreparationEnded = data.savepreparationended;
                 GameplayState.isDialogEnded = data.savedisDialogEnded;
                 GameplayState.deletedObjectsList = data.savedDeletedList;
-
                 GameplayState.NewPositionPlayer = new Vector3(data.savedPlayerPosX, data.savedPlayerPosY, data.savedPlayerPosZ);
                 GameplayState.isLoaded = true;
             }

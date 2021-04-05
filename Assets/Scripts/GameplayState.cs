@@ -13,10 +13,10 @@ public static class GameplayState
     public static bool isPaused = false;
     public static int barrels = 0;
     public static int feededBarrels = 0;
+    public static bool isPreparationEnded = false;
     public static Vector3 NewPositionPlayer;
-    public static bool isLoaded = false;
+    public static bool isLoaded;
     public static bool isDialogEnded = false;
-    public static bool isPreparationEnded = false; 
     public static List<string> deletedObjectsList = new List<string>();
     
     public static void LevelStart()

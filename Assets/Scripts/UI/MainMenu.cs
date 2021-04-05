@@ -39,7 +39,12 @@ public class MainMenu : SaveSerial
         Debug.Log("STARTING NEW GAME");
         GameplayState.LevelStart();
         Cursor.visible = false;
+        GameplayState.deletedObjectsList.Clear();
+        GameplayState.barrels = 0;
+        GameplayState.feededBarrels = 0;
+        GameplayState.isPreparationEnded = false;
         SceneManager.LoadScene(1);
+
     }
 
     public void OpenOptions()
