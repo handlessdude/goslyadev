@@ -15,11 +15,14 @@ public class Feeder : Interactable
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (GameplayState.isPreparationEnded)
+            EndGamePreparations();
     }
 
     protected override void Action()
     {
+        print(GameplayState.barrels);
+        print(GameplayState.feededBarrels);
         base.Action();
         if (GameplayState.barrels > 0)
         {
@@ -29,6 +32,7 @@ public class Feeder : Interactable
             if (GameplayState.feededBarrels > 1)
             {
                 EndGamePreparations();
+                GameplayState.isPreparationEnded = true;
             }
         }
     }

@@ -40,7 +40,6 @@ public class MainMenu : SaveSerial
         GameplayState.LevelStart();
         Cursor.visible = false;
         SceneManager.LoadScene(1);
-        
     }
 
     public void OpenOptions()

@@ -61,6 +61,20 @@ public class CameraController : MonoBehaviour
         return zoomedOut;
     }
 
+    void FixedUpdate()
+    {
+        if (GameplayState.isLoaded)
+        {
+            transform.position = GameplayState.NewPositionPlayer;
+            foreach (var item in GameplayState.deletedObjectsList)
+            {
+                Destroy(GameObject.Find(item));
+            }
+            GameplayState.isLoaded = false;
+        }
+    }
+
+
     void Update()
     {
         if (target)
@@ -196,10 +210,6 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        
-    }
 
     public void ZoomIn()
     {

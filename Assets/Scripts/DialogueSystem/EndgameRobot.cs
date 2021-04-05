@@ -56,6 +56,6 @@ public class EndgameRobot : DialogueNPC
         base.DialogueExit();
         Time.timeScale = 1.0f;
         Cursor.visible = true;
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(2);
     }
 }
