@@ -8,6 +8,7 @@ public class Barrel : Interactable
     {
         base.Action();
         GameplayState.barrels += 1;
+        GameplayState.deletedObjectsList.Add(gameObject.name);
         Destroy(gameObject);
     }
 }

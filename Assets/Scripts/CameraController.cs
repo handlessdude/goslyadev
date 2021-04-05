@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class CameraController : MonoBehaviour
 {
@@ -10,9 +11,8 @@ public class CameraController : MonoBehaviour
 
     [HideInInspector]
     public PixelPerfectCamera pixCamera;
-
     public Transform cameraBoundsParent;
-
+    public ScreenFader screenFader;
     Vector2 inboundTarget;
 
     List<PolygonCollider2D> cameraBounds;
@@ -54,12 +54,24 @@ public class CameraController : MonoBehaviour
             }
             currentCollider = cameraBounds[0];
         }
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
+            screenFader.fadeState = ScreenFader.FadeState.OutEnd;
+        else
+        {
+            screenFader.fadeState = ScreenFader.FadeState.OutEnd;
+            screenFader.fadeState = ScreenFader.FadeState.Out;
+        }
     }
 
     public bool ZoomedOut()
     {
         return zoomedOut;
     }
+
+    void FixedUpdate()
+    {
+    }
+
 
     void Update()
     {
@@ -196,10 +208,6 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        
-    }
 
     public void ZoomIn()
     {

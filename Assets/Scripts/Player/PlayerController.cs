@@ -208,6 +208,7 @@ public class PlayerController : MonoBehaviour
     //TODO: навести порядок во всех системах, которые затрагивает FixedUpdate, они все сделаны плохо
     private void FixedUpdate()
     {
+
         //float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;
 
         //rb.position = Vector2.SmoothDamp(rb.position, new Vector2(targetPos, rb.position.y), ref _currentVelocity, 0.05f);
@@ -247,6 +248,10 @@ public class PlayerController : MonoBehaviour
         if (GameplayState.isLoaded)
         {
             transform.position = GameplayState.NewPositionPlayer;
+            foreach (var item in GameplayState.deletedObjectsList)
+            {
+                Destroy(GameObject.Find(item));
+            }
             GameplayState.isLoaded = false;
         }
     }
@@ -337,8 +342,7 @@ public class PlayerController : MonoBehaviour
         //ForcePlayStepSound();
         rb.velocity = new Vector2(rb.velocity.x, 0);
         jumping = false;
-        isInAir = false;
-        
+        isInAir = false; 
     }
 }
 
