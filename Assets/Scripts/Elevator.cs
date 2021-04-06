@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lift : MonoBehaviour
+public class Elevator : MonoBehaviour
 {
     Rigidbody2D rb;
     public float moveSpeed = 2f;
@@ -38,7 +38,6 @@ public class Lift : MonoBehaviour
         {
             if (transform.position.y > targetTop.position.y)
             {
-                rb.velocity = new Vector2(0, 0);
                 rb.bodyType = RigidbodyType2D.Static;
             }
             else
@@ -53,7 +52,6 @@ public class Lift : MonoBehaviour
             if (transform.position.y < targetBottom.position.y)
             {
                 rb.bodyType = RigidbodyType2D.Static;
-                rb.velocity = new Vector2(0, 0);
             }
             else
             {
