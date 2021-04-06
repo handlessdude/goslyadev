@@ -8,6 +8,8 @@ TagManager:
   - MagentaWorld
   - GreenWorld
   - Boxes
+  - Barrles
+  - Elevator
   layers:
   - Default
   - TransparentFX
