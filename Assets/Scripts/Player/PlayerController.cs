@@ -99,17 +99,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+
 
     //TODO: Доделать анимацию, когда персонаж стоит на маленьком ящике, нет анимации передвижения
+
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name.Equals("tileset_5"))
+        {
+            transform.parent = collision.transform;
+        }
+    }
+
     public void OnTriggerStay2D(Collider2D collision)
     {
         if ((collision.gameObject.tag == "Boxes") && (collision.gameObject.transform.position.y >= middle_ground.position.y))
             flag = true;
+
     }
 
     public void OnTriggerExit2D(Collider2D collision)
     {
+        if (collision.gameObject.name.Equals("tileset_5"))
+        {
+            transform.parent = null;
+        }
+
         if (collision.gameObject.tag == "Boxes")
             flag = false;
     }

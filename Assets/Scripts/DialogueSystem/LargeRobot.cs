@@ -22,8 +22,7 @@ public class LargeRobot : DialogueNPC
 
         selfBubbleHeight = 2.3f;
 
-        if (!GameplayState.isDialogEnded)
-        {
+       
             var make_generator_work = new SequentialDialogueElement("big_robot_make_generator_work", false,
             new SequentialDialogueElement("big_robot_hero_what", true, new DialogueEndElement()));
 
@@ -62,20 +61,10 @@ public class LargeRobot : DialogueNPC
                 () => why_are_you,
                 () => tried_to_do
             });
-            
-        }
-        else
-        {
-            Debug.Log("РАБОТАЙ");
-            var make_generator_work = new SequentialDialogueElement("big_robot_make_generator_work", false,
-            new SequentialDialogueElement("big_robot_hero_what", true, new DialogueEndElement()));
-
-            
 
             ((make_generator_work.next as SequentialDialogueElement).next
              as DialogueEndElement).nextOnNextVisit = make_generator_work;
-
-        }
+      
        
 
 
