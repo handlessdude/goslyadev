@@ -10,6 +10,7 @@ using static UnityEngine.SceneManagement.SceneManager;
 public static class GameplayState
 {
     public static PlayerControllability controllability = PlayerControllability.Full;
+    public static List<string> deletedObjectsList = new List<string>();
     public static bool isPaused = false;
     public static int barrels = 0;
     public static int feededBarrels = 0;
@@ -17,7 +18,10 @@ public static class GameplayState
     public static Vector3 NewPositionPlayer;
     public static bool isLoaded;
     public static bool isDialogEnded = false;
-    public static List<string> deletedObjectsList = new List<string>();
+    //SecondLvl
+    public static bool isThiefRobotDialogEnded = false;
+    public static bool isMainRobotDialogEnded = false;
+    public static int boards = 0;
     public static Dictionary<string, Tuple<float, float>> BoxesPosition = new Dictionary<string, Tuple<float, float>>();
     public static void LevelStart()
     {

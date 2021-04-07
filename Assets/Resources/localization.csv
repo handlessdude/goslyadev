@@ -48,7 +48,7 @@
 "te12313","","",""
 "te1231===234","1","2","3"
 <<<<<<< HEAD
-"ask_rob_bout_board","№4568? We've lost the board here. I remember that a couple of times we already lost boards, and each time they turned out to be with you for some rituals. Would you like to accidentally make a great sacrifice for your ritual by going to the smelter for recycling? ","№4568? У нас тут плата пропала? Помнится, пару раз у нас уже пропадали платы, и каждый раз они оказывались у тебя для каких-то ритуалов. Не хочешь случайно принести великую жертву для своего ритуала, отправившись в плавильную печь для переработки?","№4568? Haben wir das Board hier verloren? Ich erinnere mich, dass wir einige Male bereits die Gebühren verloren haben und jedes Mal herausfanden, dass sie für einige Rituale bei Ihnen waren. Möchten Sie versehentlich ein großes Opfer für Ihr Ritual bringen, indem Sie zum Recycling in die Schmelze gehen? "
+"ask_rob_bout_board","№4568? We've lost the board here. I remember that a couple of times we already lost boards, and each time they turned out to be with you for some rituals. ","№4568? У нас тут плата пропала? Помнится, пару раз у нас уже пропадали платы, и каждый раз они оказывались у тебя для каких-то ритуалов. ","№4568? Haben wir das Board hier verloren? Ich erinnere mich, dass wir einige Male bereits die Gebühren verloren haben und jedes Mal herausfanden, dass sie für einige Rituale bei Ihnen waren. "
 "robot_panic","No, no, I don't, sir! ","Нет, нет, что вы, сэр!","Nein, nein, ich will nicht, Sir! "
 "k_demands_plate","Then give me the board quickly.","Тогда быстро отдай мне плату.","Dann gib mir deine Zahlung schnell."
 "rob_gives_board","Here.","Вот.","Hier."
@@ -78,6 +78,7 @@
 "son_asked_about_sleep","Hi, Dad! Falling asleep at work again?","Привет, пап! Опять уснул на работе?","Hallo Papa! Bei der Arbeit wieder einschlafen?"
 >>>>>>> cf163cd9209d43dab57af9af98c53f9ecc8f2584
 
+<<<<<<< Updated upstream
 "son_know","Heh. How did you know?","Хех. Как узнал?","Heh. Woher wusstest du das?"
 "called_mom","I called my mom, she said you didn’t come home. You know that sleep deprivation and overtime are bad for your health?","Маме звонил, она сказала, ты не заходил домой. Ты же в курсе, что недосыпы и переработки плохо сказываются на здоровье?","Ich habe meine Mutter angerufen, sie sagte, du bist nicht nach Hause gekommen. Sie wissen, dass Schlafentzug und Überstunden gesundheitsschädlich sind?"
 "had_dream","Yes ... Your mother has already told me about this many times. But! I had such a wonderful dream!","Да... Твоя мать уже неоднократно мне об этом рассказывала. Зато! У меня был такой чудесный сон!","Ja ... Deine Mutter hat mir schon oft davon erzählt. Aber! Ich hatte so einen wundervollen Traum!"
@@ -99,3 +100,12 @@
 "how_fix","Okay. How do I fix this?","Ладно. Как мне это исправить?","Okay. Wie behebe ich das?"
 "find_boards","You need to find 3 boards in different parts of the building. As you find everything, replace the unusable ones in the mechanism and start it.","Вам нужно найти 3 платы в разных частях здания. Как найдете все, замените негодные в механизме и запустите его.","Sie müssen 3 Bretter in verschiedenen Teilen des Gebäudes finden. Wenn Sie alles gefunden haben, ersetzen Sie die unbrauchbaren im Mechanismus und starten Sie ihn."
 "clear","Ok.","Понятно.","Ok."
+=======
+"ask_rob_bout_board2","Would you like to accidentally make a great sacrifice for your ritual by going to the smelter for recycling? ","Не хочешь случайно принести великую жертву для своего ритуала, отправившись в плавильную печь для переработки?","Möchten Sie versehentlich ein großes Opfer für Ihr Ritual bringen, indem Sie zum Recycling in die Schmelze gehen?"
+"random_rep1","As you wish, sir.","Как прикажете, господин.","Wie Sie wünschen, Sir."
+"random_rep2","Your word is law.","Ваше слово - закон.","Dein Wort ist Gesetz."
+"random_rep3","I have completed your last assignment.","Я исполнил последнее поручение.","Ich habe Ihre letzte Aufgabe abgeschlossen."
+"random_rep4","There were no incidents in your absence. Nobody has violated your will.","В ваше отсутствие никаких происшествий не было. Никто не нарушил вашей воли.","In Ihrer Abwesenheit gab es keine Zwischenfälle. Niemand hat deinen Willen verletzt."
+"random_rep5","...","...","..."
+"random_rep6","I hope Faith hears my prayers.","Надеюсь, Вера услышит мои молитвы.","Ich hoffe, Bekenntnis
+ hört meine Gebete."
