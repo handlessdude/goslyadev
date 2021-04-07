@@ -21,7 +21,7 @@ public class SaveSerial : MonoBehaviour
     public void SaveGame()
     {
         BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = new FileStream(Application.persistentDataPath + "/mynew.dat", FileMode.Create))
+        using (FileStream fs = new FileStream(Application.persistentDataPath + "/Saved.dat", FileMode.Create))
         {
             SaveData data = new SaveData();
             data.savedsceneInd = SceneManager.GetActiveScene().buildIndex;
@@ -53,7 +53,7 @@ public class SaveSerial : MonoBehaviour
         try
         {
             BinaryFormatter bf = new BinaryFormatter();
-            using (FileStream fs = new FileStream(Application.persistentDataPath + "/mynew.dat", FileMode.Open))
+            using (FileStream fs = new FileStream(Application.persistentDataPath + "/Saved.dat", FileMode.Open))
             {
                 SaveData data = (SaveData)bf.Deserialize(fs);
                 Cursor.visible = false;

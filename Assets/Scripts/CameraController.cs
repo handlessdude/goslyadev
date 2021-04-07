@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
     public Transform cameraBoundsParent;
     public ScreenFader screenFader;
     Vector2 inboundTarget;
-
+    SaveSerial Load;
     List<PolygonCollider2D> cameraBounds;
     PolygonCollider2D currentCollider;
 
@@ -40,6 +40,10 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
+        if (!Load)
+        {
+            Load = GetComponent<SaveSerial>();
+        }    
         if (!pixCamera)
         {
             pixCamera = GetComponent<PixelPerfectCamera>();
@@ -70,6 +74,31 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        // Сделал для удобной проверки всего
+        if (InputManager.GetKey(KeyAction.Level1))
+        {
+            SceneManager.LoadScene(1);
+            GameplayState.LevelStart();
+        }
+
+        if (InputManager.GetKey(KeyAction.Level2))
+        {
+            SceneManager.LoadScene(2);
+            GameplayState.LevelStart();
+        }
+
+        if (InputManager.GetKey(KeyAction.Load))
+        {
+            Load.LoadGame();
+        }
+
+        if (InputManager.GetKey(KeyAction.Save))
+        {
+            Load.SaveGame();
+        }
+
+        //
+
         if (target)
         {
             //интерполируем к точке на периметре коллайдера-ограничителя
