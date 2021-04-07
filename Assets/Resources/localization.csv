@@ -52,6 +52,7 @@
 "robot_panic","No, no, I don't, sir! ","Нет, нет, что вы, сэр!","Nein, nein, ich will nicht, Sir! "
 "k_demands_plate","Then give me the board quickly.","Тогда быстро отдай мне плату.","Dann gib mir deine Zahlung schnell."
 "rob_gives_board","Here.","Вот.","Hier."
+
 "meets_fixer","Fixer?","Починщик?","Fixierer?"
 "fixer_meets_k","Oh, Mr. K, it has been a long time since you visited me live.","О, Мистер К, давно вы не навещали меня вживую.","Oh, Mr. K, es ist lange her, dass Sie mich live besucht haben."
 "remember_why","Yes ... Remind me why, to get to you, I have to go through some kind of torment with the box?","Да... Напомни, почему, чтобы добраться к тебе, нужно пройти через какие-то мучения с ящиком?","Ja ... Erinnern Sie mich daran, warum ich, um zu Ihnen zu gelangen, eine Art Qual mit der Kiste durchmachen muss?"
@@ -64,8 +65,11 @@
 "and_sir","And sir...","И сэр...","Und Sir..."
 "what_fixer","Yes?","Да?","Ja?"
 "good_luck","Good luck to you.","Удачи вам.","Viel Erfolg."
+
 "last_repair","Now all that remains is to repair the mechanism.","Теперь осталось только починить механизм.","Jetzt muss nur noch der Mechanismus repariert werden."
+
 "after_repair","Finally, I'm already tired of running, now I would like to drink some coff .. Oh, a call from the hospital?","Наконец-то, я уже устал бегать, теперь бы выпить немного коф.. Ой, звонок из больницы?","Endlich bin ich es schon leid zu rennen, jetzt möchte ich etwas Kaffee trinken. Oh, ein Anruf aus dem Krankenhaus?"
+
 "call_from_hosp","Hello? Mr.  K? This is St. George's Hospital.","Алло? Мистер К? Это больница святого Георгия.","Hallo? Herr K? Dies ist das St. George's Hospital."
 "meets_hosp","Yes? This is Mr K.","Да? Это Мистер К.","Ja? Das ist Herr K."
 "news_bout_son","Your son. He has a serious deterioration. The attending physician said that he may not make it until tomorrow. Could you come...","Ваш сын. У него серьезное ухудшение. Лечащий врач сказал, что он может не дотянуть до завтра. Вы не могли бы приех...","Dein Sohn. Er hat eine ernsthafte Verschlechterung. Der behandelnde Arzt sagte, dass er es möglicherweise erst morgen schaffen werde. Könnten Sie kommen..."
@@ -96,8 +100,11 @@
 "tin_can","I'll give you to some college, tin can.","Отдать бы тебя какому-нибудь колледжу, банка ты консервная.","Ich gebe dir ein College, Blechdose."
 "lets_fix_mech","No sir, please, let's get on with fixing the mechanism?","Нет, сэр, пожалуйста, давайте лучше займемся починкой механизма?","Nein, Sir, bitte, lassen Sie uns mit der Reparatur des Mechanismus fortfahren."
 "how_fix","Okay. How do I fix this?","Ладно. Как мне это исправить?","Okay. Wie behebe ich das?"
-"find_boards","You need to find 3 boards in different parts of the building. As you find everything, replace the unusable ones in the mechanism and start it.","Вам нужно найти 3 платы в разных частях здания. Как найдете все, замените негодные в механизме и запустите его.","Sie müssen 3 Bretter in verschiedenen Teilen des Gebäudes finden. Wenn Sie alles gefunden haben, ersetzen Sie die unbrauchbaren im Mechanismus und starten Sie ihn."
+"find_boards","You need to find 3 boards in different parts of the building. As you find everything, replace the unusable ones in the mechanism and start it.","Вам нужно найти 3 платы в разных частях здания. Как найдете все, замените негодные в центральном компьютере и запустите его.","Sie müssen 3 Bretter in verschiedenen Teilen des Gebäudes finden. Wenn Sie alles gefunden haben, ersetzen Sie die unbrauchbaren im Mechanismus und starten Sie ihn."
 "clear","Ok.","Понятно.","Ok."
+
+
+
 =======
 "ask_rob_bout_board2","Would you like to accidentally make a great sacrifice for your ritual by going to the smelter for recycling? ","Не хочешь случайно принести великую жертву для своего ритуала, отправившись в плавильную печь для переработки?","Möchten Sie versehentlich ein großes Opfer für Ihr Ritual bringen, indem Sie zum Recycling in die Schmelze gehen?"
 "random_rep1","As you wish, sir.","Как прикажете, господин.","Wie Sie wünschen, Sir."

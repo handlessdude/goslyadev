@@ -82,6 +82,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        
         if (GameplayState.controllability == PlayerControllability.FirstDialog)
         {
             phoneRing.mute = false;
