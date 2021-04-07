@@ -104,18 +104,30 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerStay2D(Collider2D collision)
     {
-        if ((collision.gameObject.tag == "Boxes") && (collision.gameObject.transform.position.y >= middle_ground.position.y))
+        
+        
+        if ((collision.gameObject.tag == "Boxes") && (collision.gameObject.transform.GetChild(0).position.y > middle_ground.position.y))
+        {
+            print(middle_ground.position.y);
+            print(collision.gameObject.transform.GetChild(0).localPosition.y);
             flag = true;
-
-       
+        }
+            
     }
 
     public void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Boxes")
+        {
+            print(middle_ground.position.y);
+            print(collision.gameObject.transform.GetChild(0).localPosition.y);
             flag = false;
+        }
+            
     }
 
+
+   
     void Update()
     {
         if (GameplayState.controllability == PlayerControllability.Full)

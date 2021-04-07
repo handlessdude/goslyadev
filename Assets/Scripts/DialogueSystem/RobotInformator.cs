@@ -6,10 +6,6 @@ public class RobotInformator : DialogueNPC
 {
     // Start is called before the first frame update
 
-
-    bool isHintShown = false;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -62,6 +58,7 @@ public class RobotInformator : DialogueNPC
     protected override void DialogueExit()
     {
         base.DialogueExit();
+        
     }
 
 
@@ -75,5 +72,6 @@ public class RobotInformator : DialogueNPC
     void RestoreIdle()
     {
         CancelInvoke("RestoreIdle");
+
     }
 }

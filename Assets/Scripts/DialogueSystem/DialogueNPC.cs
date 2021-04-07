@@ -55,7 +55,7 @@ public class DialogueNPC : Interactable
             RotateSelf();
             player.GetComponent<PlayerController>().RotateToVector(transform.position);
             GameplayState.controllability = PlayerControllability.InDialogue;
-            player.GetComponent<WorldSwitcher>().DefaultWorld();
+            //player.GetComponent<WorldSwitcher>().DefaultWorld();
             Transform cameraTarget = player.transform.Find("CameraTarget");
             cameraTarget.position = new Vector2((cameraTarget.position.x + transform.position.x) / 2, (cameraTarget.position.y + transform.position.y) / 2 + 1f);
             zoomedOut = cc.ZoomedOut();
