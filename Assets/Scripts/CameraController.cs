@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
     public Transform cameraBoundsParent;
     public ScreenFader screenFader;
     Vector2 inboundTarget;
-    public AudioClip phoneRing;
+    public AudioSource phoneRing;
     SaveSerial Load;
     List<PolygonCollider2D> cameraBounds;
     PolygonCollider2D currentCollider;
@@ -84,8 +84,11 @@ public class CameraController : MonoBehaviour
     {
         if (GameplayState.controllability == PlayerControllability.FirstDialog)
         {
-
+            phoneRing.mute = false;
         }
+        else
+            phoneRing.mute = true;
+
 
         // Сделал для удобной проверки всего
         if (InputManager.GetKey(KeyAction.Level1))
