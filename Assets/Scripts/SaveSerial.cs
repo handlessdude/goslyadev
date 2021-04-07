@@ -32,7 +32,8 @@ public class SaveSerial : MonoBehaviour
             //TODO
             data.savedisDialogEnded = GameplayState.isDialogEnded;
             //
-
+            data.savedisThiefRobotDialogEnded = GameplayState.isThiefRobotDialogEnded;
+            data.savedisMainRobotDialogEnded = GameplayState.isMainRobotDialogEnded;
             foreach (var boxes in GameObject.FindGameObjectsWithTag("Boxes"))
             {
                 var p = boxes.transform.position;
@@ -66,6 +67,8 @@ public class SaveSerial : MonoBehaviour
                 GameplayState.isDialogEnded = data.savedisDialogEnded;
                 GameplayState.BoxesPosition = data.savedBoxesPosition;
                 GameplayState.deletedObjectsList = data.savedDeletedList;
+                GameplayState.isThiefRobotDialogEnded = data.savedisThiefRobotDialogEnded;
+                GameplayState.isMainRobotDialogEnded = data.savedisMainRobotDialogEnded;
                 GameplayState.NewPositionPlayer = new Vector3(data.savedPlayerPosX, data.savedPlayerPosY, data.savedPlayerPosZ);
                 GameplayState.isLoaded = true;
             }
@@ -94,5 +97,7 @@ public class SaveData
     public float savedPlayerPosX;
     public float savedPlayerPosY;
     public float savedPlayerPosZ;
+    public bool savedisThiefRobotDialogEnded;
+    public bool savedisMainRobotDialogEnded;
 }
 
