@@ -105,10 +105,22 @@ public class DialogueNPC : Interactable
         return length;
     }
 
+    float CalculateBubleHeight(string text)
+    {
+        float length = text.Length * 0.125f + 0.5f;
+        if (length < 4.5f)
+        {
+            length = 4.5f;
+        }
+        return length/ 4.5f;
+    }
+
+
     IEnumerator StretchBar(string text)
     {
         dialogueState = DialogueState.DrawingBox;
         float length = CalculateLineLength(text);
+        float height = CalculateBubleHeight(text);
         RectTransform rtMain = currentDialogueBox.transform.Find("Background").GetComponent<RectTransform>();
         RectTransform rtLeft = currentDialogueBox.transform.Find("Leftbackground").GetComponent<RectTransform>();
         RectTransform rtRight = currentDialogueBox.transform.Find("Rightbackground").GetComponent<RectTransform>();
@@ -123,9 +135,11 @@ public class DialogueNPC : Interactable
             rtRight.localPosition = new Vector2(width/2, rtRight.localPosition.y);
             yield return new WaitForSeconds(backgroundRollingSpeed);
         }
-        rtMain.sizeDelta = new Vector2(length, rtMain.sizeDelta.y);
-        rtLeft.localPosition = new Vector2(-length / 2, rtLeft.localPosition.y);
-        rtRight.localPosition = new Vector2(length / 2, rtRight.localPosition.y);
+        rtMain.sizeDelta = new Vector2(length, height / 2);
+        rtLeft.localPosition = new Vector2(-length / 2, -rtMain.sizeDelta.y / 2);
+        rtLeft.sizeDelta = new Vector2(rtLeft.sizeDelta.x, rtMain.sizeDelta.y);
+        rtRight.localPosition = new Vector2(length / 2, -rtMain.sizeDelta.y / 2);
+        rtRight.sizeDelta = new Vector2(rtRight.sizeDelta.x, rtMain.sizeDelta.y);
         BackgroundReady(text);
     }
 
