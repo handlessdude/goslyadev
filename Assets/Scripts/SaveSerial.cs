@@ -32,19 +32,20 @@ public class SaveSerial : MonoBehaviour
             //TODO
             data.savedisDialogEnded = GameplayState.isDialogEnded;
             //
-
             data.savedisThiefRobotDialogEnded = GameplayState.isThiefRobotDialogEnded;
             data.savedisMainRobotDialogEnded = GameplayState.isMainRobotDialogEnded;
-
             data.savedboards = GameplayState.boards;
+
             foreach (var boxes in GameObject.FindGameObjectsWithTag("Boxes"))
             {
                 var p = boxes.transform.position;
                 data.savedBoxesPosition.Add(boxes.name, new Tuple<float, float>(p.x, p.y));
             }
 
-            data.savedDeletedList = GameplayState.deletedObjectsList;  
-            
+            data.savedDeletedList = GameplayState.deletedObjectsList;
+
+            data.savedisStartedDialogEnded = GameplayState.isStartedDialogEnded;
+
             (data.savedPlayerPosX, data.savedPlayerPosY, data.savedPlayerPosZ) = (player.transform.position.x,player.transform.position.y,player.transform.position.z);
             
             bf.Serialize(fs, data);
@@ -65,14 +66,21 @@ public class SaveSerial : MonoBehaviour
                 SceneManager.LoadScene(data.savedsceneInd,LoadSceneMode.Single);
                 GameplayState.LevelStart();
                 GameplayState.feededBarrels = data.savedfeededbarrels;
+
                 GameplayState.barrels = data.savedbarrels;
+
                 GameplayState.isPreparationEnded = data.savepreparationended;
+
                 GameplayState.isDialogEnded = data.savedisDialogEnded;
+
                 GameplayState.deletedObjectsList = data.savedDeletedList;
 
+                GameplayState.isStartedDialogEnded = data.savedisStartedDialogEnded;
 
                 GameplayState.isThiefRobotDialogEnded = data.savedisThiefRobotDialogEnded;
+
                 GameplayState.isMainRobotDialogEnded = data.savedisMainRobotDialogEnded;
+
                 GameplayState.BoxesPosition = data.savedBoxesPosition;
 
                 GameplayState.boards = data.savedboards;
@@ -107,6 +115,7 @@ public class SaveData
     public float savedPlayerPosZ;
     public bool savedisThiefRobotDialogEnded;
     public bool savedisMainRobotDialogEnded;
+    public bool savedisStartedDialogEnded;
     public int savedboards;
 }
 

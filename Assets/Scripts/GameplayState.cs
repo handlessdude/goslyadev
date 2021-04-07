@@ -20,7 +20,11 @@ public static class GameplayState
     public static bool isDialogEnded = false;
     //SecondLvl
     public static bool isThiefRobotDialogEnded = false;
+
     public static bool isMainRobotDialogEnded = false;
+
+
+    public static bool isStartedDialogEnded = false;
     public static int boards = 0;
     public static Dictionary<string, Tuple<float, float>> BoxesPosition = new Dictionary<string, Tuple<float, float>>();
     public static void LevelStart()
@@ -35,4 +39,5 @@ public enum PlayerControllability
 {
     Full,
     InDialogue,
+    FirstDialog
 }

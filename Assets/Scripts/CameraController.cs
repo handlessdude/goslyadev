@@ -14,6 +14,7 @@ public class CameraController : MonoBehaviour
     public Transform cameraBoundsParent;
     public ScreenFader screenFader;
     Vector2 inboundTarget;
+    public AudioClip phoneRing;
     SaveSerial Load;
     List<PolygonCollider2D> cameraBounds;
     PolygonCollider2D currentCollider;
@@ -60,6 +61,12 @@ public class CameraController : MonoBehaviour
         } 
             screenFader.fadeState = ScreenFader.FadeState.OutEnd;
             screenFader.fadeState = ScreenFader.FadeState.Out;
+
+        if (SceneManager.GetSceneByBuildIndex(2).Equals(SceneManager.GetActiveScene()))
+        {
+            if (!GameplayState.isStartedDialogEnded)
+                GameplayState.controllability = PlayerControllability.FirstDialog;
+        }
     }
 
     public bool ZoomedOut()
@@ -69,11 +76,17 @@ public class CameraController : MonoBehaviour
 
     void FixedUpdate()
     {
+
     }
 
 
     void Update()
     {
+        if (GameplayState.controllability == PlayerControllability.FirstDialog)
+        {
+
+        }
+
         // Сделал для удобной проверки всего
         if (InputManager.GetKey(KeyAction.Level1))
         {
