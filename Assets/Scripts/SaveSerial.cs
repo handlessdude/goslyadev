@@ -41,7 +41,7 @@ public class SaveSerial : MonoBehaviour
                 var p = boxes.transform.position;
                 data.savedBoxesPosition.Add(boxes.name, new Tuple<float, float>(p.x, p.y));
             }
-
+            data.savedFeededboards = GameplayState.feededboards;
             data.savedDeletedList = GameplayState.deletedObjectsList;
 
             data.savedisStartedDialogEnded = GameplayState.isStartedDialogEnded;
@@ -81,6 +81,8 @@ public class SaveSerial : MonoBehaviour
 
                 GameplayState.isMainRobotDialogEnded = data.savedisMainRobotDialogEnded;
 
+                GameplayState.feededboards = data.savedFeededboards;
+
                 GameplayState.BoxesPosition = data.savedBoxesPosition;
 
                 GameplayState.boards = data.savedboards;
@@ -117,5 +119,6 @@ public class SaveData
     public bool savedisMainRobotDialogEnded;
     public bool savedisStartedDialogEnded;
     public int savedboards;
+    public int savedFeededboards;
 }
 

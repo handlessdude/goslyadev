@@ -18,6 +18,8 @@ public static class GameplayState
 
     public static Vector3 NewPositionPlayer;
 
+    public static bool isPhoneRinged = false;
+
     public static bool isLoaded;
 
     public static bool isDialogEnded = false;
@@ -31,7 +33,7 @@ public static class GameplayState
     public static bool isFixererDiaglolEnded = false;
 
     public static int boards = 0;
-
+    public static int feededboards = 0;
     public static Dictionary<string, Tuple<float, float>> BoxesPosition = new Dictionary<string, Tuple<float, float>>();
     public static void LevelStart()
     {

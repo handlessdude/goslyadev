@@ -82,13 +82,18 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        
-        if (GameplayState.controllability == PlayerControllability.FirstDialog)
+        print(GameplayState.feededboards);
+        print(GameplayState.boards);
+        if (phoneRing)
         {
-            phoneRing.mute = false;
+            if (GameplayState.controllability == PlayerControllability.FirstDialog)
+            {
+                phoneRing.mute = false;
+            }
+            else
+                phoneRing.mute = true;
         }
-        else
-            phoneRing.mute = true;
+        
 
 
         // Сделал для удобной проверки всего

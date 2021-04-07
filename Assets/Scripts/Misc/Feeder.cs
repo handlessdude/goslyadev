@@ -21,8 +21,6 @@ public class Feeder : Interactable
 
     protected override void Action()
     {
-        print(GameplayState.barrels);
-        print(GameplayState.feededBarrels);
         base.Action();
         if (GameplayState.barrels > 0)
         {
