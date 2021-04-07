@@ -43,7 +43,7 @@ public class RobotInformator : DialogueNPC
                 () => why_are_you_end
             })))));
 
-        currentDialogElement = new SelectionDialogueElement("misterk_wake_up", new string[]
+        currentDialogElement = new SelectionDialogueElement("big_robot_emptiness", new string[]
         { "big_robot_choice_why_are_you" , "big_robot_choice_tried_to_do"
         }, new System.Func<DialogueElement>[] {
                 () => why_are_you,
