@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -177,7 +178,7 @@ public class PlayerController : MonoBehaviour
             {
                 ResetCamera(TargetPosition.Up);
             }
-
+           
             if (InputManager.GetKeyUp(KeyAction.LookDown))
             {
                 ResetCamera(TargetPosition.Down);
