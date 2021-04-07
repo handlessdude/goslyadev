@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ThiefRobot : DialogueNPC
 {
+    public GameObject board;
     void Start()
     {
                 selfBubbleHeight = 2.3f;
@@ -17,6 +18,7 @@ public class ThiefRobot : DialogueNPC
 
     protected override void DialogueExit()
     {
+        board.SetActive(true);
         base.DialogueExit();
     }
 
