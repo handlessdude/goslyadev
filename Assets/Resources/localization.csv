@@ -50,7 +50,7 @@
 <<<<<<< HEAD
 "ask_rob_bout_board","№4568? We've lost the board here. I remember that a couple of times we already lost boards, and each time they turned out to be with you for some rituals. Would you like to accidentally make a great sacrifice for your ritual by going to the smelter for recycling? ","№4568? У нас тут плата пропала? Помнится, пару раз у нас уже пропадали платы, и каждый раз они оказывались у тебя для каких-то ритуалов. Не хочешь случайно принести великую жертву для своего ритуала, отправившись в плавильную печь для переработки?","№4568? Haben wir das Board hier verloren? Ich erinnere mich, dass wir einige Male bereits die Gebühren verloren haben und jedes Mal herausfanden, dass sie für einige Rituale bei Ihnen waren. Möchten Sie versehentlich ein großes Opfer für Ihr Ritual bringen, indem Sie zum Recycling in die Schmelze gehen? "
 "robot_panic","No, no, I don't, sir! ","Нет, нет, что вы, сэр!","Nein, nein, ich will nicht, Sir! "
-"k_demands_plate","Then give me your payment quickly. ","Тогда быстро отдай мне плату.","Dann gib mir deine Zahlung schnell."
+"k_demands_plate","Then give me the board quickly.","Тогда быстро отдай мне плату.","Dann gib mir deine Zahlung schnell."
 "rob_gives_board","Here.","Вот.","Hier."
 "meets_fixer","Fixer?","Починщик?","Fixierer?"
 "fixer_meets_k","Oh, Mr. K, it has been a long time since you visited me live.","О, Мистер К, давно вы не навещали меня вживую.","Oh, Mr. K, es ist lange her, dass Sie mich live besucht haben."
