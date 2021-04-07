@@ -84,7 +84,6 @@ public class LargeRobot : DialogueNPC
         base.Response(i);
         anim.Play("udivl");
         Invoke("RestoreIdle", 2.0f);
-
     }
 
     void RestoreIdle()
@@ -102,6 +101,6 @@ public class LargeRobot : DialogueNPC
             instantiated.transform.position = new Vector2(player.transform.position.x, player.transform.position.y + 1.0f);
             isHintShown = true;
         }
-        GameplayState.isDialogEnded = true;
+        //GameplayState.isDialogEnded = true;
     }
 }
