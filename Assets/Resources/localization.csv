@@ -47,6 +47,7 @@
 "te546","1","2","3"
 "te12313","","",""
 "te1231===234","1","2","3"
+<<<<<<< HEAD
 "ask_rob_bout_board","№4568? We've lost the board here. I remember that a couple of times we already lost boards, and each time they turned out to be with you for some rituals. Would you like to accidentally make a great sacrifice for your ritual by going to the smelter for recycling? ","№4568? У нас тут плата пропала? Помнится, пару раз у нас уже пропадали платы, и каждый раз они оказывались у тебя для каких-то ритуалов. Не хочешь случайно принести великую жертву для своего ритуала, отправившись в плавильную печь для переработки?","№4568? Haben wir das Board hier verloren? Ich erinnere mich, dass wir einige Male bereits die Gebühren verloren haben und jedes Mal herausfanden, dass sie für einige Rituale bei Ihnen waren. Möchten Sie versehentlich ein großes Opfer für Ihr Ritual bringen, indem Sie zum Recycling in die Schmelze gehen? "
 "robot_panic","No, no, I don't, sir! ","Нет, нет, что вы, сэр!","Nein, nein, ich will nicht, Sir! "
 "k_demands_plate","Then give me your payment quickly. ","Тогда быстро отдай мне плату.","Dann gib mir deine Zahlung schnell."
@@ -70,3 +71,9 @@
 "news_bout_son","Your son. He has a serious deterioration. The attending physician said that he may not make it until tomorrow. Could you come...","Ваш сын. У него серьезное ухудшение. Лечащий врач сказал, что он может не дотянуть до завтра. Вы не могли бы приех...","Dein Sohn. Er hat eine ernsthafte Verschlechterung. Der behandelnde Arzt sagte, dass er es möglicherweise erst morgen schaffen werde. Könnten Sie kommen..."
 "hung_up","*hung up*","*повесил трубку*","*aufgehangen*"
 "have_no_time","Why so soon?? I have no time left at all! Of the options, I have only this left. They won't forgive me for that...","Почему так скоро?? У меня совсем не осталось времени! Из вариантов у меня осталось только это. Они мне этого не простят...","Warum so früh?? Ich habe überhaupt keine Zeit mehr! Von den Optionen habe ich nur noch diese. Sie werden mir das nicht verzeihen..."
+=======
+"misterk_wake_up","Overworked  again. Eh ... if I had more time, this dream would be much easier to bring to life.","Снова заработался. Эх... было бы у меня больше времени, этот сон было бы намного проще воплотить в жизнь.","Es hat wieder funktioniert. Eh ... wenn ich mehr Zeit hätte, wäre dieser Traum viel einfacher zu verwirklichen."
+"phone_ring","*bzz bzz* *bzz bzz* *phone rings*","*бзз бзз* *бзз бзз* *звонит телефон*","*bzz bzz* *bzz bzz* *Telefon klingelt*"
+"q_son","Son?","Сын?","Sohn?"
+"son_asked_about_sleep","Hi, Dad! Falling asleep at work again?","Привет, пап! Опять уснул на работе?","Hallo Papa! Bei der Arbeit wieder einschlafen?"
+>>>>>>> cf163cd9209d43dab57af9af98c53f9ecc8f2584
