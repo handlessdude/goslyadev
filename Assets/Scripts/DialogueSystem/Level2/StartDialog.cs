@@ -13,7 +13,6 @@ public class StartDialog : DialogueNPC
         {
             selfBubbleHeight = 2.3f;
             currentDialogElement = new SequentialDialogueElement("misterk_wake_up", true,
-                new SequentialDialogueElement("phone_ring", true,
                 new SequentialDialogueElement("q_son", true,
                 new SequentialDialogueElement("son_asked_about_sleep", true,
                 new SequentialDialogueElement("son_know", true,
@@ -21,7 +20,7 @@ public class StartDialog : DialogueNPC
                 new SequentialDialogueElement("again_body", true,
                 new SequentialDialogueElement("will_be_healthy", true,
                 new SequentialDialogueElement("go_work", true,
-                new SequentialDialogueElement("call_later", true, new DialogueEndElement()))))))))));
+                new SequentialDialogueElement("call_later", true, new DialogueEndElement())))))))));
         }
         else
             Box.enabled = false;
