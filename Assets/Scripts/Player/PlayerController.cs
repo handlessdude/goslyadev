@@ -60,7 +60,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        dashTime = startDashTime;
         if (!rb)
         {
             rb = GetComponent<Rigidbody2D>();
@@ -139,13 +138,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-
-            dashTime -= Time.deltaTime;
-            
-            //rb.velocity = Vector2.zero; //---------------------------------------------------------------если че убрать
-
-
-
+ 
+        //rb.velocity = Vector2.zero; //---------------------------------------------------------------если че убрать
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
             if (InputManager.GetKey(KeyAction.MoveLeft))
@@ -235,6 +229,7 @@ public class PlayerController : MonoBehaviour
         }
 
         movementInput = false;
+        print(dashTime);
     }
 
     public void RotateToVector(Vector2 position)
@@ -245,6 +240,11 @@ public class PlayerController : MonoBehaviour
     //TODO: навести порядок во всех системах, которые затрагивает FixedUpdate, они все сделаны плохо
     private void FixedUpdate()
     {
+        if (dashTime > 0)
+        {
+            dashTime -= 0.2f;
+            dashDirection = 0;
+        }
 
         //float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;
 
@@ -300,7 +300,6 @@ public class PlayerController : MonoBehaviour
         }
         if (InputManager.GetKeyDown(KeyAction.CombatAbility1) && worldSwitcher.currentWorld == WorldSwitcher.World.cyan)
         {
-            
             Dash();
         };
         if (InputManager.GetKeyDown(KeyAction.CombatAbility2) && worldSwitcher.currentWorld == WorldSwitcher.World.green)
@@ -401,13 +400,11 @@ public class PlayerController : MonoBehaviour
 
     void Dash()
     {
-        print(dashTime);
-        if (dashTime > 0)
+        if (dashTime <= 0)
         {
-           
             if (dashDirection != 0)
             {
-                dashTime = startDashTime;
+                dashTime = 5.0f;
 
                 if (dashDirection == -1)
                 {
@@ -419,8 +416,6 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        /*rb.velocity = new Vector2(dashSpeed*Time.deltaTime, rb.velocity.y);
-        rb.velocity = new Vector2(dashSpeed*Time.deltaTime, rb.velocity.y);*/
     }
 }
 
