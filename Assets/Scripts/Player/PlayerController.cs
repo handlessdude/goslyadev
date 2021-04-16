@@ -21,7 +21,13 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed = 6.0f;
     public float jumpForce = 700.0f;
 
+    //характеристики Dash()
+    public float dashSpeed;
+    public float dashTime;
+    public float startDashTime;
+    private int dashDirection;
 
+    WorldSwitcher worldSwitcher;
 
     // -1 — влево, 1 — вправо, 0 — на месте.
     float horizontalDirection = 0.0f;
@@ -54,9 +60,14 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        dashTime = startDashTime;
         if (!rb)
         {
             rb = GetComponent<Rigidbody2D>();
+        }
+        if (!worldSwitcher)
+        {
+            worldSwitcher = GetComponent<WorldSwitcher>();
         }
 
         if (!left_ground)
@@ -128,6 +139,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+
+            dashTime -= Time.deltaTime;
+            
+            //rb.velocity = Vector2.zero; //---------------------------------------------------------------если че убрать
+
+
+
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
             if (InputManager.GetKey(KeyAction.MoveLeft))
@@ -145,6 +163,8 @@ public class PlayerController : MonoBehaviour
                     PlayStepSound();
                 }
                 ResetCamera();
+
+                dashDirection = -1;
             }
             else if (InputManager.GetKey(KeyAction.MoveRight))
             {
@@ -160,6 +180,8 @@ public class PlayerController : MonoBehaviour
                     PlayStepSound();
                 }
                 ResetCamera();
+
+                dashDirection = 1;
             }
             else
             {
@@ -200,6 +222,8 @@ public class PlayerController : MonoBehaviour
                 ResetCamera();
                 ForcePlayStepSound();
             }
+            
+            
         } //ветка else здесь костыль
         else
         {
@@ -274,6 +298,16 @@ public class PlayerController : MonoBehaviour
             }
             GameplayState.isLoaded = false;
         }
+        if (InputManager.GetKeyDown(KeyAction.CombatAbility1) && worldSwitcher.currentWorld == WorldSwitcher.World.cyan)
+        {
+            
+            Dash();
+        };
+        if (InputManager.GetKeyDown(KeyAction.CombatAbility2) && worldSwitcher.currentWorld == WorldSwitcher.World.green)
+        {
+
+        };
+
     }
 
     void ResetStep()
@@ -363,6 +397,30 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, 0);
         jumping = false;
         isInAir = false; 
+    }
+
+    void Dash()
+    {
+        print(dashTime);
+        if (dashTime > 0)
+        {
+           
+            if (dashDirection != 0)
+            {
+                dashTime = startDashTime;
+
+                if (dashDirection == -1)
+                {
+                    rb.velocity = Vector2.left * dashSpeed;
+                }
+                else if (dashDirection == 1)
+                {
+                    rb.velocity = Vector2.right * dashSpeed;
+                }
+            }
+        }
+        /*rb.velocity = new Vector2(dashSpeed*Time.deltaTime, rb.velocity.y);
+        rb.velocity = new Vector2(dashSpeed*Time.deltaTime, rb.velocity.y);*/
     }
 }
 

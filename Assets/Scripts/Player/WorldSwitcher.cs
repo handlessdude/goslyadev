@@ -18,7 +18,7 @@ public class WorldSwitcher : MonoBehaviour
 
     ChromaticAberration aberration;
 
-    World currentWorld = World.none;
+    public World currentWorld = World.none;
 
     public GameObject cyanGlow;
     public GameObject magentaGlow;
@@ -27,7 +27,7 @@ public class WorldSwitcher : MonoBehaviour
 
     Dictionary<World, GameObject[]> objects;
 
-    enum World
+    public enum World
     {
         none,
         cyan,

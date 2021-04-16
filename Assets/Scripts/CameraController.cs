@@ -82,8 +82,6 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        print(GameplayState.feededboards);
-        print(GameplayState.boards);
         if (phoneRing)
         {
             if (GameplayState.controllability == PlayerControllability.FirstDialog)

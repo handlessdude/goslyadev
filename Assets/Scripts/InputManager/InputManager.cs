@@ -21,6 +21,9 @@ public enum KeyAction
     Level2,
     Load,
     Save,
+    //Test
+    CombatAbility1,
+    CombatAbility2
 }
 
 public static class InputManager
@@ -45,7 +48,10 @@ public static class InputManager
             [KeyAction.Level1] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F1, KeyCode.None),
             [KeyAction.Level2] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F2, KeyCode.None),
             [KeyAction.Load] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F4, KeyCode.Mouse3),
-            [KeyAction.Save] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F5, KeyCode.Mouse4)
+            [KeyAction.Save] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F5, KeyCode.Mouse4),
+            [KeyAction.CombatAbility1] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse0, KeyCode.None),
+            [KeyAction.CombatAbility2] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse1, KeyCode.None),
+
         };
 
     static bool isInit = false;
