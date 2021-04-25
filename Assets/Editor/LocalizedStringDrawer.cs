@@ -17,14 +17,15 @@ public class LocalizedStringDrawer : PropertyDrawer
     {
         if (dropdown)
         {
-            return height + 25;
+            return height + 47;
         }
-        return 20;
+        return 42;
     }
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         EditorGUI.BeginProperty(position, label, property);
+        
         position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
         position.width -= 34;
         position.height = 18;
@@ -38,7 +39,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 
         dropdown = EditorGUI.Foldout(foldButtonRect, dropdown, "");
 
-        position.width -= 120;
+        position.width += 34;
 
         SerializedProperty key = property.FindPropertyRelative("key");
         key.stringValue = EditorGUI.TextField(position, key.stringValue);
@@ -56,9 +57,12 @@ public class LocalizedStringDrawer : PropertyDrawer
             modifiedProp[property.propertyPath] = default(string);
         }
 
-        position.x += position.width + 2;
-        position.width = 60;
+        
+        //position.x += position.width + 2;
+        position.y += 20;
+        position.width = position.width/7*3;
         position.height = 17;
+
 
         if (GUI.Button(position, "Search"))
         {
@@ -66,7 +70,7 @@ public class LocalizedStringDrawer : PropertyDrawer
         }
 
         position.x += position.width + 2;
-        position.width = 40;
+        position.width = position.width/3*2;
 
         if (GUI.Button(position, "New"))
         {
@@ -84,7 +88,7 @@ public class LocalizedStringDrawer : PropertyDrawer
         {
             var value = "\n" + CSVParser.GetTranslations(key.stringValue).Select(x => x.Key + ": " + x.Value + "\n\n").Aggregate((res, x) => res + x);
             GUIStyle style = GUI.skin.box;
-            height = style.CalcHeight(new GUIContent(value), valueRect.width);
+            height = style.CalcHeight(new GUIContent(value), valueRect.width) + 40;
 
             valueRect.height = height;
             valueRect.y += 21;

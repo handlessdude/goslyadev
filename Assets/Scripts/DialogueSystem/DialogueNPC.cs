@@ -7,6 +7,7 @@ public class DialogueNPC : Interactable
 {
     public GameObject dialogueBoxPrefab;
     public DialogueElement currentDialogElement;
+    public DialogueObject dialogueFile;
     public CameraController cc;
     public DialogueSelection dialogueSelection;
     //public GameObject player;
@@ -77,6 +78,94 @@ public class DialogueNPC : Interactable
         }
     }
 
+    private void Start()
+    {
+        if (currentDialogElement == null)
+        {
+            DeserializeDialogueFile();
+        }
+    }
+
+    void DeserializeDialogueFile()
+    {
+        if (!dialogueFile)
+        {
+            Debug.LogError("No dialogue file!");
+            return;
+        }
+
+        Dictionary<int, DialogueElement> processed = new Dictionary<int, DialogueElement>();
+        Queue<(int, DialogueElement)> q = new Queue<(int, DialogueElement)>();
+
+        for (int i = dialogueFile.nodes.Count - 1; i >= 0; i--)
+        {
+            if (dialogueFile.nodes[i].type == DialogueNodeObject.Type.End)
+            {
+                processed[i] = new DialogueEndElement();
+                processed[i].textValue = dialogueFile.nodes[i].textValue;
+                processed[i].isOnCharacter = dialogueFile.nodes[i].isOnCharacter;
+                if (dialogueFile.nodes[i].nextOnNextVisit < 0)
+                {
+                    continue;
+                }
+                if (processed.ContainsKey(dialogueFile.nodes[i].nextOnNextVisit))
+                {
+                    (processed[i] as DialogueEndElement).nextOnNextVisit = processed[dialogueFile.nodes[i].nextOnNextVisit];
+                }
+                else
+                {
+                    q.Enqueue((dialogueFile.nodes[i].nextOnNextVisit, processed[i]));
+                }
+            }
+            else if (dialogueFile.nodes[i].type == DialogueNodeObject.Type.Sequential)
+            {
+                processed[i] = new SequentialDialogueElement();
+                processed[i].textValue = dialogueFile.nodes[i].textValue;
+                processed[i].isOnCharacter = dialogueFile.nodes[i].isOnCharacter;
+                if (processed.ContainsKey(dialogueFile.nodes[i].next))
+                {
+                    (processed[i] as SequentialDialogueElement).next = processed[dialogueFile.nodes[i].next];
+                }
+                else
+                {
+                    q.Enqueue((dialogueFile.nodes[i].next, processed[i]));
+                }
+            }
+            else if (dialogueFile.nodes[i].type == DialogueNodeObject.Type.Selection)
+            {
+                processed[i] = new SelectionDialogueElement();
+                (processed[i] as SelectionDialogueElement).playerChoices = dialogueFile.nodes[i].playerChoice_keys.ToArray();
+                processed[i].textValue = dialogueFile.nodes[i].textValue;
+                (processed[i] as SelectionDialogueElement).next = new List<System.Func<DialogueElement>>();
+                foreach (var x in dialogueFile.nodes[i].playerChoice_values)
+                {
+                    q.Enqueue((x, processed[i]));
+                }
+            }
+        }
+
+        while (q.Count != 0)
+        {
+            (int, DialogueElement) pair = q.Dequeue();
+            DialogueElement d_node = pair.Item2;
+            int i = pair.Item1;
+            if (d_node is SelectionDialogueElement)
+            {
+                (d_node as SelectionDialogueElement).next.Add(() => processed[i]);
+            }
+            else if (d_node is DialogueEndElement)
+            {
+                (d_node as DialogueEndElement).nextOnNextVisit = processed[i];
+            }
+            else if (d_node is SequentialDialogueElement)
+            {
+                (d_node as SequentialDialogueElement).next = processed[i];
+            }
+        }
+
+        currentDialogElement = processed[0];
+    }
+
     void DrawDialogueText()
     {
         if (currentDialogElement.isOnCharacter)
@@ -90,7 +179,7 @@ public class DialogueNPC : Interactable
             currentDialogueBox.transform.position = new Vector2(transform.position.x, transform.position.y + selfBubbleHeight);
         }
 
-        string text = Localization.GetLocalizedString(currentDialogElement.textValue);
+        string text = Localization.GetLocalizedString(currentDialogElement.textValue.key);
         textComponent = currentDialogueBox.transform.Find("Text").GetComponent<TextMeshProUGUI>();
         stretchBar = StartCoroutine(StretchBar(text));
     }
@@ -154,7 +243,7 @@ public class DialogueNPC : Interactable
             case DialogueState.DrawingBox:
                 {
                     StopCoroutine(stretchBar);
-                    string text = Localization.GetLocalizedString(currentDialogElement.textValue);
+                    string text = Localization.GetLocalizedString(currentDialogElement.textValue.key);
                     float length = CalculateLineLength(text);
                     RectTransform rtMain = currentDialogueBox.transform.Find("Background").GetComponent<RectTransform>();
                     RectTransform rtLeft = currentDialogueBox.transform.Find("Leftbackground").GetComponent<RectTransform>();
@@ -169,7 +258,7 @@ public class DialogueNPC : Interactable
                 {
                     CancelInvoke("OnDialogueDrawn");
                     StopCoroutine(typeText);
-                    textComponent.text = Localization.GetLocalizedString(currentDialogElement.textValue);
+                    textComponent.text = Localization.GetLocalizedString(currentDialogElement.textValue.key);
                     dialogueState = DialogueState.DrawnDialogDelay;
                     Invoke("OnDialogueDrawn", drawnDialogShowTime);
                     break;

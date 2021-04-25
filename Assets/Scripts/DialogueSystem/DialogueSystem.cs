@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [System.Serializable]
 public abstract class DialogueElement
 {
     [SerializeField]
-    public string textValue;
+    public LocalizedString textValue;
     public bool isOnCharacter;
 }
 
@@ -29,7 +30,11 @@ public class SequentialDialogueElement : DialogueElement
 {
     public DialogueElement next;
 
-    public SequentialDialogueElement(string val, bool isOnChar, DialogueElement dialogueElement)
+    public SequentialDialogueElement()
+    {
+
+    }
+        public SequentialDialogueElement(string val, bool isOnChar, DialogueElement dialogueElement)
     {
         textValue = val;
         isOnCharacter = isOnChar;
@@ -39,14 +44,20 @@ public class SequentialDialogueElement : DialogueElement
 
 public class SelectionDialogueElement : DialogueElement
 {
-    public string[] playerChoices;
-    System.Func<DialogueElement>[] next;
-    public SelectionDialogueElement(string val, string[] choices, System.Func<DialogueElement>[] outcomes)
+    public LocalizedString[] playerChoices;
+    public List<System.Func<DialogueElement>> next;
+    public SelectionDialogueElement()
+    {
+        isOnCharacter = false;
+    }
+
+    public SelectionDialogueElement(string val, LocalizedString[] choices, System.Func<DialogueElement>[] outcomes)
     {
         textValue = val;
         isOnCharacter = false;
         playerChoices = choices;
-        next = outcomes;
+        //TODO: это временно. эта сигнатура нам не нужна.
+        next = outcomes.ToList();
     }
 
     public DialogueElement ChooseNext(int i)

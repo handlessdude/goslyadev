@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d798dd91538b834c8d9cd746c7654f9, type: 3}
+  m_Name: dialogue7
+  m_EditorClassIdentifier: 
+  nodes:
+  - textValue:
+      key: big_robot_hero_what
+    isOnCharacter: 0
+    rect:
+      serializedVersion: 2
+      x: 435.969
+      y: 271.4845
+      width: 400
+      height: 70
+    type: 0
+    nextOnNextVisit: 0
+    next: 0
+    playerChoice_keys:
+    - key: big_robot_not_touch_it
+    - key: smallrobot_eh
+    playerChoice_events:
+    - m_PersistentCalls:
+        m_Calls: []
+    - m_PersistentCalls:
+        m_Calls: []
+    playerChoice_values: 0100000002000000
+  - textValue:
+      key: menu_new_game
+    isOnCharacter: 0
+    rect:
+      serializedVersion: 2
+      x: 1573.913
+      y: 576.39746
+      width: 400
+      height: 80
+    type: 1
+    nextOnNextVisit: 0
+    next: 0
+    playerChoice_keys: []
+    playerChoice_events: []
+    playerChoice_values: 
+  - textValue:
+      key: options_windowed
+    isOnCharacter: 0
+    rect:
+      serializedVersion: 2
+      x: 1533
+      y: 378
+      width: 400
+      height: 80
+    type: 2
+    nextOnNextVisit: 0
+    next: 0
+    playerChoice_keys: []
+    playerChoice_events: []
+    playerChoice_values: 

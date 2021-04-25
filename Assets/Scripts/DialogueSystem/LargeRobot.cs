@@ -65,8 +65,6 @@ public class LargeRobot : DialogueNPC
             ((make_generator_work.next as SequentialDialogueElement).next
              as DialogueEndElement).nextOnNextVisit = make_generator_work;
       
-       
-
 
         /*currentDialogElement = new SequentialDialogueElement(
         "dialogue_test1", true, new SequentialDialogueElement(
