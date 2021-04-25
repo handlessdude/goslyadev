@@ -15,7 +15,12 @@ public enum KeyAction
     WorldGreen,
     CameraScale,
     Action,
-    Confirm
+    Confirm,
+    // Сделал для проверки
+    Level1,
+    Level2,
+    Load,
+    Save,
 }
 
 public static class InputManager
@@ -36,7 +41,11 @@ public static class InputManager
             [KeyAction.WorldGreen] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Alpha3, KeyCode.G),
             [KeyAction.CameraScale] = new System.Tuple<KeyCode, KeyCode>(KeyCode.V, KeyCode.None),
             [KeyAction.Action] = new System.Tuple<KeyCode, KeyCode>(KeyCode.E, KeyCode.None),
-            [KeyAction.Confirm] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Return, KeyCode.E)
+            [KeyAction.Confirm] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Return, KeyCode.E),
+            [KeyAction.Level1] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F1, KeyCode.None),
+            [KeyAction.Level2] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F2, KeyCode.None),
+            [KeyAction.Load] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F4, KeyCode.Mouse3),
+            [KeyAction.Save] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F5, KeyCode.Mouse4)
         };
 
     static bool isInit = false;

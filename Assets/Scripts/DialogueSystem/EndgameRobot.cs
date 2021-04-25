@@ -8,7 +8,7 @@ public class EndgameRobot : DialogueNPC
 
     public Animator anim;
     public GameObject pressToUnderstandHint;
-
+    public ScreenFader screenFader;
     bool isHintShown = false;
 
     // Start is called before the first frame update
@@ -18,8 +18,6 @@ public class EndgameRobot : DialogueNPC
         {
             anim = GetComponent<Animator>();
         }
-
-
         selfBubbleHeight = 2.3f;
 
         currentDialogElement = new SequentialDialogueElement("endgame", false,
@@ -42,7 +40,6 @@ public class EndgameRobot : DialogueNPC
         base.Response(i);
         anim.Play("udivl");
         Invoke("RestoreIdle", 2.0f);
-
     }
 
     void RestoreIdle()
@@ -55,7 +52,12 @@ public class EndgameRobot : DialogueNPC
     {
         base.DialogueExit();
         Time.timeScale = 1.0f;
-        Cursor.visible = true;
-        SceneManager.LoadScene(0);
+        screenFader.fadeState = ScreenFader.FadeState.In;
+        Invoke("LoadScene", 5.0f);
+    }
+
+    void LoadScene()
+    {
+        SceneManager.LoadScene(2);
     }
 }

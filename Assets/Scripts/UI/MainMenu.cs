@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class MainMenu : SaveSerial
 {
     public GameObject notImplementedWarning;
     public GameObject mainMenu;
@@ -39,14 +39,12 @@ public class MainMenu : MonoBehaviour
         Debug.Log("STARTING NEW GAME");
         GameplayState.LevelStart();
         Cursor.visible = false;
+        GameplayState.deletedObjectsList.Clear();
+        GameplayState.barrels = 0;
+        GameplayState.feededBarrels = 0;
+        GameplayState.isPreparationEnded = false;
         SceneManager.LoadScene(1);
-        
-    }
 
-    public void LoadGame()
-    {
-        Debug.Log("OPENING LOAD GAME MENU");
-        ShowNotImplementedWarning();
     }
 
     public void OpenOptions()
@@ -72,8 +70,6 @@ public class MainMenu : MonoBehaviour
             t.UpdateLocalization();
         }
     }
-
-
 
     public void ShowNotImplementedWarning()
     {

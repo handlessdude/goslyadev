@@ -1,30 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class Doorway : Interactable
 {
     public FadeToBlack fade;
     public Transform destination;
     public GameObject cam;
-
     bool cooldown = false;
-
+    public Plate Plate;
     void Start()
     {
-        
     }
 
     protected override void Action()
     {
         base.Action();
-        if (!cooldown)
+        if (Plate.isTriggered)
         {
-            CancelInvoke();
-            fade.FadeTransition(out float halfTime);
-            Invoke("Teleport", halfTime);
-            cooldown = true;
-        }
+            if (!cooldown)
+            {
+                CancelInvoke();
+                fade.FadeTransition(out float halfTime);
+                Invoke("Teleport", halfTime);
+                cooldown = true;
+            }
+        }    
     }
 
     void Teleport()

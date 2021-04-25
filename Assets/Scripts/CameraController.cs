@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class CameraController : MonoBehaviour
 {
@@ -10,11 +11,10 @@ public class CameraController : MonoBehaviour
 
     [HideInInspector]
     public PixelPerfectCamera pixCamera;
-
     public Transform cameraBoundsParent;
-
+    public ScreenFader screenFader;
     Vector2 inboundTarget;
-
+    SaveSerial Load;
     List<PolygonCollider2D> cameraBounds;
     PolygonCollider2D currentCollider;
 
@@ -40,21 +40,26 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
+        if (!Load)
+        {
+            Load = GetComponent<SaveSerial>();
+        }    
         if (!pixCamera)
         {
             pixCamera = GetComponent<PixelPerfectCamera>();
         }
 
-        cameraBounds = new List<PolygonCollider2D>();
-
-        foreach (Transform gO in cameraBoundsParent)
+        if (cameraBoundsParent)
         {
-            cameraBounds.Add(gO.GetComponent<PolygonCollider2D>());
-        }
-
-        currentCollider = cameraBounds[0];
-
-
+            cameraBounds = new List<PolygonCollider2D>();
+            foreach (Transform gO in cameraBoundsParent)
+            {
+                cameraBounds.Add(gO.GetComponent<PolygonCollider2D>());
+            }
+            currentCollider = cameraBounds[0];
+        } 
+            screenFader.fadeState = ScreenFader.FadeState.OutEnd;
+            screenFader.fadeState = ScreenFader.FadeState.Out;
     }
 
     public bool ZoomedOut()
@@ -62,8 +67,38 @@ public class CameraController : MonoBehaviour
         return zoomedOut;
     }
 
+    void FixedUpdate()
+    {
+    }
+
+
     void Update()
     {
+        // Сделал для удобной проверки всего
+        if (InputManager.GetKey(KeyAction.Level1))
+        {
+            SceneManager.LoadScene(1);
+            GameplayState.LevelStart();
+        }
+
+        if (InputManager.GetKey(KeyAction.Level2))
+        {
+            SceneManager.LoadScene(2);
+            GameplayState.LevelStart();
+        }
+
+        if (InputManager.GetKey(KeyAction.Load))
+        {
+            Load.LoadGame();
+        }
+
+        if (InputManager.GetKey(KeyAction.Save))
+        {
+            Load.SaveGame();
+        }
+
+        //
+
         if (target)
         {
             //интерполируем к точке на периметре коллайдера-ограничителя
@@ -197,10 +232,6 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        
-    }
 
     public void ZoomIn()
     {
