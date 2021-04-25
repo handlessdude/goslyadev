@@ -90,6 +90,7 @@ public class DialogueNPC : Interactable
     {
         if (!dialogueFile)
         {
+            Debug.LogError("No dialogue file!");
             return;
         }
 
@@ -109,12 +110,11 @@ public class DialogueNPC : Interactable
                 }
                 if (processed.ContainsKey(dialogueFile.nodes[i].nextOnNextVisit))
                 {
-                    Debug.Log("HIER!");
                     (processed[i] as DialogueEndElement).nextOnNextVisit = processed[dialogueFile.nodes[i].nextOnNextVisit];
                 }
                 else
                 {
-                    q.Enqueue((i, processed[i]));
+                    q.Enqueue((dialogueFile.nodes[i].nextOnNextVisit, processed[i]));
                 }
             }
             else if (dialogueFile.nodes[i].type == DialogueNodeObject.Type.Sequential)
@@ -128,7 +128,7 @@ public class DialogueNPC : Interactable
                 }
                 else
                 {
-                    q.Enqueue((i, processed[i]));
+                    q.Enqueue((dialogueFile.nodes[i].next, processed[i]));
                 }
             }
             else if (dialogueFile.nodes[i].type == DialogueNodeObject.Type.Selection)
@@ -139,14 +139,7 @@ public class DialogueNPC : Interactable
                 (processed[i] as SelectionDialogueElement).next = new List<System.Func<DialogueElement>>();
                 foreach (var x in dialogueFile.nodes[i].playerChoice_values)
                 {
-                    if (processed.ContainsKey(x))
-                    {
-                        (processed[i] as SelectionDialogueElement).next.Add(() => processed[x]);
-                    }
-                    else
-                    {
-                        q.Enqueue((i, processed[i]));
-                    }
+                    q.Enqueue((x, processed[i]));
                 }
             }
         }

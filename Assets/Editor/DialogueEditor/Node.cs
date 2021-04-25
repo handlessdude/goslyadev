@@ -9,7 +9,7 @@ public class Node : ScriptableObject
 {
 
     //я и сам не понимаю, почему это здесь, но иначе не работает
-    protected SerializedObject this_as_serialized;
+    public SerializedObject this_as_serialized;
 
     public LocalizedString textValue;
     public bool isOnCharacter;
@@ -67,7 +67,6 @@ public class Node : ScriptableObject
                             GUI.changed = true;
                             isSelected = true;
                             style = selectedNodeStyle;
-                            e.Use();
                         }
                         else
                         {
@@ -186,12 +185,12 @@ public class SequentialNode : StandardNode
         if (!optimized)
         {
             Rect r = rect;
-            r.position = new Vector2(r.position.x + 15, r.position.y - r.height / 2 + 20);
+            r.position = new Vector2(r.position.x + 15, r.position.y - r.height / 2 + 15);
             EditorGUI.LabelField(r, "Sequential Node");
-            r.position = new Vector2(r.position.x, r.position.y + 50);
-            r.width -= 25;
+            r.position = new Vector2(r.position.x, r.position.y + 60);
+            r.width -= 35;
             EditorGUI.PropertyField(r, this_as_serialized.FindProperty("textValue"));
-            r.position = new Vector2(r.position.x, r.position.y + 18);
+            r.position = new Vector2(r.position.x, r.position.y + 45);
             r.height = 20;
             EditorGUI.PropertyField(r, this_as_serialized.FindProperty("isOnCharacter"));
             this_as_serialized.ApplyModifiedProperties();
@@ -213,11 +212,11 @@ public class SelectionNode : StandardNode
         if (!optimized)
         {
             Rect r = rect;
-            r.position = new Vector2(r.position.x + 15, r.position.y - r.height / 2 + 20);
+            r.position = new Vector2(r.position.x + 15, r.position.y - r.height / 2 + 15);
             EditorGUI.LabelField(r, "Selection Node");
-            r.position = new Vector2(r.position.x, r.position.y + 47);
+            r.position = new Vector2(r.position.x, r.position.y + 57);
             r.height = 20;
-            r.width -= 25;
+            r.width -= 35;
             EditorGUI.PropertyField(r, this_as_serialized.FindProperty("textValue"));
             this_as_serialized.ApplyModifiedProperties();
         }
@@ -240,12 +239,12 @@ public class ChoiceNode : StandardNode
         if (!optimized)
         {
             Rect r = rect;
-            r.position = new Vector2(r.position.x + 15, r.position.y - r.height / 2 + 20);
+            r.position = new Vector2(r.position.x + 15, r.position.y - r.height / 2 + 15);
             EditorGUI.LabelField(r, "Choice Node");
-            r.position = new Vector2(r.position.x, r.position.y + 100);
-            r.width -= 25;
+            r.position = new Vector2(r.position.x, r.position.y + 110);
+            r.width -= 30;
             EditorGUI.PropertyField(r, this_as_serialized.FindProperty("textValue"));
-            r.position = new Vector2(r.position.x, r.position.y + 22);
+            r.position = new Vector2(r.position.x, r.position.y + 42);
             r.height = 20;
             EditorGUI.PropertyField(r, this_as_serialized.FindProperty("priority"));
             r.position = new Vector2(r.position.x, r.position.y + 22);
@@ -269,12 +268,12 @@ public class EndNode : StandardNode
         if (!optimized)
         {
             Rect r = rect;
-            r.position = new Vector2(r.position.x + 15, r.position.y - r.height / 2 + 20);
+            r.position = new Vector2(r.position.x + 15, r.position.y - r.height / 2 + 15);
             EditorGUI.LabelField(r, "End Node");
-            r.position = new Vector2(r.position.x, r.position.y + 50);
-            r.width -= 25;
+            r.position = new Vector2(r.position.x, r.position.y + 60);
+            r.width -= 30;
             EditorGUI.PropertyField(r, this_as_serialized.FindProperty("textValue"));
-            r.position = new Vector2(r.position.x, r.position.y + 18);
+            r.position = new Vector2(r.position.x, r.position.y + 38);
             r.height = 20;
             EditorGUI.PropertyField(r, this_as_serialized.FindProperty("isOnCharacter"));
             this_as_serialized.ApplyModifiedProperties();

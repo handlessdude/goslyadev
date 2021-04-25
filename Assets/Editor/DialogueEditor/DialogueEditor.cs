@@ -26,7 +26,7 @@ public class DialogueEditor : EditorWindow
 
     private Vector2 windowSize = new Vector2(800f, 600f);
     private Rect zoomableCanvas;
-    
+
     private float scaling = 1f;
     private float maxScaling = 10f;
     private float minScaling = 0.1f;
@@ -78,7 +78,7 @@ public class DialogueEditor : EditorWindow
         outPointStyle.active.background = EditorGUIUtility.Load("builtin skins/darkskin/images/btn right on.png") as Texture2D;
         outPointStyle.border = new RectOffset(4, 4, 12, 12);
 
-        nodes.Add(new StartNode(new Vector2(windowSize.x/4, windowSize.y/4), 150, 80, nodeStyle, selectedNodeStyle, outPointStyle, OnClickOutPoint));
+        nodes.Add(new StartNode(new Vector2(windowSize.x / 4, windowSize.y / 4), 100, 40, nodeStyle, selectedNodeStyle, outPointStyle, OnClickOutPoint));
     }
 
     void OnGUI()
@@ -110,7 +110,12 @@ public class DialogueEditor : EditorWindow
 
         if (GUI.Button(new Rect(5, 5, 50, 25), "SAVE"))
         {
-            Save();
+            NewSave();
+        }
+
+        if (GUI.Button(new Rect(60, 5, 50, 25), "LOAD"))
+        {
+            Load();
         }
 
         if (GUI.changed)
@@ -244,7 +249,7 @@ public class DialogueEditor : EditorWindow
                     }
                     break;
                 }
-            
+
         }
     }
 
@@ -261,12 +266,12 @@ public class DialogueEditor : EditorWindow
 
         for (int i = 0; i < widthDivs; i++)
         {
-            Handles.DrawLine(new Vector3(gridSpacing * i, -gridSpacing, 0) + newOffset, new Vector3(gridSpacing * i, position.height/scaling, 0f) + newOffset);
+            Handles.DrawLine(new Vector3(gridSpacing * i, -gridSpacing, 0) + newOffset, new Vector3(gridSpacing * i, position.height / scaling, 0f) + newOffset);
         }
 
         for (int j = 0; j < heightDivs; j++)
         {
-            Handles.DrawLine(new Vector3(-gridSpacing, gridSpacing * j, 0) + newOffset, new Vector3(position.width/scaling, gridSpacing * j, 0f) + newOffset);
+            Handles.DrawLine(new Vector3(-gridSpacing, gridSpacing * j, 0) + newOffset, new Vector3(position.width / scaling, gridSpacing * j, 0f) + newOffset);
         }
 
         Handles.color = Color.white;
@@ -302,7 +307,7 @@ public class DialogueEditor : EditorWindow
     Vector2 ScaledCoords(Vector2 screenCoords)
     {
         Vector2 canvasTopLeft = new Vector2(zoomableCanvas.xMin, zoomableCanvas.yMin);
-        return (screenCoords - canvasTopLeft)/scaling + scalingPivot;
+        return (screenCoords - canvasTopLeft) / scaling + scalingPivot;
     }
 
     private void OnDrag(Vector2 delta)
@@ -322,25 +327,25 @@ public class DialogueEditor : EditorWindow
 
     void OnClickAddSelectionNode(Vector2 mousePosition)
     {
-        nodes.Add(new SelectionNode(mousePosition, 400, 70, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle, 
+        nodes.Add(new SelectionNode(mousePosition, 300, 90, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle,
             OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
     }
 
     void OnClickAddChoiceNode(Vector2 mousePosition)
     {
-        nodes.Add(new ChoiceNode(mousePosition, 400, 180, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle,
+        nodes.Add(new ChoiceNode(mousePosition, 300, 200, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle,
             OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
     }
 
     void OnClickAddSequentialNode(Vector2 mousePosition)
     {
-        nodes.Add(new SequentialNode(mousePosition, 400, 80, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle, 
+        nodes.Add(new SequentialNode(mousePosition, 300, 100, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle,
             OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
     }
 
     void OnClickAddEndNode(Vector2 mousePosition)
     {
-        nodes.Add(new EndNode(mousePosition, 400, 80, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle,
+        nodes.Add(new EndNode(mousePosition, 300, 100, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle,
             OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
     }
 
@@ -425,72 +430,72 @@ public class DialogueEditor : EditorWindow
         selectedInPoint = null;
         selectedOutPoint = null;
     }
-    
-    //TODO: да, здесь сложность можно сократить на порядок
-    private void Save()
+
+    private void NewSave()
     {
-        //(parent_ind, node)
-        Stack<(int, Node)> s = new Stack<(int, Node)>();
+        List<Node> unresolved_links = new List<Node>();
+        Dictionary<Node, int> result_links = new Dictionary<Node, int>();
+        Queue<Node> q = new Queue<Node>();
         List<DialogueNodeObject> result = new List<DialogueNodeObject>();
-        Dictionary<Node, int> enumerated_nodes = new Dictionary<Node, int>();
 
-        s.Push((-1, getChildren(nodes[0]).First()));
+        q.Enqueue(getChildren(nodes[0]).First());
 
-        int i = -1;
-        while (s.Count != 0)
+        while (q.Count != 0)
         {
-            i++;
-            (int, Node) pair = s.Pop();
-            UnityEvent e = null;
-            if (pair.Item2 is ChoiceNode)
+            Node n = q.Dequeue();
+
+            if (result_links.ContainsKey(n))
             {
-                e = (pair.Item2 as ChoiceNode).OnSelect;
-                Node n1 = getChildren(pair.Item2).First();
-
-                result[pair.Item1].playerChoice_keys.Add(pair.Item2.textValue);
-                result[pair.Item1].playerChoice_events.Add(e);
-                if (enumerated_nodes.ContainsKey(n1))
-                {
-                    Debug.Log("Here!");
-                    result[pair.Item1].playerChoice_values.Add(enumerated_nodes[n1]);
-                    continue;
-                }
-                result[pair.Item1].playerChoice_values.Add(i);
-
-                pair = (pair.Item1, n1);
+                continue;
             }
-            result.Add(TransformToNodeObject(pair.Item2));
-            enumerated_nodes[pair.Item2] = i;
-            if (pair.Item1 != -1)
-            { //обновляем родительскую ссылку
-                if (result[pair.Item1].type == DialogueNodeObject.Type.End)
+            result.Add(TransformToNodeObject(n));
+            result_links[n] = result.Count() - 1;
+            Node[] children = getChildren(n);
+            if (n is SelectionNode)
+            {
+                foreach (var x in children)
                 {
-                    result[pair.Item1].nextOnNextVisit = i;
-                }
-                else if (result[pair.Item1].type == DialogueNodeObject.Type.Sequential)
-                {
-                    result[pair.Item1].next = i;
+                    Node child = getChildren(x).First();
+                    unresolved_links.Add(child);
+                    result.Last().playerChoice_events.Add((x as ChoiceNode).OnSelect);
+                    result.Last().playerChoice_keys.Add((x as ChoiceNode).textValue);
+                    result.Last().playerChoice_values.Add(unresolved_links.Count());
+                    result.Last().choiceNodes.Add(x.rect);
+                    q.Enqueue(child);
                 }
             }
-
-            Node[] children = getChildren(pair.Item2);
-            foreach (var c in children)
+            else
             {
-                if (enumerated_nodes.ContainsKey(c))
+                if (children.Count() == 0 && n is EndNode)
                 {
-                    if (pair.Item2 is EndNode)
-                    {
-                        result[i].nextOnNextVisit = enumerated_nodes[c];
-                    }
-                    else if (pair.Item2 is SequentialNode)
-                    {
-                        result[i].next = enumerated_nodes[c];
-                    }
+                    result.Last().nextOnNextVisit = -1;
                 }
                 else
                 {
-                    s.Push((i, c));
+                    unresolved_links.Add(children.First());
+                    result.Last().next = unresolved_links.Count();
+                    result.Last().nextOnNextVisit = unresolved_links.Count();
                 }
+                q.Enqueue(children.First());
+            }
+        }
+
+        foreach (var x in result)
+        {
+            if (x.playerChoice_values != null)
+            {
+                for (int i = 0; i < x.playerChoice_values.Count(); i++)
+                {
+                    x.playerChoice_values[i] = result_links[unresolved_links[x.playerChoice_values[i] - 1]];
+                }
+            }
+            if (x.next != 0)
+            {
+                x.next = result_links[unresolved_links[x.next - 1]];
+            }
+            if (x.nextOnNextVisit > 0)
+            {
+                x.nextOnNextVisit = result_links[unresolved_links[x.nextOnNextVisit - 1]];
             }
         }
 
@@ -506,7 +511,6 @@ public class DialogueEditor : EditorWindow
             AssetDatabase.CreateAsset(asset, path);
             AssetDatabase.SaveAssets();
         }
-        
     }
 
     private DialogueNodeObject TransformToNodeObject(Node n)
@@ -534,5 +538,117 @@ public class DialogueEditor : EditorWindow
     private Node[] getChildren(Node n)
     {
         return connections.FindAll(x => x.outPoint.node == n).Select(x => x.inPoint.node).ToArray();
+    }
+
+    private void Load()
+    {
+        string path = EditorUtility.OpenFilePanel("Load dialogue file", "", "asset");
+        if (path.Length == 0)
+        { 
+            return;
+        }
+        if (path.StartsWith(Application.dataPath))
+        {
+            path = "Assets" + path.Substring(Application.dataPath.Length);
+        }
+        Clear();
+        DialogueObject file = AssetDatabase.LoadAssetAtPath<DialogueObject>(path);
+        DeserializeFile(file);
+    }
+
+    private void Clear()
+    {
+        nodes.RemoveAll(x => !(x is StartNode ));
+        connections.RemoveAll(x => true);
+    }
+
+    private void DeserializeFile(DialogueObject file)
+    {
+        if (!file)
+        {
+            Debug.LogError("No dialogue file!");
+            return;
+        }
+
+        Dictionary<int, StandardNode> processed = new Dictionary<int, StandardNode>();
+        Queue<(int, Node)> q = new Queue<(int, Node)>();
+
+        for (int i = file.nodes.Count - 1; i >= 0; i--)
+        {
+            if (file.nodes[i].type == DialogueNodeObject.Type.End)
+            {
+                nodes.Add(new EndNode(file.nodes[i].rect.position, file.nodes[i].rect.width, file.nodes[i].rect.height, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle,
+                OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
+                processed[i] = nodes.Last() as StandardNode;
+                processed[i].textValue = file.nodes[i].textValue;
+                processed[i].isOnCharacter = file.nodes[i].isOnCharacter;
+                if (file.nodes[i].nextOnNextVisit < 0)
+                {
+                    continue;
+                }
+                if (processed.ContainsKey(file.nodes[i].nextOnNextVisit))
+                {
+                    connections.Add(new Connection(processed[file.nodes[i].nextOnNextVisit].inPoint, processed[i].outPoint, OnClickRemoveConnection));
+                }
+                else
+                {
+                    q.Enqueue((file.nodes[i].nextOnNextVisit, processed[i]));
+                }
+            }
+            else if (file.nodes[i].type == DialogueNodeObject.Type.Sequential)
+            {
+                nodes.Add(new SequentialNode(file.nodes[i].rect.position, file.nodes[i].rect.width, file.nodes[i].rect.height, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle,
+                OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
+                processed[i] = nodes.Last() as StandardNode;
+                processed[i].textValue = file.nodes[i].textValue;
+                processed[i].isOnCharacter = file.nodes[i].isOnCharacter;
+                if (processed.ContainsKey(file.nodes[i].next))
+                {
+                    connections.Add(new Connection(processed[file.nodes[i].next].inPoint, processed[i].outPoint, OnClickRemoveConnection));
+                }
+                else
+                {
+                    q.Enqueue((file.nodes[i].next, processed[i]));
+                }
+            }
+            else if (file.nodes[i].type == DialogueNodeObject.Type.Selection)
+            {
+                nodes.Add(new SelectionNode(file.nodes[i].rect.position, file.nodes[i].rect.width, file.nodes[i].rect.height, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle,
+                 OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
+                processed[i] = nodes.Last() as StandardNode;
+                processed[i].textValue = file.nodes[i].textValue;
+                for (int j = 0; j < file.nodes[i].playerChoice_values.Count; j++)
+                {
+                    nodes.Add(new ChoiceNode(file.nodes[i].choiceNodes[j].position, file.nodes[i].choiceNodes[j].width, file.nodes[i].choiceNodes[j].height, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle,
+                 OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
+                    //TODO: убрать этот момент.
+                    processed[-40 * i + j] = nodes.Last() as StandardNode;
+                    processed[-40 * i + j].textValue = file.nodes[i].playerChoice_keys[j];
+                    (processed[-40 * i + j] as ChoiceNode).OnSelect = file.nodes[i].playerChoice_events[j];
+
+                    connections.Add(new Connection(processed[-40*i + j].inPoint, processed[i].outPoint, OnClickRemoveConnection));
+
+                    q.Enqueue((file.nodes[i].playerChoice_values[j], processed[-40 * i + j]));
+                }
+            }
+
+            Repaint();
+        }
+
+        while (q.Count != 0)
+        {
+            (int, Node) pair = q.Dequeue();
+            StandardNode d_node = pair.Item2 as StandardNode;
+            int i = pair.Item1;
+            connections.Add(new Connection(processed[i].inPoint, d_node.outPoint, OnClickRemoveConnection));
+        }
+
+        foreach (var x in processed)
+        {
+            (x.Value.this_as_serialized).Update();
+            //(x.Value.this_as_serialized).ApplyModifiedProperties();
+        }
+
+        connections.Add(new Connection(processed[0].inPoint, nodes[0].outPoint, OnClickRemoveConnection));
     }
 }

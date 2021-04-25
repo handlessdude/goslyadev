@@ -27,6 +27,8 @@ public class DialogueNodeObject
     public List<UnityEvent> playerChoice_events = new List<UnityEvent>();
     [SerializeField]
     public List<int> playerChoice_values = new List<int>();
+    [SerializeField]
+    public List<Rect> choiceNodes = new List<Rect>();
 }
 
 public class DialogueObject : ScriptableObject
