@@ -11,10 +11,13 @@ public class PathNode
     public float fCost;
     public float gCost;
     public float hCost;
+    public MapPathNode mapPathNode;
+    public PathNode parent;
 
-    public PathNode(Vector2 pos)
+    public PathNode(Vector2 pos, MapPathNode mapPathNode)
     {
         this.pos = pos;
+        this.mapPathNode = mapPathNode;
         gCost = 0;
         hCost = 0;
         fCost = 0;
@@ -36,6 +39,11 @@ public class MapPathNode
     public MapPathNode(Vector2Int pos)
     {
         this.pos = pos;
+    }
+
+    public static explicit operator PathNode(MapPathNode mp)
+    {
+        return new PathNode(Pathfinder.GetCellCenter(mp.pos), mp);
     }
 }
 
@@ -117,12 +125,12 @@ public class Pathfinder
         }
     }
 
-    Vector2Int ConvertToIntCoords(Vector2 v)
+    public static Vector2Int ConvertToIntCoords(Vector2 v)
     {
         return new Vector2Int(Mathf.FloorToInt(v.x/cellSize), Mathf.FloorToInt(v.y / cellSize));
     }
 
-    Vector2 GetCellCenter(Vector2Int v)
+    public static Vector2 GetCellCenter(Vector2Int v)
     {
         return new Vector2(v.x + cellSize/2, v.y + cellSize/2);
     }
@@ -174,17 +182,17 @@ public class Pathfinder
             return null;
         }
 
-
+        return FindPath(map[startPos], map[endPos]);
     }
 
-    public LinkedList<PathNode> FindPath(PathNode startNode, PathNode endNode)
+    public LinkedList<PathNode> FindPath(MapPathNode startNode, MapPathNode endNode)
     {
         Debug.Log("Search started");
         LinkedList<PathNode> path = new LinkedList<PathNode>();
         List<PathNode> openSet = new List<PathNode>();
-        List<Vector2> closedCoords = new List<Vector2>();
+        List<Vector2Int> closedCoords = new List<Vector2Int>();
         List<PathNode> closedSet = new List<PathNode>();
-        openSet.Add(startNode);
+        openSet.Add((PathNode)startNode);
         while (openSet.Count != 0)
         {
             float minf = float.MaxValue;
@@ -200,14 +208,14 @@ public class Pathfinder
             //Debug.Log(currentNode);
             openSet.Remove(currentNode);
             closedSet.Add(currentNode);
-            closedCoords.Add(new Vector2(currentNode.pos.x, currentNode.pos.y));
+            closedCoords.Add(currentNode.mapPathNode.pos);
             if (closedCoords.Count > 50)
             {
                 return null;
             }
-            if ((currentNode.pos.x == endNode.pos.x) && (currentNode.pos.y == endNode.pos.y))
+            if (currentNode.mapPathNode == endNode)
             {
-                while (currentNode != startNode)
+                while (currentNode.mapPathNode != startNode)
                 {
                     path.AddFirst(currentNode);
                     currentNode = currentNode.parent;
@@ -216,16 +224,18 @@ public class Pathfinder
                 return path;
             }
 
-            foreach (PathNode neighbour in GetNeighbourNodes(currentNode))
+            foreach (MapPathNode _neighbour in GetNeighbourNodes(currentNode.mapPathNode))
             {
+                PathNode neighbour = (PathNode)_neighbour;
+                neighbour.parent = currentNode;
                 neighbour.gCost = currentNode.gCost + heuristic_cost_estimate(currentNode, neighbour);
-                neighbour.hCost = heuristic_cost_estimate(neighbour, endNode);
+                neighbour.hCost = heuristic_cost_estimate(neighbour, (PathNode)endNode);
                 neighbour.fCost = neighbour.hCost + neighbour.gCost;
 
                 bool breaker = false;
                 foreach (PathNode openNode in openSet)
                 {
-                    if ((openNode.pos.x == neighbour.pos.x) && (openNode.pos.y == neighbour.pos.y) && (neighbour.gCost > openNode.gCost))
+                    if ((openNode.mapPathNode == neighbour.mapPathNode) && (neighbour.gCost > openNode.gCost))
                     {
                         breaker = true;
                         break;
