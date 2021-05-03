@@ -8,11 +8,18 @@ using UnityEngine;
 public class PathNode
 {
     public Vector2 pos;
+
     public float fCost;
     public float gCost;
     public float hCost;
     public MapPathNode mapPathNode;
     public PathNode parent;
+    public bool isInAir = false;
+    public Vector2Int jumpDirection;
+
+    public bool jumpNode = false;
+    public float optJumpForce;
+    public float optVelocityX;
 
     public PathNode(Vector2 pos, MapPathNode mapPathNode)
     {
@@ -28,10 +35,10 @@ public class PathNode
 public class MapPathNode
 {
     public Vector2Int pos;
-    MapPathNode left;
-    MapPathNode right;
-    MapPathNode up;
-    MapPathNode down;
+    public MapPathNode left;
+    public MapPathNode right;
+    public MapPathNode up;
+    public MapPathNode down;
 
     //TODO: начать использовать этот параметр
     public int maxCharacterHeight;
@@ -39,6 +46,47 @@ public class MapPathNode
     public MapPathNode(Vector2Int pos)
     {
         this.pos = pos;
+    }
+
+    public bool IsOnGround()
+    {
+        return this.down == null;
+    }
+
+    public MapPathNode FindGroundNode()
+    {
+        MapPathNode result = this;
+        while (!result.IsOnGround())
+        {
+            result = result.down;
+        }
+        return result;
+    }
+
+    public HashSet<MapPathNode> GetNeighbourNodes()
+    {
+        HashSet<MapPathNode> result = new HashSet<MapPathNode>();
+        if (this.left != null)
+        {
+            result.Add(this.left);
+        }
+
+        if (this.right != null)
+        {
+            result.Add(this.right);
+        }
+
+        if (this.up != null)
+        {
+            result.Add(this.up);
+        }
+
+        if (this.down != null)
+        {
+            result.Add(this.down);
+        }
+
+        return result;
     }
 
     public static explicit operator PathNode(MapPathNode mp)
@@ -49,9 +97,9 @@ public class MapPathNode
 
 public class Pathfinder
 {
-    GameObject colliderInst;
-    Collider2D colliderChecker;
-    Dictionary<Vector2Int, MapPathNode> map;
+    //GameObject colliderInst;
+    //Collider2D colliderChecker;
+    public Dictionary<Vector2Int, MapPathNode> map;
 
     Transform[] areaMarkers;
 
@@ -60,9 +108,9 @@ public class Pathfinder
 
     public Pathfinder(Transform[] areaMarkers)
     {
-        Object colliderObject = Resources.Load("CircleChecker");
-        colliderInst = GameObject.Instantiate(colliderObject) as GameObject;
-        colliderChecker = colliderInst.GetComponent<Collider2D>();
+        //Object colliderObject = Resources.Load("CircleChecker");
+        //colliderInst = GameObject.Instantiate(colliderObject) as GameObject;
+        //colliderChecker = colliderInst.GetComponent<Collider2D>();
 
         this.areaMarkers = areaMarkers;
 
@@ -72,12 +120,47 @@ public class Pathfinder
     bool IsSpaceWalkable(Vector2 pos1, Vector2 pos2)
     {
         RaycastHit2D[] raycastHits = Physics2D.LinecastAll(pos1, pos2);
-        return !raycastHits.Any(x => ((x.collider.isTrigger == false) && (x.transform.tag != "Enemy") && (x.transform.tag != "player")));
+        return !raycastHits.Any(x => ((x.collider.isTrigger == false) && (x.transform.tag != "Enemy") && (x.transform.tag != "Player")));
     }
 
+    //здесь есть повторяющиеся вычисления, которые можно было бы перенести в FindPath, но он и без того слабо читаем
+    bool IsNodeReachable(PathNode start, PathNode destination, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
+    {
+        float deltaY = destination.pos.y - start.pos.y;
+        float velocityY = jumpForce * Time.fixedDeltaTime;
+        float gravity = - Physics2D.gravity.y * agentBody.gravityScale;
+        float maxJumpHeight = velocityY * velocityY / (2 * gravity);
+        if (deltaY > maxJumpHeight)
+        {
+            return false;
+        }
+
+        float jumpTime;
+        float deltaX = Mathf.Abs(destination.pos.x - start.pos.x); 
+        if (deltaY <= 0)
+        {
+            jumpTime = 2 * velocityY / gravity;
+            float groundLevelVelocity = velocityY - gravity * jumpTime;
+            float fallTime = (-groundLevelVelocity - Mathf.Sqrt(groundLevelVelocity*groundLevelVelocity - 2*gravity*deltaY))/(-gravity);
+            return deltaX < maxVelocityX * (jumpTime + fallTime);
+        }
+
+        float ascendTime = (-velocityY + Mathf.Sqrt(velocityY * velocityY - 2 * gravity * deltaY)) / (-gravity);
+        float targetLevelVelocity = velocityY - gravity * ascendTime;
+        jumpTime = targetLevelVelocity / gravity;
+        return deltaX < maxVelocityX * (jumpTime + ascendTime);
+    }
+
+    void UpdateOptimalJumpParameters(PathNode start, PathNode destination, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
+    {
+        start.jumpNode = true;
+    }
+
+    //TODO: рефактор
     void InitializeMap()
     {
         map = new Dictionary<Vector2Int, MapPathNode>();
+        HashSet<Vector2Int> closed = new HashSet<Vector2Int>();
         
         foreach (var marker in areaMarkers)
         {
@@ -86,39 +169,85 @@ public class Pathfinder
             MapPathNode start = new MapPathNode(pos);
             Queue<MapPathNode> q = new Queue<MapPathNode>();
             q.Enqueue(start);
+            map[pos] = start;
             while (q.Count != 0 && map.Count < maxCellsInArea)
             {
                 MapPathNode node = q.Dequeue();
-                if (map.ContainsKey(node.pos))
+                if (closed.Contains(node.pos))
                 {
                     continue;
                 }
+                closed.Add(node.pos);
 
-                map[node.pos] = node;
                 Vector2 center = GetCellCenter(node.pos);
-
+                Vector2Int p;
                 if (IsSpaceWalkable(center, center + new Vector2(cellSize, 0f)))
                 {
-                    MapPathNode right = new MapPathNode(node.pos + new Vector2Int(1, 0));
-                    q.Enqueue(right);
+                    p = node.pos + new Vector2Int(1, 0);
+                    MapPathNode right;
+                    if (map.ContainsKey(p))
+                    {
+                        right = map[p];
+                    }
+                    else
+                    {
+                         right = new MapPathNode(p);
+                        map[p] = right;
+                        q.Enqueue(right);
+                    }
+                    
+                    node.right = right;
                 }
 
                 if (IsSpaceWalkable(center, center + new Vector2(-cellSize, 0f)))
                 {
-                    MapPathNode left = new MapPathNode(node.pos + new Vector2Int(-1, 0));
-                    q.Enqueue(left);
+                    p = node.pos + new Vector2Int(-1, 0);
+                    MapPathNode left;
+                    if (map.ContainsKey(p))
+                    {
+                        left = map[p];
+                    }
+                    else
+                    {
+                        left = new MapPathNode(p);
+                        map[p] = left;
+                        q.Enqueue(left);
+                    }
+                    node.left = left;
                 }
 
                 if (IsSpaceWalkable(center, center + new Vector2(0f, cellSize)))
                 {
-                    MapPathNode up = new MapPathNode(node.pos + new Vector2Int(0, 1));
-                    q.Enqueue(up);
+                    p = node.pos + new Vector2Int(0, 1);
+                    MapPathNode up;
+                    if (map.ContainsKey(p))
+                    {
+                        up = map[p];
+                    }
+                    else
+                    {
+                        up = new MapPathNode(p);
+                        map[p] = up;
+                        q.Enqueue(up);
+                    }
+                    node.up = up;
                 }
 
                 if (IsSpaceWalkable(center, center + new Vector2(0f, -cellSize)))
                 {
-                    MapPathNode down = new MapPathNode(node.pos + new Vector2Int(0, -1));
-                    q.Enqueue(down);
+                    p = node.pos + new Vector2Int(0, -1);
+                    MapPathNode down;
+                    if (map.ContainsKey(p))
+                    {
+                        down = map[p];
+                    }
+                    else
+                    {
+                        down = new MapPathNode(p);
+                        map[p] = down;
+                        q.Enqueue(down);
+                    }
+                    node.down = down;
                 }
 
             }
@@ -135,63 +264,71 @@ public class Pathfinder
         return new Vector2(v.x + cellSize/2, v.y + cellSize/2);
     }
 
-    HashSet<MapPathNode> GetNeighbourNodes(MapPathNode node)
-    {
-        HashSet<MapPathNode> result = new HashSet<MapPathNode>();
-        Vector2Int left = node.pos + new Vector2Int(-1, 0);
-        Vector2Int right = node.pos + new Vector2Int(1, 0);
-        Vector2Int up = node.pos + new Vector2Int(0, 1);
-        Vector2Int down = node.pos + new Vector2Int(0, -1);
-        if (map.ContainsKey(left))
-        {
-            result.Add(map[left]);
-        }
-
-        if (map.ContainsKey(right))
-        {
-            result.Add(map[right]);
-        }
-
-        if (map.ContainsKey(up))
-        {
-            result.Add(map[up]);
-        }
-
-        if (map.ContainsKey(down))
-        {
-            result.Add(map[down]);
-        }
-
-        return result;
-    }
-
     float heuristic_cost_estimate(PathNode nodeA, PathNode nodeB)
     {
         float deltaX = Mathf.Abs(nodeA.pos.x - nodeB.pos.x);
         float deltaY = Mathf.Abs(nodeA.pos.y - nodeB.pos.y);
 
-        return deltaX + deltaY;
+        float gravity_bonus = nodeA.pos.y - nodeB.pos.y > 0 ? 0.05f : -0.05f;
+
+        return deltaX*(1-gravity_bonus) + deltaY*(1+gravity_bonus);
     }
 
-    public LinkedList<PathNode> FindPath(Vector2 agentPos, Vector2 targetPos)
+    LinkedList<PathNode> ConstructPath(PathNode end, MapPathNode start, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
+    {
+        LinkedList<PathNode> path = new LinkedList<PathNode>();
+        PathNode jumpDest = end;
+        PathNode lastNode = end;
+        while (end != null)
+        {
+            if (!end.isInAir)
+            {
+                if (path.Count != 0 && jumpDest != lastNode)
+                {
+                    UpdateOptimalJumpParameters(end, jumpDest, agentBody, jumpForce, maxVelocityX);
+                }
+                jumpDest = end;
+                path.AddFirst(end);
+            }
+            lastNode = end;
+            end = end.parent;
+        }
+
+        return path;
+    }
+
+    LinkedList<PathNode> ConstructBadPath(PathNode end, MapPathNode start, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
+    {
+        LinkedList<PathNode> path = new LinkedList<PathNode>();
+        PathNode jumpDest = end;
+        while (end != null)
+        {
+            path.AddFirst(end);
+            end = end.parent;
+        }
+
+        return path;
+    }
+
+    public LinkedList<PathNode> FindPath(Vector2 agentPos, Vector2 targetPos, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
     {
         Vector2Int startPos = ConvertToIntCoords(agentPos);
         Vector2Int endPos = ConvertToIntCoords(targetPos);
-        if (!map.ContainsKey(startPos) && !map.ContainsKey(endPos))
+        if (!map.ContainsKey(startPos) || !map.ContainsKey(endPos))
         {
             return null;
         }
-
-        return FindPath(map[startPos], map[endPos]);
+        return FindPath(map[startPos], map[endPos], agentBody, jumpForce, maxVelocityX);
     }
 
-    public LinkedList<PathNode> FindPath(MapPathNode startNode, MapPathNode endNode)
+    public LinkedList<PathNode> FindPath(MapPathNode startNode, MapPathNode endNode, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
     {
         Debug.Log("Search started");
-        LinkedList<PathNode> path = new LinkedList<PathNode>();
         List<PathNode> openSet = new List<PathNode>();
-        List<Vector2Int> closedCoords = new List<Vector2Int>();
-        List<PathNode> closedSet = new List<PathNode>();
+        
+        int num_iterations = 0;
+        startNode = startNode.FindGroundNode();
+        endNode = endNode.FindGroundNode();
         openSet.Add((PathNode)startNode);
         while (openSet.Count != 0)
         {
@@ -205,31 +342,59 @@ public class Pathfinder
                     currentNode = p;
                 }
             }
-            //Debug.Log(currentNode);
             openSet.Remove(currentNode);
-            closedSet.Add(currentNode);
-            closedCoords.Add(currentNode.mapPathNode.pos);
-            if (closedCoords.Count > 50)
+            if (num_iterations++ > 1000)
             {
                 return null;
             }
+
             if (currentNode.mapPathNode == endNode)
             {
-                while (currentNode.mapPathNode != startNode)
-                {
-                    path.AddFirst(currentNode);
-                    currentNode = currentNode.parent;
-                }
                 Debug.Log("FOUND!");
-                return path;
+                return ConstructPath(currentNode, startNode, agentBody, jumpForce, maxVelocityX);
             }
 
-            foreach (MapPathNode _neighbour in GetNeighbourNodes(currentNode.mapPathNode))
+            PathNode lastGroundNode = currentNode;
+            while (lastGroundNode.isInAir)
+            {
+                lastGroundNode = lastGroundNode.parent;
+            }
+
+            foreach (MapPathNode _neighbour in currentNode.mapPathNode.GetNeighbourNodes())
             {
                 PathNode neighbour = (PathNode)_neighbour;
+
+                neighbour.isInAir = !neighbour.mapPathNode.IsOnGround();
+
+                if (neighbour.isInAir || currentNode.isInAir)
+                {
+                    if (_neighbour == currentNode.mapPathNode.left)
+                    {
+                        if (currentNode.isInAir && currentNode.jumpDirection == Vector2Int.right)
+                        {
+                            continue;
+                        }
+                        neighbour.jumpDirection = Vector2Int.left;
+                    }
+                    else if (_neighbour == currentNode.mapPathNode.right)
+                    {
+                        if (currentNode.isInAir && currentNode.jumpDirection == Vector2Int.left)
+                        {
+                            continue;
+                        }
+                        neighbour.jumpDirection = Vector2Int.right;
+                    }
+                    else if (neighbour.isInAir)
+                    {
+                        neighbour.jumpDirection = currentNode.jumpDirection;
+                    }
+                }
+
+                float ground_modifier = neighbour.isInAir? 1.2f : 1.0f;
+
                 neighbour.parent = currentNode;
                 neighbour.gCost = currentNode.gCost + heuristic_cost_estimate(currentNode, neighbour);
-                neighbour.hCost = heuristic_cost_estimate(neighbour, (PathNode)endNode);
+                neighbour.hCost = heuristic_cost_estimate(neighbour, (PathNode)endNode)*ground_modifier;
                 neighbour.fCost = neighbour.hCost + neighbour.gCost;
 
                 bool breaker = false;
@@ -246,10 +411,16 @@ public class Pathfinder
                     continue;
                 }
 
+                if (!neighbour.isInAir && neighbour.parent.isInAir && !IsNodeReachable(lastGroundNode, neighbour, agentBody, jumpForce, maxVelocityX))
+                {
+                    continue;
+                }
+
+
 
                 openSet.Add(neighbour);
             }
         }
-        return path;
+        return null;
     }
 }
