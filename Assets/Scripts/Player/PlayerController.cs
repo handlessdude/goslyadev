@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public Transform cameraTarget;
     public Footsteps footsteps;
     public GameObject wall;
+    public GameObject wallClone;
     //2^(ИД слоя), поэтому 256
     public int groundLayer = 256;
 
@@ -123,10 +124,41 @@ public class PlayerController : MonoBehaviour
             
     }
 
-    void Update()
+    void Stomp()
     {
+        animator.SetBool("Stomp", true);
+        Invoke("CreateClone", 0.333f);
+        GameplayState.controllability = PlayerControllability.InDialogue;
+        Invoke("DeleteClone", 1f);
+        
+        //Instantiate(wall, new Vector3(playerPos.x - 2, playerPos.y, 0), Quaternion.identity);
+        //Instantiate(wall, new Vector3(playerPos.x + 2, playerPos.y, 0), Quaternion.identity);
+    }
+
+    void DeleteClone()
+    {
+        Destroy(wallClone);
+        GameplayState.controllability = PlayerControllability.Full;
+        animator.SetBool("Stomp", false);
+    }
+
+    void CreateClone()
+    {
+        var playerPos = gameObject.transform.position;
+        wallClone = Instantiate(wall, new Vector3(playerPos.x, playerPos.y + 0.5f, 0), Quaternion.identity);
+
+    }
+
+    void Update()
+    { 
+
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
+            if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping)
+            {
+                Stomp();
+            }
+
             if (InputManager.GetKey(KeyAction.MoveLeft))
             {
                 if (flag)
@@ -273,6 +305,7 @@ public class PlayerController : MonoBehaviour
             GameplayState.isLoaded = false;
         }
     }
+    
 
     void ResetStep()
     {

@@ -44,7 +44,13 @@ public static class InputManager
             [KeyAction.Stomp] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse1, KeyCode.None),
             [KeyAction.Confirm] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Return, KeyCode.E),
             [KeyAction.Pause] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Escape, KeyCode.P),
-        };
+            [KeyAction.Level1] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F1, KeyCode.None),
+            [KeyAction.Level2] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F2, KeyCode.None),
+            [KeyAction.Load] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F4, KeyCode.Mouse3),
+            [KeyAction.Save] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F5, KeyCode.Mouse4),
+            [KeyAction.CombatAbility1] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse0, KeyCode.None),
+            [KeyAction.CombatAbility2] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse1, KeyCode.None),
+            [KeyAction.Stomp] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse1, KeyCode.None),
 
     public static Dictionary<KeyAction, System.Tuple<KeyCode, KeyCode>> bindings = new Dictionary<KeyAction, System.Tuple<KeyCode, KeyCode>>(defaultMapping);
     public static bool GetKey(KeyAction kA)
