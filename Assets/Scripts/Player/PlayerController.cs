@@ -126,11 +126,9 @@ public class PlayerController : MonoBehaviour
             
     }
 
-
-   
     void Update()
     {
-        if (GameplayState.controllability == PlayerControllability.Full)
+        if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
             if (InputManager.GetKey(KeyAction.MoveLeft))
             {

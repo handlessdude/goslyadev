@@ -26,7 +26,7 @@ public class Interactable : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (playerCollidersCount != 0 && GameplayState.isPaused == false && GameplayState.controllability == PlayerControllability.Full
+        if (playerCollidersCount != 0 && GameplayState.isPaused == false && ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
             && InputManager.GetKeyDown(KeyAction.Action))
         {
             Action();

@@ -15,13 +15,25 @@ public static class GameplayState
     public static int barrels = 0;
     public static int feededBarrels = 0;
     public static bool isPreparationEnded = false;
+
     public static Vector3 NewPositionPlayer;
+
+    public static bool isPhoneRinged = false;
+
     public static bool isLoaded;
+
     public static bool isDialogEnded = false;
     //SecondLvl
     public static bool isThiefRobotDialogEnded = false;
+
     public static bool isMainRobotDialogEnded = false;
+
+    public static bool isStartedDialogEnded = false;
+
+    public static bool isFixererDiaglolEnded = false;
+
     public static int boards = 0;
+    public static int feededboards = 0;
     public static Dictionary<string, Tuple<float, float>> BoxesPosition = new Dictionary<string, Tuple<float, float>>();
     public static void LevelStart()
     {
@@ -35,4 +47,5 @@ public enum PlayerControllability
 {
     Full,
     InDialogue,
+    FirstDialog
 }
