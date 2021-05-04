@@ -50,6 +50,7 @@ public static class InputManager
             [KeyAction.Save] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F5, KeyCode.Mouse4),
             [KeyAction.CombatAbility1] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse0, KeyCode.None),
             [KeyAction.CombatAbility2] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse1, KeyCode.None),
+            [KeyAction.Dash] = new System.Tuple<KeyCode, KeyCode>(KeyCode.LeftShift, KeyCode.None),
             [KeyAction.Stomp] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse1, KeyCode.None),
 
     public static Dictionary<KeyAction, System.Tuple<KeyCode, KeyCode>> bindings = new Dictionary<KeyAction, System.Tuple<KeyCode, KeyCode>>(defaultMapping);

@@ -23,12 +23,18 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed = 6.0f;
     public float jumpForce = 700.0f;
 
+    //характеристики Dash()
+    public float dashSpeed;
+    public float dashTime;
+    public float startDashTime;
+    private int dashDirection;
 
+    WorldSwitcher worldSwitcher;
 
     // -1 — влево, 1 — вправо, 0 — на месте.
     float horizontalDirection = 0.0f;
 
-    //float verticalDirection = 0.0f;
+    float verticalDirection = 0.0f;
     
     bool isInAir = false;
     bool jumping = false;
@@ -59,6 +65,10 @@ public class PlayerController : MonoBehaviour
         if (!rb)
         {
             rb = GetComponent<Rigidbody2D>();
+        }
+        if (!worldSwitcher)
+        {
+            worldSwitcher = GetComponent<WorldSwitcher>();
         }
 
         if (!left_ground)
@@ -102,8 +112,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //TODO: Доделать анимацию, когда персонаж стоит на маленьком ящике, нет анимации передвижения
+
     public void OnTriggerStay2D(Collider2D collision)
-    {        
+    {
+        
+        
         if ((collision.gameObject.tag == "Boxes") && (collision.gameObject.transform.GetChild(0).position.y > middle_ground.position.y))
         {
             print(middle_ground.position.y);
@@ -127,7 +141,7 @@ public class PlayerController : MonoBehaviour
     void Stomp()
     {
         animator.SetBool("Stomp", true);
-        Invoke("CreateClone", 0.333f);
+        Invoke("CreateClone", 0.5f);
         GameplayState.controllability = PlayerControllability.InDialogue;
         Invoke("DeleteClone", 1f);
         
@@ -149,14 +163,32 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void Update()
-    { 
+    void Dash()
+    {
+        animator.SetBool("Dash", true);
+        rb.AddForce(new Vector2(500, 0));
+        Invoke("StopDash", 1f);
 
+    }
+    void StopDash()
+    {
+        animator.SetBool("Dash", false);
+    }
+    void Update()
+    {
+        
+
+        //rb.velocity = Vector2.zero; //---------------------------------------------------------------если че убрать
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
             if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping)
             {
                 Stomp();
+            }
+
+            if (InputManager.GetKeyDown(KeyAction.Dash))
+            {
+                Dash();
             }
 
             if (InputManager.GetKey(KeyAction.MoveLeft))
@@ -174,6 +206,8 @@ public class PlayerController : MonoBehaviour
                     PlayStepSound();
                 }
                 ResetCamera();
+
+                dashDirection = -1;
             }
             else if (InputManager.GetKey(KeyAction.MoveRight))
             {
@@ -189,6 +223,8 @@ public class PlayerController : MonoBehaviour
                     PlayStepSound();
                 }
                 ResetCamera();
+
+                dashDirection = 1;
             }
             else
             {
@@ -202,6 +238,8 @@ public class PlayerController : MonoBehaviour
                 }
                 horizontalDirection = 0.0f;
             }
+
+          
 
             if (InputManager.GetKey(KeyAction.LookUp) && !jumping && !movementInput)
             {
@@ -223,13 +261,14 @@ public class PlayerController : MonoBehaviour
                 ResetCamera(TargetPosition.Down);
             }
 
-
             if (InputManager.GetKey(KeyAction.Jump) && !jumping && IsOnGround())
             {
                 Jump();
                 ResetCamera();
                 ForcePlayStepSound();
             }
+            
+            
         } //ветка else здесь костыль
         else
         {
@@ -241,6 +280,7 @@ public class PlayerController : MonoBehaviour
         }
 
         movementInput = false;
+        print(dashTime);
     }
 
     public void RotateToVector(Vector2 position)
@@ -251,6 +291,11 @@ public class PlayerController : MonoBehaviour
     //TODO: навести порядок во всех системах, которые затрагивает FixedUpdate, они все сделаны плохо
     private void FixedUpdate()
     {
+        if (dashTime > 0)
+        {
+            dashTime -= 0.2f;
+            dashDirection = 0;
+        }
 
         //float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;
 
@@ -304,8 +349,9 @@ public class PlayerController : MonoBehaviour
             }
             GameplayState.isLoaded = false;
         }
+        
+
     }
-    
 
     void ResetStep()
     {
