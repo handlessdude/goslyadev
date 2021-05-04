@@ -26,13 +26,18 @@ public class TestAgent : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.blue;
         if (p != null)
         {
             foreach (var t in p.map)
             {
                 Vector2 v = Pathfinder.GetCellCenter(t.Key);
-                //Gizmos.DrawIcon(v, "sv_icon_dot" + t.Value.GetNeighbourNodes().Count() + "_pix16_gizmo", true);
-                
+                //Gizmos.DrawIcon(v, "sv_icon_dot" + t.Value.children.Count() + "_pix16_gizmo", true);
+                //Gizmos.DrawIcon(v, "sv_icon_dot7_pix16_gizmo", true);
+                foreach (var child in t.Value.children)
+                {
+                    Gizmos.DrawLine(v, Pathfinder.GetCellCenter(child.pos));
+                }
             }
         }
         if (path != null)
