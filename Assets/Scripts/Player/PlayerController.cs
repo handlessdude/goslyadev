@@ -141,7 +141,7 @@ public class PlayerController : MonoBehaviour
     void Stomp()
     {
         animator.SetBool("Stomp", true);
-        Invoke("CreateClone", 0.333f);
+        Invoke("CreateClone", 0.5f);
         GameplayState.controllability = PlayerControllability.InDialogue;
         Invoke("DeleteClone", 1f);
         
@@ -163,6 +163,17 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    void Dash()
+    {
+        animator.SetBool("Dash", true);
+        rb.AddForce(new Vector2(500, 0));
+        Invoke("StopDash", 1f);
+
+    }
+    void StopDash()
+    {
+        animator.SetBool("Dash", false);
+    }
     void Update()
     {
         
@@ -173,6 +184,11 @@ public class PlayerController : MonoBehaviour
             if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping)
             {
                 Stomp();
+            }
+
+            if (InputManager.GetKeyDown(KeyAction.Dash))
+            {
+                Dash();
             }
 
             if (InputManager.GetKey(KeyAction.MoveLeft))
@@ -333,7 +349,7 @@ public class PlayerController : MonoBehaviour
             }
             GameplayState.isLoaded = false;
         }
-       
+        
 
     }
 
@@ -424,26 +440,6 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, 0);
         jumping = false;
         isInAir = false; 
-    }
-
-    void Dash()
-    {
-        if (dashTime <= 0)
-        {
-            if (dashDirection != 0)
-            {
-                dashTime = 5.0f;
-
-                if (dashDirection == -1)
-                {
-                    rb.velocity = Vector2.left * dashSpeed;
-                }
-                else if (dashDirection == 1)
-                {
-                    rb.velocity = Vector2.right * dashSpeed;
-                }
-            }
-        }
     }
 }
 
