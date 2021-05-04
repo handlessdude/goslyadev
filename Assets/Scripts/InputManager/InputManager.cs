@@ -23,7 +23,8 @@ public enum KeyAction
     Save,
     //Test
     CombatAbility1,
-    CombatAbility2
+    CombatAbility2,
+    Stomp
 }
 
 public static class InputManager
@@ -51,7 +52,8 @@ public static class InputManager
             [KeyAction.Save] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F5, KeyCode.Mouse4),
             [KeyAction.CombatAbility1] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse0, KeyCode.None),
             [KeyAction.CombatAbility2] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse1, KeyCode.None),
-
+            [KeyAction.Stomp] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse1, KeyCode.None),
+            
         };
 
     static bool isInit = false;

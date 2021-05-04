@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public Transform middle_ground2;
     public Transform cameraTarget;
     public Footsteps footsteps;
+    public GameObject wall;
+    public GameObject wallClone;
     //2^(ИД слоя), поэтому 256
     public int groundLayer = 256;
 
@@ -136,12 +138,43 @@ public class PlayerController : MonoBehaviour
             
     }
 
+    void Stomp()
+    {
+        animator.SetBool("Stomp", true);
+        Invoke("CreateClone", 0.333f);
+        GameplayState.controllability = PlayerControllability.InDialogue;
+        Invoke("DeleteClone", 1f);
+        
+        //Instantiate(wall, new Vector3(playerPos.x - 2, playerPos.y, 0), Quaternion.identity);
+        //Instantiate(wall, new Vector3(playerPos.x + 2, playerPos.y, 0), Quaternion.identity);
+    }
+
+    void DeleteClone()
+    {
+        Destroy(wallClone);
+        GameplayState.controllability = PlayerControllability.Full;
+        animator.SetBool("Stomp", false);
+    }
+
+    void CreateClone()
+    {
+        var playerPos = gameObject.transform.position;
+        wallClone = Instantiate(wall, new Vector3(playerPos.x, playerPos.y + 0.5f, 0), Quaternion.identity);
+
+    }
+
     void Update()
     {
- 
+        
+
         //rb.velocity = Vector2.zero; //---------------------------------------------------------------если че убрать
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
+            if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping)
+            {
+                Stomp();
+            }
+
             if (InputManager.GetKey(KeyAction.MoveLeft))
             {
                 if (flag)
@@ -189,6 +222,8 @@ public class PlayerController : MonoBehaviour
                 }
                 horizontalDirection = 0.0f;
             }
+
+          
 
             if (InputManager.GetKey(KeyAction.LookUp) && !jumping && !movementInput)
             {
@@ -298,14 +333,7 @@ public class PlayerController : MonoBehaviour
             }
             GameplayState.isLoaded = false;
         }
-        if (InputManager.GetKeyDown(KeyAction.CombatAbility1) && worldSwitcher.currentWorld == WorldSwitcher.World.cyan)
-        {
-            Dash();
-        };
-        if (InputManager.GetKeyDown(KeyAction.CombatAbility2) && worldSwitcher.currentWorld == WorldSwitcher.World.green)
-        {
-
-        };
+       
 
     }
 
