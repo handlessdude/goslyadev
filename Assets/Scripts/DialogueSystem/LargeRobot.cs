@@ -41,7 +41,7 @@ public class LargeRobot : DialogueNPC
             var why_are_you = new SequentialDialogueElement("big_robot_hero_why_are_you", true,
                 new SequentialDialogueElement("big_robot_performance", false,
                 new SequentialDialogueElement("big_robot_hero_whats_name", true,
-                new SelectionDialogueElement("big_robot_not_working", new string[] { "big_robot_choice_tried_to_do" },
+                new SelectionDialogueElement("big_robot_not_working", new LocalizedString[] { "big_robot_choice_tried_to_do" },
                 new System.Func<DialogueElement>[] {
                 () => tried_to_do_end
                 }))));
@@ -50,12 +50,12 @@ public class LargeRobot : DialogueNPC
                 new SequentialDialogueElement("big_robot_not_touch_it", false,
                 new SequentialDialogueElement("big_robot_its_name", false,
                 new SequentialDialogueElement("big_robot_hero_dont_want_to_know", true,
-                new SelectionDialogueElement("big_robot_emptiness", new string[] { "big_robot_choice_why_are_you" },
+                new SelectionDialogueElement("big_robot_emptiness", new LocalizedString[] { "big_robot_choice_why_are_you" },
                 new System.Func<DialogueElement>[] {
                 () => why_are_you_end
                 })))));
 
-            currentDialogElement = new SelectionDialogueElement("big_robot_emptiness", new string[]
+            currentDialogElement = new SelectionDialogueElement("big_robot_emptiness", new LocalizedString[]
             { "big_robot_choice_why_are_you" , "big_robot_choice_tried_to_do"
             }, new System.Func<DialogueElement>[] {
                 () => why_are_you,
