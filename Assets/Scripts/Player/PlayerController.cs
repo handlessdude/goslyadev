@@ -21,9 +21,10 @@ public class PlayerController : MonoBehaviour
     //2^(ИД слоя), поэтому 256
     public int groundLayer = 256;
 
-    public float coolDown = 5.0f;
+    public float coolDown = 0.0f;
     public float movementSpeed = 6.0f;
     public float jumpForce = 700.0f;
+    public float dashForce = 5000.0f;
 
     //характеристики Dash()
     public float dashSpeed;
@@ -170,17 +171,18 @@ public class PlayerController : MonoBehaviour
         if (horizontalDirection > 0)
         {
             animator.SetBool("Dash", true);
-            rb.AddForce(new Vector2(5000, 0));
+            rb.AddForce(new Vector2(dashForce, 0));
             Invoke("StopDash", 0.5f);
+            coolDown = 100.0f;
         }
         else if (horizontalDirection < 0)
         {
             animator.SetBool("Dash", true);
-            rb.AddForce(new Vector2(-5000, 0));
+            rb.AddForce(new Vector2(-dashForce, 0));
             Invoke("StopDash", 0.5f);
+            coolDown = 100.0f;
         }
-        coolDown = 5.0f;
-
+        
     }
     void StopDash()
     {
@@ -188,8 +190,6 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        
-
         //rb.velocity = Vector2.zero; //---------------------------------------------------------------если че убрать
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
@@ -198,7 +198,7 @@ public class PlayerController : MonoBehaviour
                 Stomp();
             }
 
-            if (InputManager.GetKeyDown(KeyAction.Dash))
+            if (InputManager.GetKeyDown(KeyAction.Dash) && coolDown <= 0.0f)
             {
                 Dash();
             }
@@ -293,6 +293,12 @@ public class PlayerController : MonoBehaviour
 
         movementInput = false;
         print(dashTime);
+
+        if (coolDown > 0)
+        {
+            coolDown -= 0.2f;
+        }
+
     }
 
     public void RotateToVector(Vector2 position)
@@ -309,6 +315,7 @@ public class PlayerController : MonoBehaviour
             dashDirection = 0;
         }
 
+        
         //float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;
 
         //rb.position = Vector2.SmoothDamp(rb.position, new Vector2(targetPos, rb.position.y), ref _currentVelocity, 0.05f);
