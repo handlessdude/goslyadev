@@ -148,4 +148,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMeshProText: {fileID: 0}
-  text: UNLOCALIZED
+  text:
+    key: UNLOCALIZED

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum KeyAction
 {
+    None,
     MoveLeft,
     MoveRight,
     Jump,
@@ -16,24 +17,22 @@ public enum KeyAction
     CameraScale,
     Action,
     Confirm,
-    // Сделал для проверки
-    Level1,
-    Level2,
-    Load,
-    Save,
+    Dash,
+    Hit,
+    Stomp,
 }
 
 public static class InputManager
 {
-    static Dictionary<KeyAction, System.Tuple<KeyCode, KeyCode>> bindings;
+    public static Dictionary<KeyAction, System.Tuple<KeyCode, KeyCode>> bindings;
 
-    static Dictionary<KeyAction, System.Tuple<KeyCode, KeyCode>> defaultMapping =
+    public static Dictionary<KeyAction, System.Tuple<KeyCode, KeyCode>> defaultMapping =
         new Dictionary<KeyAction, System.Tuple<KeyCode, KeyCode>>()
         {
-            [KeyAction.MoveLeft] = new System.Tuple<KeyCode, KeyCode>(KeyCode.LeftArrow, KeyCode.A),
-            [KeyAction.MoveRight] = new System.Tuple<KeyCode, KeyCode>(KeyCode.RightArrow, KeyCode.D),
-            [KeyAction.Jump] = new System.Tuple<KeyCode, KeyCode>(KeyCode.None, KeyCode.Space),
-            [KeyAction.Pause] = new System.Tuple<KeyCode, KeyCode>(KeyCode.P, KeyCode.Escape),
+            [KeyAction.MoveLeft] = new System.Tuple<KeyCode, KeyCode>(KeyCode.A, KeyCode.LeftArrow),
+            [KeyAction.MoveRight] = new System.Tuple<KeyCode, KeyCode>(KeyCode.D, KeyCode.RightArrow),
+            [KeyAction.Jump] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Space, KeyCode.None),
+            [KeyAction.Pause] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Escape, KeyCode.P),
             [KeyAction.LookDown] = new System.Tuple<KeyCode, KeyCode>(KeyCode.S, KeyCode.DownArrow),
             [KeyAction.LookUp] = new System.Tuple<KeyCode, KeyCode>(KeyCode.W, KeyCode.UpArrow),
             [KeyAction.WorldCyan] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Alpha1, KeyCode.C),
@@ -42,10 +41,9 @@ public static class InputManager
             [KeyAction.CameraScale] = new System.Tuple<KeyCode, KeyCode>(KeyCode.V, KeyCode.None),
             [KeyAction.Action] = new System.Tuple<KeyCode, KeyCode>(KeyCode.E, KeyCode.None),
             [KeyAction.Confirm] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Return, KeyCode.E),
-            [KeyAction.Level1] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F1, KeyCode.None),
-            [KeyAction.Level2] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F2, KeyCode.None),
-            [KeyAction.Load] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F4, KeyCode.Mouse3),
-            [KeyAction.Save] = new System.Tuple<KeyCode, KeyCode>(KeyCode.F5, KeyCode.Mouse4)
+            [KeyAction.Dash] = new System.Tuple<KeyCode, KeyCode>(KeyCode.LeftShift, KeyCode.None),
+            [KeyAction.Hit] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse0, KeyCode.None),
+            [KeyAction.Stomp] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse1, KeyCode.None),
         };
 
     static bool isInit = false;

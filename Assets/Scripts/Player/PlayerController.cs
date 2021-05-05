@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public Transform middle_ground2;
     public Transform cameraTarget;
     public Footsteps footsteps;
+    public GameObject wall;
     //2^(ИД слоя), поэтому 256
     public int groundLayer = 256;
 
@@ -126,10 +127,32 @@ public class PlayerController : MonoBehaviour
             
     }
 
+    void Stomp()
+    {
+        var wallClone = Instantiate(wall);
+        wallClone.SetActive(true);
+        var playerPos = gameObject.transform.position;
+        if (horizontalDirection > 0)
+        {
+            print(gameObject.name);
+            print(playerPos);
+            wallClone.transform.position = new Vector3(playerPos.x + 50, playerPos.y, 0);
+
+        }
+        else if (horizontalDirection < 0)
+        {
+            wallClone.transform.position = new Vector3(playerPos.x - 50, playerPos.y, 0);
+        }
+    }
+
     void Update()
     {
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
+            
+
+            
+
             if (InputManager.GetKey(KeyAction.MoveLeft))
             {
                 if (flag)
@@ -192,6 +215,11 @@ public class PlayerController : MonoBehaviour
             if (InputManager.GetKeyUp(KeyAction.LookDown))
             {
                 ResetCamera(TargetPosition.Down);
+            }
+
+            if (InputManager.GetKey(KeyAction.Stomp))
+            {
+                Stomp();
             }
 
             if (InputManager.GetKey(KeyAction.Jump) && !jumping && IsOnGround())
