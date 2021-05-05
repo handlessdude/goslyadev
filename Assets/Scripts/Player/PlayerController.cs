@@ -20,17 +20,18 @@ public class PlayerController : MonoBehaviour
     
     //2^(ИД слоя), поэтому 256
     public int groundLayer = 256;
-
-    public float coolDown = 0.0f;
     public float movementSpeed = 6.0f;
     public float jumpForce = 700.0f;
-    public float dashForce = 5000.0f;
 
-    //характеристики Dash()
-    public float dashSpeed;
-    public float dashTime;
-    public float startDashTime;
-    private int dashDirection;
+
+    //характеристики Dash
+    public float dashForce = 5000.0f;
+    public bool isDashAllowed = true;
+
+
+    //характеристики Stopm
+    public bool isStopmAllowed = true;
+
 
     WorldSwitcher worldSwitcher;
 
@@ -141,16 +142,18 @@ public class PlayerController : MonoBehaviour
             
     }
 
+    //Реализация абилки Stopm
     void Stomp()
     {
         animator.SetBool("Stomp", true);
-        Invoke("CreateClone", 0.5f);
+        Invoke("CreateClone", 0.35f);
         GameplayState.controllability = PlayerControllability.InDialogue;
         Invoke("DeleteClone", 1f);
-        
-        //Instantiate(wall, new Vector3(playerPos.x - 2, playerPos.y, 0), Quaternion.identity);
-        //Instantiate(wall, new Vector3(playerPos.x + 2, playerPos.y, 0), Quaternion.identity);
+        isStopmAllowed = false;
+        Invoke("StompCoolDown", 4.0f);
     }
+
+    void StompCoolDown() => isStopmAllowed = true;
 
     void DeleteClone()
     {
@@ -163,46 +166,32 @@ public class PlayerController : MonoBehaviour
     {
         var playerPos = gameObject.transform.position;
         wallClone = Instantiate(wall, new Vector3(playerPos.x, playerPos.y + 0.5f, 0), Quaternion.identity);
-
     }
+    //
 
+    //Реализация абилки Dash
     void Dash()
     {
+        animator.SetBool("Dash", true);
         if (horizontalDirection > 0)
-        {
-            animator.SetBool("Dash", true);
             rb.AddForce(new Vector2(dashForce, 0));
-            Invoke("StopDash", 0.5f);
-            coolDown = 30.0f;
-        }
-        else if (horizontalDirection < 0)
-        {
-            animator.SetBool("Dash", true);
+        if (horizontalDirection < 0)
             rb.AddForce(new Vector2(-dashForce, 0));
-            Invoke("StopDash", 0.5f);
-            coolDown = 30.0f;
-        }
-        
+        Invoke("StopDash", 0.5f);
+        isDashAllowed = false;
+        Invoke("DashCoolDown", 2.0f);
     }
-    void StopDash()
-    {
-        animator.SetBool("Dash", false);
-    }
+
+    void DashCoolDown() => isDashAllowed = true;
+    void StopDash() => animator.SetBool("Dash", false);
+    //
+
     void Update()
     {
         //rb.velocity = Vector2.zero; //---------------------------------------------------------------если че убрать
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
-            if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping)
-            {
-                Stomp();
-            }
-
-            if (InputManager.GetKeyDown(KeyAction.Dash) && coolDown <= 0.0f)
-            {
-                Dash();
-            }
-
+           
             if (InputManager.GetKey(KeyAction.MoveLeft))
             {
                 if (flag)
@@ -218,8 +207,6 @@ public class PlayerController : MonoBehaviour
                     PlayStepSound();
                 }
                 ResetCamera();
-
-                dashDirection = -1;
             }
             else if (InputManager.GetKey(KeyAction.MoveRight))
             {
@@ -235,8 +222,6 @@ public class PlayerController : MonoBehaviour
                     PlayStepSound();
                 }
                 ResetCamera();
-
-                dashDirection = 1;
             }
             else
             {
@@ -251,7 +236,15 @@ public class PlayerController : MonoBehaviour
                 horizontalDirection = 0.0f;
             }
 
-          
+            if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping && isStopmAllowed)
+            {
+                Stomp();
+            }
+
+            if (InputManager.GetKeyDown(KeyAction.Dash) && isDashAllowed)
+            {
+                Dash();
+            }
 
             if (InputManager.GetKey(KeyAction.LookUp) && !jumping && !movementInput)
             {
@@ -292,10 +285,6 @@ public class PlayerController : MonoBehaviour
         }
 
         movementInput = false;
-        
-
-        
-
     }
 
     public void RotateToVector(Vector2 position)
@@ -306,17 +295,6 @@ public class PlayerController : MonoBehaviour
     //TODO: навести порядок во всех системах, которые затрагивает FixedUpdate, они все сделаны плохо
     private void FixedUpdate()
     {
-        if (dashTime > 0)
-        {
-            dashTime -= 0.2f;
-            dashDirection = 0;
-        }
-
-        if (coolDown > 0)
-        {
-            coolDown -= 0.2f;
-            print(coolDown);
-        }
         //float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;
 
         //rb.position = Vector2.SmoothDamp(rb.position, new Vector2(targetPos, rb.position.y), ref _currentVelocity, 0.05f);
