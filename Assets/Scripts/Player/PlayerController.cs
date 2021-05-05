@@ -17,9 +17,11 @@ public class PlayerController : MonoBehaviour
     public Footsteps footsteps;
     public GameObject wall;
     public GameObject wallClone;
+    
     //2^(ИД слоя), поэтому 256
     public int groundLayer = 256;
 
+    public float coolDown = 5.0f;
     public float movementSpeed = 6.0f;
     public float jumpForce = 700.0f;
 
@@ -165,9 +167,19 @@ public class PlayerController : MonoBehaviour
 
     void Dash()
     {
-        animator.SetBool("Dash", true);
-        rb.AddForce(new Vector2(500, 0));
-        Invoke("StopDash", 1f);
+        if (horizontalDirection > 0)
+        {
+            animator.SetBool("Dash", true);
+            rb.AddForce(new Vector2(5000, 0));
+            Invoke("StopDash", 0.5f);
+        }
+        else if (horizontalDirection < 0)
+        {
+            animator.SetBool("Dash", true);
+            rb.AddForce(new Vector2(-5000, 0));
+            Invoke("StopDash", 0.5f);
+        }
+        coolDown = 5.0f;
 
     }
     void StopDash()
