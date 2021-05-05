@@ -18,6 +18,7 @@ public static class GameplayState
 
     public static Vector3 NewPositionPlayer;
 
+    public static bool IsOnClick = false;
     public static bool isPhoneRinged = false;
 
     public static bool isLoaded;
@@ -31,6 +32,8 @@ public static class GameplayState
     public static bool isStartedDialogEnded = false;
 
     public static bool isFixererDiaglolEnded = false;
+
+    public static bool UnderElevator = false;
 
     public static int boards = 0;
     public static int feededboards = 0;

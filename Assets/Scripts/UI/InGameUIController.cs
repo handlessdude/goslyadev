@@ -9,6 +9,7 @@ public class InGameUIController : MonoBehaviour
     public GameObject LightBuble;
     public GameObject FPSCounter;
     public GameObject UIFX;
+    public GameObject Inventory;
     void Start()
     {
         if (!pauseMenu)
@@ -43,6 +44,8 @@ public class InGameUIController : MonoBehaviour
             LightBuble.SetActive(false); // Отключает лампочку при открытии меню
             UIFX.SetActive(false); //Отключает свет лампочки при открытии меню
         }
+        if (Inventory)
+            Inventory.SetActive(false);
         FPSCounter.SetActive(false);  // Отключает счетчик FPS при открытии меню
         pauseMenu.SetActive(true);
         Cursor.visible = true;
@@ -61,6 +64,8 @@ public class InGameUIController : MonoBehaviour
             UIFX.SetActive(true); //Включает свет лампочки при закрытии меню
             LightBuble.SetActive(true); // Включает лампочку при закрытии меню
         }
+        if (Inventory)  
+            Inventory.SetActive(true);
         FPSCounter.SetActive(true); // Включает счетчик FPS при закрытии меню
         pauseMenu.SetActive(false);
         Cursor.visible = false;

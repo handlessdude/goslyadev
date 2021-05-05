@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
     public ScreenFader screenFader;
     Vector2 inboundTarget;
     public AudioSource phoneRing;
-    SaveSerial Load;
+    SaveSystem Load;
     List<PolygonCollider2D> cameraBounds;
     PolygonCollider2D currentCollider;
 
@@ -43,7 +43,7 @@ public class CameraController : MonoBehaviour
     {
         if (!Load)
         {
-            Load = GetComponent<SaveSerial>();
+            Load = GetComponent<SaveSystem>();
         }    
         if (!pixCamera)
         {
@@ -86,6 +86,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+		(keybinding menu added)
         if (phoneRing)
         {
             if (GameplayState.controllability == PlayerControllability.FirstDialog)
@@ -94,34 +95,7 @@ public class CameraController : MonoBehaviour
             }
             else
                 phoneRing.mute = true;
-        }
-        
-
-
-        // Сделал для удобной проверки всего
-        if (InputManager.GetKey(KeyAction.Level1))
-        {
-            SceneManager.LoadScene(1);
-            GameplayState.LevelStart();
-        }
-
-        if (InputManager.GetKey(KeyAction.Level2))
-        {
-            SceneManager.LoadScene(2);
-            GameplayState.LevelStart();
-        }
-
-        if (InputManager.GetKey(KeyAction.Load))
-        {
-            Load.LoadGame();
-        }
-
-        if (InputManager.GetKey(KeyAction.Save))
-        {
-            Load.SaveGame();
-        }
-
-        //
+        }  
 
         if (target)
         {

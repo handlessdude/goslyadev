@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : SaveSerial
+public class MainMenu : SaveSystem
 {
     public GameObject notImplementedWarning;
     public GameObject mainMenu;
