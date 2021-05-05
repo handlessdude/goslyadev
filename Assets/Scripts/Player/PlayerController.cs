@@ -26,11 +26,11 @@ public class PlayerController : MonoBehaviour
 
     //характеристики Dash
     public float dashForce = 5000.0f;
-    public bool isDashAllowed = true;
+    public  bool isDashAllowed = true;
 
 
     //характеристики Stopm
-    public bool isStopmAllowed = true;
+    public static bool isStopmAllowed = true;
 
 
     WorldSwitcher worldSwitcher;
@@ -120,8 +120,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerStay2D(Collider2D collision)
     {
-        
-        
         if ((collision.gameObject.tag == "Boxes") && (collision.gameObject.transform.GetChild(0).position.y > middle_ground.position.y))
         {
             print(middle_ground.position.y);
@@ -188,6 +186,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        print(isStopmAllowed);
         //rb.velocity = Vector2.zero; //---------------------------------------------------------------если че убрать
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
