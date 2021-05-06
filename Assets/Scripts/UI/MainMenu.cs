@@ -44,7 +44,6 @@ public class MainMenu : SaveSystem
         GameplayState.feededBarrels = 0;
         GameplayState.isPreparationEnded = false;
         SceneManager.LoadScene(1);
-
     }
 
     public void OpenOptions()

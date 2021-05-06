@@ -11,20 +11,24 @@ public class MainRobot : DialogueNPC
         {
             currentDialogElement = new SequentialDialogueElement("meets_informer", false,
                 new SequentialDialogueElement("what_happend", true,
-                new SequentialDialogueElement("have_problem", false,
+                new SequentialDialogueElement("have_problem1", false,
+                new SequentialDialogueElement("have_problem2", false,
+                new SequentialDialogueElement("have_problem3", false,   
                 new SequentialDialogueElement("fix_it", true,
-                new SequentialDialogueElement("i_cannot", false,
-                new SequentialDialogueElement("didnt_wake_up", true,
+                new SequentialDialogueElement("i_cannot1", false,
+                new SequentialDialogueElement("i_cannot2", false,
+                new SequentialDialogueElement("didnt_wake_up1", true,
+                new SequentialDialogueElement("didnt_wake_up2", true,
                 new SequentialDialogueElement("no_words", false,
                 new SequentialDialogueElement("error", false,
                 new SequentialDialogueElement("tin_can", true,
                 new SequentialDialogueElement("lets_fix_mech", false,
                 new SequentialDialogueElement("how_fix", true,
-                new SequentialDialogueElement("find_boards", false,
+                new SequentialDialogueElement("find_boards1", false,
+                new SequentialDialogueElement("find_boards2", false,
                 new SequentialDialogueElement("clear", true,
-                new DialogueEndElement())))))))))))));
+                new DialogueEndElement()))))))))))))))))));
         }
-           
     }
 
 

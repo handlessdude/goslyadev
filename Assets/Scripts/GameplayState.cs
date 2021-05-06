@@ -33,7 +33,7 @@ public static class GameplayState
 
     public static bool isFixererDiaglolEnded = false;
 
-    public static bool UnderElevator = false;
+    public static bool isUnderElevator = false;
 
     public static int boards = 0;
     public static int feededboards = 0;

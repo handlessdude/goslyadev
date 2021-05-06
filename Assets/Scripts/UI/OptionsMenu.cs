@@ -33,11 +33,6 @@ public class OptionsMenu : MonoBehaviour
         }
     }
 
-    public void OnEnable()
-    {
-        
-    }
-
     //OPTIONS CONTROLS
 
     public void ChangeWindowed(int n)
@@ -65,7 +60,6 @@ public class OptionsMenu : MonoBehaviour
     {
         controlsMenu.SetActive(false);
         gameObject.SetActive(true);
-        SaveSystem.SaveKeys();
     }
 
     public void ChangeSFXVolume(float value)

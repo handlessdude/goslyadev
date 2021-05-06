@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     // -1 — влево, 1 — вправо, 0 — на месте.
     float horizontalDirection = 0.0f;
 
-    float verticalDirection = 0.0f;
+    //float verticalDirection = 0.0f;
     
     bool isInAir = false;
     bool jumping = false;
@@ -101,12 +101,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //TODO: Доделать анимацию, когда персонаж стоит на маленьком ящике, нет анимации передвижения
-
     public void OnTriggerStay2D(Collider2D collision)
-    {
-        
-        
+    {        
         if ((collision.gameObject.tag == "Boxes") && (collision.gameObject.transform.GetChild(0).position.y > middle_ground.position.y))
         {
             print(middle_ground.position.y);
@@ -127,32 +123,10 @@ public class PlayerController : MonoBehaviour
             
     }
 
-    void Stomp()
-    {
-        var wallClone = Instantiate(wall);
-        wallClone.SetActive(true);
-        var playerPos = gameObject.transform.position;
-        if (horizontalDirection > 0)
-        {
-            print(gameObject.name);
-            print(playerPos);
-            wallClone.transform.position = new Vector3(playerPos.x + 50, playerPos.y, 0);
-
-        }
-        else if (horizontalDirection < 0)
-        {
-            wallClone.transform.position = new Vector3(playerPos.x - 50, playerPos.y, 0);
-        }
-    }
-
     void Update()
     {
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
-            
-
-            
-
             if (InputManager.GetKey(KeyAction.MoveLeft))
             {
                 if (flag)
@@ -217,10 +191,6 @@ public class PlayerController : MonoBehaviour
                 ResetCamera(TargetPosition.Down);
             }
 
-            if (InputManager.GetKey(KeyAction.Stomp))
-            {
-                Stomp();
-            }
 
             if (InputManager.GetKey(KeyAction.Jump) && !jumping && IsOnGround())
             {

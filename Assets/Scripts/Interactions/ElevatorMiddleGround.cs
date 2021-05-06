@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElevatorPlato : MonoBehaviour
+public class ElevatorMiddleGround : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Player") || collision.CompareTag("Boxes"))
-            GameplayState.UnderElevator = true;
+            GameplayState.isUnderElevator = true;
     }
-
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player") || collision.CompareTag("Boxes"))
-            GameplayState.UnderElevator = false;
+            GameplayState.isUnderElevator = false;
     }
 }
