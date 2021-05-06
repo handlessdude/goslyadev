@@ -19,6 +19,13 @@ public class Enemy : MonoBehaviour {
 		Die
 	}
 
+    public enum PhysicalAction
+    {
+		Run,
+		Walk,
+		Stay
+	}
+
 	public enum Modifier
 	{
 		Discombobulated,
@@ -30,9 +37,10 @@ public class Enemy : MonoBehaviour {
 	public List<Sense> senses = new List<Sense>();
 
 	public int maxHealth = 50;
-	
+	public int damage = 5;
 	public float walkingSpeed = 3f;
 	public float runningSpeed = 6f;
+	public float maxJumpForce = 700f;
 
 	//ПЕРЕМЕННЫЕ ДЛЯ КОРРЕКТНОЙ РАБОТЫ ИИ
 
@@ -44,15 +52,23 @@ public class Enemy : MonoBehaviour {
 	protected bool isPlayerInAttackRange = false;
 	protected Dictionary<Sense, bool> isPlayerInSenseRange = new Dictionary<Sense, bool>();
 
+	//ПЕРЕМЕННЫЕ ДЛЯ КОНТРОЛЛЕРА
+	protected float directionX;
+
     protected virtual void Start()
     {
 		health = maxHealth;
     }
 
-    void Update()
+    protected virtual void Update()
 	{
 		OnAI();
 	}
+
+	protected virtual void FixedUpdate()
+    {
+
+    }
 
 	protected virtual void OnAI()
 	{
@@ -75,6 +91,11 @@ public class Enemy : MonoBehaviour {
 	{
 
 	}
+
+	public virtual void Attack()
+    {
+		target.GetComponent<PlayerStats>().OnHit(gameObject, damage);
+    }
 
 	public virtual void OnHit(GameObject player, int damage)
 	{

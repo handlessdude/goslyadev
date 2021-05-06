@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //используется конкретно для A*. эти ноды одноразовые для каждого пути
 public class PathNode
@@ -65,32 +66,42 @@ public class MapPathNode
     }
 }
 
-public class Pathfinder
+public static class Pathfinder
 {
-    public Dictionary<Vector2Int, MapPathNode> map;
+    public static Dictionary<Vector2Int, MapPathNode> map;
 
-    Transform[] areaMarkers;
+    static Vector3[] areaMarkers;
 
     public static float cellSize = 1.0f;
     public static int maxCellsInArea = 2600;
 
-    public Pathfinder(Transform[] areaMarkers)
+    static int _initFor = -1;
+
+    public static void Init()
     {
-        this.areaMarkers = areaMarkers;
+        areaMarkers = GameObject.FindGameObjectsWithTag("AreaMarker").Select(x => x.transform.position).ToArray();
 
         map = new Dictionary<Vector2Int, MapPathNode>();
-
+        _initFor = SceneManager.GetActiveScene().buildIndex;
         InitializeMap();
     }
 
-    bool IsSpaceWalkable(Vector2 pos1, Vector2 pos2)
+    static void CheckInit()
+    {
+        if (SceneManager.GetActiveScene().buildIndex != _initFor)
+        {
+            Init();
+        }
+    }
+
+    static bool IsSpaceWalkable(Vector2 pos1, Vector2 pos2)
     {
         RaycastHit2D[] raycastHits = Physics2D.LinecastAll(pos1, pos2);
         return !raycastHits.Any(x => ((x.collider.isTrigger == false) && (x.transform.tag != "Enemy") && (x.transform.tag != "Player")));
     }
 
     //здесь есть повторяющиеся вычисления, которые можно было бы перенести в FindPath, но он и без того слабо читаем
-    bool UpdateOptimalJumpParameters(PathNode start, PathNode destination, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
+    static bool UpdateOptimalJumpParameters(PathNode start, PathNode destination, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
     {
         float deltaY = destination.pos.y - start.pos.y;
         float velocityY = jumpForce * Time.fixedDeltaTime;
@@ -160,7 +171,7 @@ public class Pathfinder
     }
 
     //TODO: рефактор
-    void InitializeMap()
+    static void InitializeMap()
     {
         HashSet<Vector2Int> closed = new HashSet<Vector2Int>();
 
@@ -168,7 +179,7 @@ public class Pathfinder
         foreach (var marker in areaMarkers)
         {
             Dictionary<Vector2Int, MapPathNode>  chunk = new Dictionary<Vector2Int, MapPathNode>();
-            Vector2Int pos = ConvertToIntCoords(marker.position);
+            Vector2Int pos = ConvertToIntCoords(marker);
             
             MapPathNode start = new MapPathNode(pos);
             Queue<MapPathNode> q = new Queue<MapPathNode>();
@@ -295,7 +306,7 @@ public class Pathfinder
         return new Vector2(v.x + cellSize/2, v.y + cellSize/2);
     }
 
-    float heuristic_cost_estimate(PathNode nodeA, PathNode nodeB)
+    static float heuristic_cost_estimate(PathNode nodeA, PathNode nodeB)
     {
         float deltaX = Mathf.Abs(nodeA.pos.x - nodeB.pos.x);
         float deltaY = Mathf.Abs(nodeA.pos.y - nodeB.pos.y);
@@ -303,10 +314,9 @@ public class Pathfinder
         return deltaX + deltaY;
     }
 
-    LinkedList<PathNode> ConstructPath(PathNode end, MapPathNode start, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
+    static LinkedList<PathNode> ConstructPath(PathNode end, MapPathNode start, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
     {
         LinkedList<PathNode> path = new LinkedList<PathNode>();
-        PathNode jumpDest = end;
         while (end != null)
         {
             path.AddFirst(end);
@@ -320,18 +330,7 @@ public class Pathfinder
         return path;
     }
 
-    public LinkedList<PathNode> FindPath(Vector2 agentPos, Vector2 targetPos, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
-    {
-        Vector2Int startPos = ConvertToIntCoords(agentPos);
-        Vector2Int endPos = ConvertToIntCoords(targetPos);
-        if (!map.ContainsKey(startPos) || !map.ContainsKey(endPos))
-        {
-            return null;
-        }
-        return FindPath(map[startPos], map[endPos], agentBody, jumpForce, maxVelocityX);
-    }
-
-    public LinkedList<PathNode> FindPath(MapPathNode startNode, MapPathNode endNode, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
+    static LinkedList<PathNode> FindPath(MapPathNode startNode, MapPathNode endNode, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
     {
         Debug.Log("Search started");
         List<PathNode> openSet = new List<PathNode>();
@@ -358,7 +357,7 @@ public class Pathfinder
 
             if (currentNode.mapPathNode == endNode)
             {
-                Debug.Log("FOUND!");
+                Debug.Log("FOUND! " + ConstructPath(currentNode, startNode, agentBody, jumpForce, maxVelocityX).Count());
                 return ConstructPath(currentNode, startNode, agentBody, jumpForce, maxVelocityX);
             }
 
@@ -402,5 +401,33 @@ public class Pathfinder
             }
         }
         return null;
+    }
+
+    public static LinkedList<PathNode> FindPath(Vector2 agentPos, Vector2 targetPos, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
+    {
+        CheckInit();
+        Vector2Int startPos = ConvertToIntCoords(agentPos);
+        Vector2Int endPos = ConvertToIntCoords(targetPos);
+        if (!map.ContainsKey(startPos) || !map.ContainsKey(endPos))
+        {
+            return null;
+        }
+        return FindPath(map[startPos], map[endPos], agentBody, jumpForce, maxVelocityX);
+    }
+
+    //(направление движения по оси X, сила прыжка по оси Y)
+    public static (float, float) GetPathInstructions(LinkedListNode<PathNode> targetNode)
+    {
+        float direction = targetNode.Value.pos.x - targetNode.Previous.Value.pos.x > 0 ? 1 : -1;
+        if (targetNode.Value.jumpNode)
+        {
+            return (direction, targetNode.Value.optJumpForce);
+        }
+        return (direction, 0f);
+    }
+
+    public static bool IsNodeReached(Vector2 pos, PathNode targetNode)
+    {
+        return (Mathf.Abs(pos.x - targetNode.pos.x) < 0.05f) && (Mathf.Abs(pos.y - targetNode.pos.y) < 0.5f);
     }
 }
