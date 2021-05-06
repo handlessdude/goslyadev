@@ -9,10 +9,9 @@ public class KeySwitcher : MonoBehaviour
 {
     public KeywordTextLocalizer localizer;
     private GameObject currentKey;
-    private RectTransform rectTransform;
     private Image Image;
     public Sprite largeButton;
-    Sprite smallButton;
+    public Sprite smallButton;
 
     private static Dictionary<Keys, Tuple<KeyAction, string>> KeyActions = new Dictionary<Keys, Tuple<KeyAction, string>>()
     {
@@ -55,7 +54,10 @@ public class KeySwitcher : MonoBehaviour
         KeyCode.Escape, 
         KeyCode.Return, 
         KeyCode.LeftCommand,
-        KeyCode.None
+        KeyCode.None,
+        KeyCode.Mouse3,
+        KeyCode.Mouse4,
+        KeyCode.Mouse5,
     };
 
 
@@ -87,16 +89,16 @@ public class KeySwitcher : MonoBehaviour
         KeyCode.UpArrow,
         KeyCode.Mouse0,
         KeyCode.Mouse1,
+        KeyCode.None,
     };
 
     void Start()
     {
-        rectTransform = gameObject.GetComponent<RectTransform>();
         Image = gameObject.GetComponent<Image>();
-        smallButton = Image.sprite;
         //Проверяет нужна ли большая подложка для кнопки
+        SaveSystem.LoadKeys();
         if (LargeButtons.Contains(InputManager.bindings[KeyActions[Key].Item1].Item1))
-            LargeButton();
+            LargeButton(gameObject);
     }
 
     public void OnGUI()
@@ -104,14 +106,18 @@ public class KeySwitcher : MonoBehaviour
         Event Event = Event.current;
         if (currentKey != null && GameplayState.IsOnClick)
         {
-            if (Event.isKey)
+            if (Event.isKey || Event.isMouse)
             {
+                if (Event.button == 0 && Event.isMouse)
+                    Event.keyCode = KeyCode.Mouse0;
+                else if (Event.button == 1 && Event.isMouse)
+                    Event.keyCode = KeyCode.Mouse1;
                 if (!DeprecatedKeys.Contains(Event.keyCode))
                 {
                     if (LargeButtons.Contains(Event.keyCode))
-                        LargeButton();
+                        LargeButton(gameObject);
                     else
-                        SmallButton();
+                        SmallButton(gameObject);
                     //Находит все кнопки, которые имею такой же бинд как и нажатая кнопка
                     foreach (var x in InputManager.bindings.Where(x => x.Value.Item1 == Event.keyCode && x.Key != KeyActions[Key].Item1).ToArray())
                     {
@@ -122,8 +128,7 @@ public class KeySwitcher : MonoBehaviour
                         //Ищет объект(кнопку с биндом None), далее изменяет подложку и размеры и обновляет текст на кнопке. 
                         var NoneButton = GameObject.Find(NoneKey.Value.Item2);
                         NoneButton.transform.GetChild(0).GetComponent<KeywordTextLocalizer>().UpdateLocalization();
-                        NoneButton.GetComponent<Image>().sprite = largeButton;
-                        NoneButton.GetComponent<RectTransform>().sizeDelta = new Vector2(312f, 100f);
+                        LargeButton(NoneButton);
                     }
                     InputManager.bindings[KeyActions[Key].Item1] = new Tuple<KeyCode, KeyCode>(Event.keyCode, InputManager.bindings[KeyActions[Key].Item1].Item2);
                     KeywordsReplacer.patterns[KeyActions[Key].Item2] = InputManager.GetPrimaryBinding(KeyActions[Key].Item1).ToString;
@@ -136,22 +141,38 @@ public class KeySwitcher : MonoBehaviour
 
 
     /// <summary>
-    /// Делает подложку для кнопки маленького размера (одиночной клавишы)
+    /// Функция для сброса биндов в начальное состояние
     /// </summary>
-    public void SmallButton()
+    public void ResetKeys()
     {
-        rectTransform.sizeDelta = new Vector2(100f, 100f);
-        Image.sprite = smallButton;
+        InputManager.bindings = new Dictionary<KeyAction, Tuple<KeyCode, KeyCode>>(InputManager.defaultMapping);
+        KeywordsReplacer.patterns = new Dictionary<string, Func<string>>(KeywordsReplacer.defaultpatterns);
+        foreach (var x in KeywordsReplacer.patterns.Keys)
+        {
+            var key = GameObject.Find(x);
+            key.transform.GetChild(0).GetComponent<KeywordTextLocalizer>().UpdateLocalization();
+            if (LargeButtons.Contains(InputManager.bindings[KeyActions[key.GetComponent<KeySwitcher>().Key].Item1].Item1))
+                LargeButton(key);
+            else SmallButton(key);
+        }
     }
 
+    /// <summary>
+    /// Делает подложку для кнопки маленького размера (одиночной клавишы)
+    /// </summary>
+    public void SmallButton(GameObject button)
+    {
+        button.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, 100f);
+        button.GetComponent<Image>().sprite = smallButton;
+    }
 
     /// <summary>
     /// Делает подложку для большой клавишы (для клавишы пробел)
     /// </summary>
-    public void LargeButton()
+    public void LargeButton(GameObject button)
     {
-        rectTransform.sizeDelta = new Vector2(350f, 100f);
-        Image.sprite = largeButton;
+        button.GetComponent<RectTransform>().sizeDelta = new Vector2(350f, 100f);
+        button.GetComponent<Image>().sprite = largeButton;
     }
 
 
@@ -161,8 +182,8 @@ public class KeySwitcher : MonoBehaviour
     public void Deselect()
     {
         currentKey = null;
-        GameplayState.IsOnClick = false;
         Image.color = new Color(1f, 1f, 1f);
+        GameplayState.IsOnClick = false;
     }
     public void ChangeKey(GameObject clicked)
     { 

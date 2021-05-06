@@ -19,12 +19,12 @@ public static class GameplayState
     public static Vector3 NewPositionPlayer;
 
     public static bool IsOnClick = false;
-    public static bool isPhoneRinged = false;
+    
 
     public static bool isLoaded;
 
     public static bool isDialogEnded = false;
-    //SecondLvl
+    //SecondLvL
     public static bool isThiefRobotDialogEnded = false;
 
     public static bool isMainRobotDialogEnded = false;

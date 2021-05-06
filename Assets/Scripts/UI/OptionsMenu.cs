@@ -6,6 +6,7 @@ using UnityEngine.Audio;
 public class OptionsMenu : MonoBehaviour
 {
     public GameObject mainMenu;
+    public GameObject controlsMenu;
     public MainMenu mainMenuScript;
     public AudioMixer audioMixer;
     public UnityEngine.UI.Slider SFXSlider;
@@ -55,8 +56,16 @@ public class OptionsMenu : MonoBehaviour
 
     public void Controls()
     {
-        Debug.Log("OPENING CONTROLS");
-        mainMenuScript.ShowNotImplementedWarning();
+        controlsMenu.SetActive(true);
+        gameObject.SetActive(false);
+    }
+
+    public void SaveBindings() => SaveSystem.SaveKeys();
+    public void ExitControls()
+    {
+        controlsMenu.SetActive(false);
+        gameObject.SetActive(true);
+        SaveSystem.SaveKeys();
     }
 
     public void ChangeSFXVolume(float value)
@@ -74,7 +83,6 @@ public class OptionsMenu : MonoBehaviour
 
     public void ExitOptions()
     {
-        
         mainMenu.SetActive(true);
         gameObject.SetActive(false);
     }
