@@ -41,7 +41,7 @@ public static class KeywordsReplacer
             ["Mouse1"] = "RClick",
         };
 
-    public static Dictionary<string, System.Func<string>> patterns =
+    public static Dictionary<string, System.Func<string>> defaultpatterns =
         new Dictionary<string, System.Func<string>>()
         {
             ["MoveLeftKey"] = InputManager.GetPrimaryBinding(KeyAction.MoveLeft).ToString,
@@ -59,12 +59,18 @@ public static class KeywordsReplacer
             ["StompKey"] = InputManager.GetPrimaryBinding(KeyAction.Stomp).ToString,
         };
 
+    public static Dictionary<string, System.Func<string>> patterns = new Dictionary<string, System.Func<string>>(defaultpatterns);
+
+
     static char[] trimChars = new char[] { '<', '>'};
 
     public static string ReplaceKeywords(string str)
     {
         string pattern = @"<" + string.Join(@">|<", patterns.Keys) + @">";
-        var s = Regex.Replace(str, pattern, x => patterns[x.Value.Trim(trimChars)]());
-        return Replace.ContainsKey(s) ? Replace[s] : s;
+        return Regex.Replace(str, pattern, x => {
+            var p = patterns[x.Value.Trim(trimChars)]();
+            return Replace.ContainsKey(p) ? Replace[p] : p;
+        });
     }
 }
+

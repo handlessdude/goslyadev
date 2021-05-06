@@ -48,9 +48,9 @@ public static class InputManager
 
     static bool isInit = false;
 
-    static void Init()
+    public static void Init()
     {
-        bindings = defaultMapping;
+        bindings =  new Dictionary<KeyAction, System.Tuple<KeyCode, KeyCode>>(defaultMapping);
         isInit = true;
     }
 

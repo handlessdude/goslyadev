@@ -17,7 +17,7 @@ public class SaveSystem : MonoBehaviour
             player = GameObject.FindWithTag("Player");
         }
     }
-    
+
     public void SaveGame()
     {
         BinaryFormatter bf = new BinaryFormatter();
@@ -29,7 +29,7 @@ public class SaveSystem : MonoBehaviour
             data.savedbarrels = GameplayState.barrels;
             data.savedfeededbarrels = GameplayState.feededBarrels;
             data.savepreparationended = GameplayState.isPreparationEnded;
-            //TODO
+            
             data.savedisDialogEnded = GameplayState.isDialogEnded;
             //
             data.savedisThiefRobotDialogEnded = GameplayState.isThiefRobotDialogEnded;
@@ -46,8 +46,11 @@ public class SaveSystem : MonoBehaviour
 
             data.savedisStartedDialogEnded = GameplayState.isStartedDialogEnded;
 
-            (data.savedPlayerPosX, data.savedPlayerPosY, data.savedPlayerPosZ) = (player.transform.position.x,player.transform.position.y,player.transform.position.z);
-            
+            (data.savedPlayerPosX, data.savedPlayerPosY, data.savedPlayerPosZ) = (player.transform.position.x, player.transform.position.y, player.transform.position.z);
+
+            //Сохраняет раскладку биндов
+            data.savedKeyBindings = InputManager.bindings;
+            data.savedPatterns = KeywordsReplacer.patterns;
             bf.Serialize(fs, data);
         }
         Debug.Log("Game data saved!");
@@ -63,7 +66,7 @@ public class SaveSystem : MonoBehaviour
                 SaveData data = (SaveData)bf.Deserialize(fs);
                 Cursor.visible = false;
                 Time.timeScale = 1.0f;
-                SceneManager.LoadScene(data.savedsceneInd,LoadSceneMode.Single);
+                SceneManager.LoadScene(data.savedsceneInd, LoadSceneMode.Single);
                 GameplayState.LevelStart();
                 GameplayState.feededBarrels = data.savedfeededbarrels;
 
@@ -91,20 +94,56 @@ public class SaveSystem : MonoBehaviour
                 GameplayState.isLoaded = true;
             }
             Debug.Log("Game data loaded!");
-            
+
         }
         catch (Exception e)
         {
             Debug.LogError(e);
         }
-           
     }
+
+    public static void SaveKeys()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        using (FileStream fs = new FileStream(Application.persistentDataPath + "/keybindings.dat", FileMode.Create))
+        {
+            SaveData data = new SaveData
+            {
+                savedKeyBindings = new Dictionary<KeyAction, Tuple<KeyCode, KeyCode>>(InputManager.bindings),
+                savedPatterns = new Dictionary<string, Func<string>>(KeywordsReplacer.patterns)
+            };
+            bf.Serialize(fs, data);
+        }
+        Debug.Log("Bindings saved");
+    }
+
+    public static void LoadKeys()
+    {
+        try
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            using (FileStream fs = new FileStream(Application.persistentDataPath + "/keybindings.dat", FileMode.Open))
+            {
+                SaveData data = (SaveData)bf.Deserialize(fs);
+                if (data.savedKeyBindings.Count != 0 && data.savedPatterns.Count != 0)
+                {
+                    InputManager.bindings = new Dictionary<KeyAction, Tuple<KeyCode, KeyCode>>(data.savedKeyBindings);
+                    KeywordsReplacer.patterns = new Dictionary<string, Func<string>>(data.savedPatterns);
+                    Debug.Log("Bindings loaded");
+                }
+            }
+        }
+        catch { }
+    }
+
 }
 
 [Serializable]
 public class SaveData
 {
     public Dictionary<string, Tuple<float, float>> savedBoxesPosition = new Dictionary<string, Tuple<float, float>>();
+    public Dictionary<KeyAction, Tuple<KeyCode, KeyCode>> savedKeyBindings = new Dictionary<KeyAction, Tuple<KeyCode, KeyCode>>();
+    public Dictionary<string, Func<string>> savedPatterns = new Dictionary<string, Func<string>>();
     public List<string> savedDeletedList;
     public bool savedisDialogEnded;
     public bool savepreparationended;
