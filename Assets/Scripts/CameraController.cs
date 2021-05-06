@@ -59,8 +59,12 @@ public class CameraController : MonoBehaviour
             }
             currentCollider = cameraBounds[0];
         } 
+
+        if (screenFader)
+        {
             screenFader.fadeState = ScreenFader.FadeState.OutEnd;
             screenFader.fadeState = ScreenFader.FadeState.Out;
+        }
 
         if (SceneManager.GetSceneByBuildIndex(2).Equals(SceneManager.GetActiveScene()))
         {
@@ -82,8 +86,6 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        print(GameplayState.feededboards);
-        print(GameplayState.boards);
         if (phoneRing)
         {
             if (GameplayState.controllability == PlayerControllability.FirstDialog)
