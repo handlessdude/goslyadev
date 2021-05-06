@@ -96,7 +96,6 @@ public class KeySwitcher : MonoBehaviour
     {
         Image = gameObject.GetComponent<Image>();
         //Проверяет нужна ли большая подложка для кнопки
-        SaveSystem.LoadKeys();
         if (LargeButtons.Contains(InputManager.bindings[KeyActions[Key].Item1].Item1))
             LargeButton(gameObject);
     }

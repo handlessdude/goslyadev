@@ -67,6 +67,7 @@ public class CameraController : MonoBehaviour
             if (!GameplayState.isStartedDialogEnded)
                 GameplayState.controllability = PlayerControllability.FirstDialog;
         }
+        SaveSystem.LoadKeys();
     }
 
     public bool ZoomedOut()
@@ -74,14 +75,10 @@ public class CameraController : MonoBehaviour
         return zoomedOut;
     }
 
-    void FixedUpdate()
-    {
-
-    }
-
-
     void Update()
     {
+            print(GameplayState.isUnderElevator);
+
 
         if (phoneRing)
         {

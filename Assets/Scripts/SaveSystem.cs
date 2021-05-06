@@ -107,11 +107,9 @@ public class SaveSystem : MonoBehaviour
         BinaryFormatter bf = new BinaryFormatter();
         using (FileStream fs = new FileStream(Application.persistentDataPath + "/keybindings.dat", FileMode.Create))
         {
-            SaveData data = new SaveData
-            {
-                savedKeyBindings = new Dictionary<KeyAction, Tuple<KeyCode, KeyCode>>(InputManager.bindings),
-                savedPatterns = new Dictionary<string, Func<string>>(KeywordsReplacer.patterns)
-            };
+            SaveData data = new SaveData();
+            data.savedKeyBindings = InputManager.bindings;
+            data.savedPatterns = KeywordsReplacer.patterns;
             bf.Serialize(fs, data);
         }
         Debug.Log("Bindings saved");
@@ -125,15 +123,15 @@ public class SaveSystem : MonoBehaviour
             using (FileStream fs = new FileStream(Application.persistentDataPath + "/keybindings.dat", FileMode.Open))
             {
                 SaveData data = (SaveData)bf.Deserialize(fs);
-                if (data.savedKeyBindings.Count != 0 && data.savedPatterns.Count != 0)
-                {
-                    InputManager.bindings = new Dictionary<KeyAction, Tuple<KeyCode, KeyCode>>(data.savedKeyBindings);
-                    KeywordsReplacer.patterns = new Dictionary<string, Func<string>>(data.savedPatterns);
-                    Debug.Log("Bindings loaded");
-                }
+                KeywordsReplacer.patterns = new Dictionary<string, Func<string>>(data.savedPatterns);
+                InputManager.bindings = new Dictionary<KeyAction, Tuple<KeyCode, KeyCode>>(data.savedKeyBindings);
             }
+            Debug.Log("Bindings loaded");
         }
-        catch { }
+        catch (Exception e)
+        {
+            print(e.Message);
+        }
     }
 
 }

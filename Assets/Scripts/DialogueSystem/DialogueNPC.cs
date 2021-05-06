@@ -17,7 +17,7 @@ public class DialogueNPC : Interactable
     protected float selfBubbleHeight = 1.5f;
     protected float characterBubbleHeight = 1.5f;
 
-    float charTypingTime = 0.05f;
+    float charTypingTime = 0.06f;
     float drawnDialogShowTime = 1f;
     float backgroundRollingSpeed = 0.02f;
 
@@ -117,7 +117,6 @@ public class DialogueNPC : Interactable
     {
         dialogueState = DialogueState.DrawingBox;
         float length = CalculateLineLength(text);
-        float height = CalculateBubleHeight(text);
         RectTransform rtMain = currentDialogueBox.transform.Find("Background").GetComponent<RectTransform>();
         RectTransform rtLeft = currentDialogueBox.transform.Find("Leftbackground").GetComponent<RectTransform>();
         RectTransform rtRight = currentDialogueBox.transform.Find("Rightbackground").GetComponent<RectTransform>();
@@ -132,16 +131,15 @@ public class DialogueNPC : Interactable
             rtRight.localPosition = new Vector2(width/2, rtRight.localPosition.y);
             yield return new WaitForSeconds(backgroundRollingSpeed);
         }
-        rtMain.sizeDelta = new Vector2(length, height / 2);
-        rtLeft.localPosition = new Vector2(-length / 2, -rtMain.sizeDelta.y / 2);
-        rtLeft.sizeDelta = new Vector2(rtLeft.sizeDelta.x, rtMain.sizeDelta.y);
-        rtRight.localPosition = new Vector2(length / 2, -rtMain.sizeDelta.y / 2);
-        rtRight.sizeDelta = new Vector2(rtRight.sizeDelta.x, rtMain.sizeDelta.y);
+        rtMain.sizeDelta = new Vector2(length, rtMain.sizeDelta.y);
+        rtLeft.localPosition = new Vector2(-length / 2, rtLeft.localPosition.y);
+        rtRight.localPosition = new Vector2(length / 2, rtRight.localPosition.y);
         BackgroundReady(text);
     }
 
     public virtual void Response(int i)
     {
+        print(dialogueState);
         switch (dialogueState)
         {
             case DialogueState.Selection:
@@ -171,7 +169,7 @@ public class DialogueNPC : Interactable
                     StopCoroutine(typeText);
                     textComponent.text = Localization.GetLocalizedString(currentDialogElement.textValue);
                     dialogueState = DialogueState.DrawnDialogDelay;
-                    Invoke("OnDialogueDrawn", drawnDialogShowTime);
+                    //Invoke("OnDialogueDrawn", drawnDialogShowTime);
                     break;
                 }
             case DialogueState.DrawnDialogDelay:
@@ -199,7 +197,7 @@ public class DialogueNPC : Interactable
         }
         CancelInvoke("OnDialogueDrawn");
         dialogueState = DialogueState.DrawnDialogDelay;
-        Invoke("OnDialogueDrawn", drawnDialogShowTime);
+        //Invoke("OnDialogueDrawn", drawnDialogShowTime);
     }
 
     void SwitchDialogElement(DialogueElement dialogueElement)
@@ -221,7 +219,7 @@ public class DialogueNPC : Interactable
         if (currentDialogElement.GetType() == typeof(SequentialDialogueElement))
         {
             Destroy(currentDialogueBox);
-            textComponent = null;
+            textComponent = null; 
             SwitchDialogElement((currentDialogElement as SequentialDialogueElement).next);
         }
         else if (currentDialogElement.GetType() == typeof(SelectionDialogueElement))

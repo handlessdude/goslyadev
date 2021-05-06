@@ -13,7 +13,8 @@ public class Elevator : MonoBehaviour
     public Transform targetBottom;
 
     bool onLift = false;
-    
+
+
     private void Start()
     {
         if (!rb)
@@ -27,7 +28,6 @@ public class Elevator : MonoBehaviour
         }
     }
 
-
     public void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -39,13 +39,15 @@ public class Elevator : MonoBehaviour
         if (collision.CompareTag("Player"))
             onLift = false;
     }
+
+    
     private void FixedUpdate()
     {
         if (onLift)
         {
             music.mute = true;
             ElevatorSound.mute = false;
-            if (transform.position.y > targetTop.position.y)
+            if (transform.position.y > targetTop.position.y || GameplayState.isUnderElevator) 
             {
                 rb.bodyType = RigidbodyType2D.Static;
             }
@@ -59,19 +61,14 @@ public class Elevator : MonoBehaviour
         {
             music.mute = false;
             ElevatorSound.mute = true;
-            if (transform.position.y < targetBottom.position.y)
+            if (transform.position.y < targetBottom.position.y || GameplayState.isUnderElevator)
             {
                 rb.bodyType = RigidbodyType2D.Static;
             }
             else
             {
-                if (!GameplayState.UnderElevator)
-                {
-                    rb.bodyType = RigidbodyType2D.Kinematic;
-                    rb.velocity = new Vector2(rb.velocity.x, -moveSpeed * 2 * Time.fixedDeltaTime);
-                }
-                else
-                    rb.bodyType = RigidbodyType2D.Static;
+                rb.bodyType = RigidbodyType2D.Kinematic;
+                rb.velocity = new Vector2(rb.velocity.x, -moveSpeed * 2 * Time.fixedDeltaTime);
             }
         }
     }
