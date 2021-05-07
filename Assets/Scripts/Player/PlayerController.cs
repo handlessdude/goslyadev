@@ -30,8 +30,10 @@ public class PlayerController : MonoBehaviour
 
 
     //характеристики Stopm
-    public static bool isStopmAllowed = true;
+    public static bool isStompAllowed = true;
 
+    //Характеристики Hit
+    public static bool isHitAllowed = true;
 
     WorldSwitcher worldSwitcher;
 
@@ -144,14 +146,14 @@ public class PlayerController : MonoBehaviour
     void Stomp()
     {
         animator.SetBool("Stomp", true);
-        Invoke("CreateClone", 0.35f);
+        Invoke("CreateClone", 0.2f);
         GameplayState.controllability = PlayerControllability.InDialogue;
         Invoke("DeleteClone", 1f);
-        isStopmAllowed = false;
+        isStompAllowed = false;
         Invoke("StompCoolDown", 4.0f);
     }
 
-    void StompCoolDown() => isStopmAllowed = true;
+    void StompCoolDown() => isStompAllowed = true;
 
     void DeleteClone()
     {
@@ -163,6 +165,7 @@ public class PlayerController : MonoBehaviour
     void CreateClone()
     {
         var playerPos = gameObject.transform.position;
+        //0.5 добавил из-за кривого спрайта
         wallClone = Instantiate(wall, new Vector3(playerPos.x, playerPos.y + 0.5f, 0), Quaternion.identity);
     }
     //
@@ -173,7 +176,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Dash", true);
         if (horizontalDirection > 0)
             rb.AddForce(new Vector2(dashForce, 0));
-        if (horizontalDirection < 0)
+        else if (horizontalDirection < 0)
             rb.AddForce(new Vector2(-dashForce, 0));
         Invoke("StopDash", 0.5f);
         isDashAllowed = false;
@@ -184,9 +187,22 @@ public class PlayerController : MonoBehaviour
     void StopDash() => animator.SetBool("Dash", false);
     //
 
+    //Реализация абилки Hit
+    
+    void Hit()
+    {
+        animator.SetBool("Hit", true);
+        Invoke("StopHit", 0.5f);
+        isHitAllowed = false;
+        Invoke("HitCoolDown", 2.0f);
+    }
+
+    void HitCoolDown() => isHitAllowed = true;
+    void StopHit() => animator.SetBool("Hit", false);
+
+    //
     void Update()
     {
-        print(isStopmAllowed);
         //rb.velocity = Vector2.zero; //---------------------------------------------------------------если че убрать
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
@@ -235,7 +251,7 @@ public class PlayerController : MonoBehaviour
                 horizontalDirection = 0.0f;
             }
 
-            if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping && isStopmAllowed)
+            if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping && isStompAllowed)
             {
                 Stomp();
             }
@@ -243,6 +259,11 @@ public class PlayerController : MonoBehaviour
             if (InputManager.GetKeyDown(KeyAction.Dash) && isDashAllowed)
             {
                 Dash();
+            }
+
+            if (InputManager.GetKeyDown(KeyAction.Hit) && isHitAllowed)
+            {
+                Hit();
             }
 
             if (InputManager.GetKey(KeyAction.LookUp) && !jumping && !movementInput)

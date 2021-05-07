@@ -26,6 +26,7 @@ public enum KeyAction
     CombatAbility2,
     Dash,
     Stomp,
+    Hit
     
 }
 
@@ -55,6 +56,7 @@ public static class InputManager
             [KeyAction.CombatAbility1] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse0, KeyCode.None),
             [KeyAction.CombatAbility2] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse1, KeyCode.None),
             [KeyAction.Dash] = new System.Tuple<KeyCode, KeyCode>(KeyCode.LeftShift, KeyCode.None),
+            [KeyAction.Hit] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse0, KeyCode.None),
             [KeyAction.Stomp] = new System.Tuple<KeyCode, KeyCode>(KeyCode.Mouse1, KeyCode.None),
             
         };
