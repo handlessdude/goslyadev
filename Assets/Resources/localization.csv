@@ -50,15 +50,19 @@
 "te1231===234","1","2","3"
 <<<<<<< HEAD
 
-"ask_rob_bout_board1","№4568? We've lost the board here. I remember that a couple of times we already","№4568? У нас тут плата пропала? Помнится, пару раз у нас уже пропадали","№4568? Haben wir das Board hier verloren? Ich erinnere mich, dass wir einige Male bereits"
-"ask_rob_bout_board2","lost boards, and each time they turned out to be with you for some rituals. ","платы, и каждый раз они оказывались у тебя для каких-то ритуалов. ","Gebühren verloren haben und jedes Mal herausfanden, dass sie für einige Rituale bei Ihnen waren. "
+"ask_rob_bout_board1","№4568? We've lost the board here. I remember that","№4568? У нас тут плата пропала? Помнится, пару раз","№4568? Haben wir das Board hier verloren? Ich erinnere mich, dass wir einige Male bereits"
+"ask_rob_bout_board2","a couple of times we already lost boards, and","у нас уже пропадали платы, и каждый раз они","Gebühren verloren haben und jedes Mal herausfanden, dass sie für einige Rituale bei Ihnen waren. "
+"ask_rob_bout_board3","each time they turned out to be with you for some rituals. ","оказывались у тебя для каких-то ритуалов. ","Gebühren verloren haben und jedes Mal herausfanden, dass sie für einige Rituale bei Ihnen waren. "
+
 "robot_panic","No, no, I don't, sir! ","Нет, нет, что вы, сэр!","Nein, nein, ich will nicht, Sir! "
 "k_demands_plate","Then give me the board quickly.","Тогда быстро отдай мне плату.","Dann gib mir deine Zahlung schnell."
 "rob_gives_board","Here.","Вот.","Hier."
 
 "meets_fixer","Fixer?","Починщик?","Fixierer?"
 "fixer_meets_k","Oh, Mr. K, it has been a long time since you visited me live.","О, Мистер К, давно вы не навещали меня вживую.","Oh, Mr. K, es ist lange her, dass Sie mich live besucht haben."
-"remember_why","Yes ... Remind me why, to get to you, I have to go through some kind of torment with the box?","Да... Напомни, почему, чтобы добраться к тебе, нужно пройти через какие-то мучения с ящиком?","Ja ... Erinnern Sie mich daran, warum ich, um zu Ihnen zu gelangen, eine Art Qual mit der Kiste durchmachen muss?"
+"remember_why1","Yes ... Remind me why, to get to you, I have to go","Да... Напомни, почему, чтобы добраться к тебе,","Ja ... Erinnern Sie mich daran, warum ich,"
+"remember_why2","through some kind of torment with the box?","нужно пройти через какие-то мучения с ящиком?","um zu Ihnen zu gelangen, eine Art Qual mit der Kiste durchmachen muss?"
+
 "insanity_of_ designer","No idea. Some kind of insanity of lvl-designer.","Без понятия. Какой-то маразм лвл-дизайнера.","Keine Ahnung. Eine Art Wahnsinn des Level-Designers."
 "ask_fixer_board","Precisely. Listen, I need...","Точно. Слушай, мне нужна...","Genau. Hören Sie, ich brauche..."
 "know_bout_board","Mechanism board, yes?","Плата для механизма, да?","Mechanism Board, was?"
@@ -71,7 +75,9 @@
 
 "last_repair","Now all that remains is to repair the mechanism.","Теперь осталось только починить механизм.","Jetzt muss nur noch der Mechanismus repariert werden."
 
-"after_repair","Finally, I'm already tired of running, now I would like to drink some coff .. Oh, a call from the hospital?","Наконец-то, я уже устал бегать, теперь бы выпить немного коф.. Ой, звонок из больницы?","Endlich bin ich es schon leid zu rennen, jetzt möchte ich etwas Kaffee trinken. Oh, ein Anruf aus dem Krankenhaus?"
+"after_repair1","Finally, I'm already tired of running,","Наконец-то, я уже устал бегать,","Endlich bin ich es schon leid zu rennen, jetzt möchte ich etwas Kaffee trinken. Oh, ein Anruf aus dem Krankenhaus?"
+"after_repair2","now I would like to drink some coff...","теперь бы выпить немного коф..","Endlich bin ich es schon leid zu rennen, jetzt möchte ich etwas Kaffee trinken. Oh, ein Anruf aus dem Krankenhaus?"
+"after_repair3","Oh, a call from the hospital?","Ой, звонок из больницы?","Endlich bin ich es schon leid zu rennen, jetzt möchte ich etwas Kaffee trinken. Oh, ein Anruf aus dem Krankenhaus?"
 
 "call_from_hosp","Hello? Mr.  K? This is St. George's Hospital.","Алло? Мистер К? Это больница святого Георгия.","Hallo? Herr K? Dies ist das St. George's Hospital."
 "meets_hosp","Yes? This is Mr K.","Да? Это Мистер К.","Ja? Das ist Herr K."
@@ -91,11 +97,15 @@
 "son_asked_about_sleep","Hi, Dad! Falling asleep at work again?","Привет, пап! Опять уснул на работе?","Hallo Papa! Bei der Arbeit wieder einschlafen?"
 "son_know","Heh. How did you know?","Хех. Как узнал?","Heh. Woher wusstest du das?"
 "called_mom","I called my mom, she said you didn’t come home. You know that sleep deprivation and overtime are bad for your health?","Маме звонил, она сказала, ты не заходил домой. Ты же в курсе, что недосыпы и переработки плохо сказываются на здоровье?","Ich habe meine Mutter angerufen, sie sagte, du bist nicht nach Hause gekommen. Sie wissen, dass Schlafentzug und Überstunden gesundheitsschädlich sind?"
-"had_dream","Yes ... Your mother has already told me about this many times. But! I had such a wonderful dream!","Да... Твоя мать уже неоднократно мне об этом рассказывала. Зато! У меня был такой чудесный сон!","Ja ... Deine Mutter hat mir schon oft davon erzählt. Aber! Ich hatte so einen wundervollen Traum!"
+"had_dream1","Yes ... Your mother has already told me about this","Да... Твоя мать уже неоднократно мне об этом","Ja ... Deine Mutter hat mir schon oft davon erzählt. Aber! Ich hatte so einen wundervollen Traum!"
+"had_dream2","many times. But! I had such a wonderful dream!","рассказывала. Зато! У меня был такой чудесный сон!","Ja ... Deine Mutter hat mir schon oft davon erzählt. Aber! Ich hatte so einen wundervollen Traum!"
+
 "again_body1","Again about that body? This already looks like paranoia,","Опять о том теле? Это уже похоже на бред,","Wieder über diesen Körper? Das sieht schon nach Paranoia aus,"
 "again_body2","maybe you will have enough to drive yourself for this?","может хватит уже себя загонять ради этого?","vielleicht haben Sie genug, um sich selbst dafür zu fahren?"
 
-"will_be_healthy","No. You will definitely be healthy, I will give my life so that you have a new healthy body.","Нет. Ты точно будешь здоров, я жизнь отдам ради того, чтобы у тебя было новое здоровое тело.","Nein. Sie werden auf jeden Fall gesund sein, ich werde mein Leben geben, damit Sie einen neuen gesunden Körper haben."
+"will_be_healthy1","No. You will definitely be healthy, I will give","Нет. Ты точно будешь здоров, я жизнь отдам ради","Nein. Sie werden auf jeden Fall gesund sein, ich werde mein Leben geben, damit Sie einen neuen gesunden Körper haben."
+"will_be_healthy2","my life so that you have a new healthy body.","того, чтобы у тебя было новое здоровое тело.","Nein. Sie werden auf jeden Fall gesund sein, ich werde mein Leben geben, damit Sie einen neuen gesunden Körper haben."
+
 "need_healthy_dad","Okay. I’m all in you and I understand that if we are on fire with something, then it is difficult to dissuade us. But promise not to get too busy. I still need a living healthy father.","Ладно. Я-то весь в тебя и понимаю, что если мы загорелись чем-то, то нас сложно разубедить. Но пообещай не слишком загоняться. Мне всё-таки нужен живой здоровый отец.","Okay. Ich bin alles in dir und ich verstehe, dass es schwierig ist, uns davon abzubringen, wenn wir mit etwas in Flammen stehen. Aber verspreche, nicht zu beschäftigt zu werden. Ich brauche noch einen lebenden gesunden Vater."
 "go_work","I won't leave you, don't worry. Okay, I'll go to work.","Я тебя не брошу, не переживай. Ладно, я пойду работать.","Ich werde dich nicht verlassen, mach dir keine Sorgen. Okay, ich gehe zur Arbeit."
 "call_later","Ok, I'll call you later.","Давай, позже я еще позвоню.","Ok, ich rufe dich später an."
@@ -118,7 +128,7 @@
 "lets_fix_mech","No sir, please, let's get on with fixing the mechanism?","Нет, сэр, пожалуйста, давайте лучше займемся починкой механизма?","Nein, Sir, bitte, lassen Sie uns mit der Reparatur des Mechanismus fortfahren."
 "how_fix","Okay. How do I fix this?","Ладно. Как мне это исправить?","Okay. Wie behebe ich das?"
 "find_boards1","You need to find 3 boards in different parts of the building.","Вам нужно найти 3 платы в разных частях здания.","Sie müssen 3 Bretter in verschiedenen Teilen des Gebäudes finden."
-"find_boards2","As you find everything, replace the unusable ones in the mechanism and start it.","Как найдете все, замените негодные в центральном компьютере и запустите его.","Wenn Sie alles gefunden haben, ersetzen Sie die unbrauchbaren im Mechanismus und starten Sie ihn."
+"find_boards2","As you find everything, replace the unusable ones in the mechanism.","Как найдете все, замените негодные в центральном компьютере.","Wenn Sie alles gefunden haben, ersetzen Sie die unbrauchbaren im Mechanismus und starten Sie ihn."
 "clear","Ok.","Понятно.","Ok."
 
 
@@ -138,3 +148,34 @@
 
 "hint_press_e_answer","press <ActionKey> to answer the phone","нажмите <ActionKey>, чтобы ответить на телефон",""
 "success_notification_boards","Integrated circuit is put in the right place!","Микросхема вставлена!","ЗАЧЕМ ВАМ ВООБЩЕ НЕМЕЦКИЙ???"
+
+"controls_moveleft_key","<MoveLeftKey>","<MoveLeftKey>","<MoveLeftKey>"
+"controls_moveright_key","<MoveRightKey>","<MoveRightKey>","<MoveRightKey>"
+"controls_lookup_key","<LookUpKey>","<LookUpKey>","<LookUpKey>"
+"controls_lookdown_key","<LookDownKey>","<LookDownKey>","<LookDownKey>"
+"controls_action_key","<ActionKey>","<ActionKey>","<ActionKey>"
+"controls_jump_key","<JumpKey>","<JumpKey>","<JumpKey>"
+"controls_magenta_key","<MagentaKey>","<MagentaKey>","<MagentaKey>"
+"controls_cyan_key","<CyanKey>","<CyanKey>","<CyanKey>"
+"controls_green_key","<GreenKey>","<GreenKey>","<GreenKey>"
+"controls_camerascale_key","<CameraScaleKey>","<CameraScaleKey>","<CameraScaleKey>"
+"controls_dash_key","<DashKey>","<DashKey>","<DashKey>"
+"controls_hit_key","<HitKey>","<HitKey>","<HitKey>"
+"controls_stomp_key","<StompKey>","<StompKey>","<StompKey>"
+"controls_save","SAVE","СОХРАНИТЬ",""
+
+"menu_controls_left","LEFT","ВЛЕВО",""
+"menu_controls_right","RIGHT","ВПРАВО",""
+"menu_controls_action","ACTION","ДЕЙСТВИЕ",""
+"menu_controls_lookup","LOOK UP","ВВЕРХ",""
+"menu_controls_lookdown","LOOK UP","ВНИЗ",""
+"menu_controls_jump","JUMP","ПРЫЖОК",""
+"menu_controls_camerascale","SCALE","МАСШТАБ",""
+"menu_controls_magenta","MAGENTA","ПУРПУРНЫЙ",""
+"menu_controls_cyan","CYAN","ГОЛУБОЙ",""
+"menu_controls_green","GREEN","ЗЕЛЕНЫЙ",""
+"menu_controls_dash","DASH","РЫВОК",""
+"menu_controls_hit","HIT","УДАР",""
+"menu_controls_stomp","STOMP","СТЕНА",""
+
+
