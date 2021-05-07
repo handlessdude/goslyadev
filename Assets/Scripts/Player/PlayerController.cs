@@ -173,14 +173,17 @@ public class PlayerController : MonoBehaviour
     //Реализация абилки Dash
     void Dash()
     {
-        animator.SetBool("Dash", true);
-        if (horizontalDirection > 0)
-            rb.AddForce(new Vector2(dashForce, 0));
-        else if (horizontalDirection < 0)
-            rb.AddForce(new Vector2(-dashForce, 0));
-        Invoke("StopDash", 0.5f);
-        isDashAllowed = false;
-        Invoke("DashCoolDown", 2.0f);
+        if (horizontalDirection != 0.0f)
+        {
+            animator.SetBool("Dash", true);
+            if (horizontalDirection > 0)
+                rb.AddForce(new Vector2(dashForce, 0));
+            if (horizontalDirection < 0)
+                rb.AddForce(new Vector2(-dashForce, 0));
+            Invoke("StopDash", 0.5f);
+            isDashAllowed = false;
+            Invoke("DashCoolDown", 2.0f);
+        }
     }
 
     void DashCoolDown() => isDashAllowed = true;
