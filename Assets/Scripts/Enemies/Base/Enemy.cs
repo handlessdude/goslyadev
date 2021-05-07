@@ -21,9 +21,10 @@ public class Enemy : MonoBehaviour {
 
     public enum PhysicalAction
     {
+		Stay,
 		Run,
 		Walk,
-		Stay
+		JumpSteer
 	}
 
 	public enum Modifier
@@ -51,13 +52,24 @@ public class Enemy : MonoBehaviour {
 	protected List<Modifier> modifiers = new List<Modifier>();
 	protected bool isPlayerInAttackRange = false;
 	protected Dictionary<Sense, bool> isPlayerInSenseRange = new Dictionary<Sense, bool>();
+	protected PhysicalAction physicalAction;
 
 	//ПЕРЕМЕННЫЕ ДЛЯ КОНТРОЛЛЕРА
 	protected float directionX;
+	protected float jumpSteerVelocityX;
+	protected Rigidbody2D rb;
+	protected LinkedListNode<PathNode> currentPathNode;
+	protected bool followPath = false;
+	protected int ticksSpentOnNode = 0;
 
     protected virtual void Start()
     {
 		health = maxHealth;
+
+		if (!rb)
+        {
+			rb = GetComponent<Rigidbody2D>();
+		}
     }
 
     protected virtual void Update()
@@ -67,6 +79,29 @@ public class Enemy : MonoBehaviour {
 
 	protected virtual void FixedUpdate()
     {
+        switch (physicalAction)
+        {
+			case PhysicalAction.Run:
+                {
+					rb.velocity = new Vector2(runningSpeed, rb.velocity.y);
+					break;
+                }
+			case PhysicalAction.Walk:
+				{
+					rb.velocity = new Vector2(walkingSpeed, rb.velocity.y);
+					break;
+				}
+			case PhysicalAction.JumpSteer:
+				{
+					rb.velocity = new Vector2(jumpSteerVelocityX * directionX, rb.velocity.y);
+					break;
+				}
+			case PhysicalAction.Stay:
+				{
+					rb.velocity = rb.velocity = new Vector2(0f, rb.velocity.y);
+					break;
+				}
+		}
 
     }
 
@@ -109,11 +144,15 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
+	public virtual void OnFailedToFollowPath()
+    {
+		followPath = false;
+    }
+
 	public virtual void OnEnterAttackRange(GameObject player)
 	{
 		isPlayerInAttackRange = true;
 		target = player;
-		Debug.Log("Attack Range");
 	}
 
 	public virtual void OnLeaveAttackRange(GameObject player)

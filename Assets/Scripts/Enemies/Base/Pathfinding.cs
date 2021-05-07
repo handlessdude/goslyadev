@@ -134,6 +134,7 @@ public static class Pathfinder
 
                 if (optimal_velocityY == 0f)
                 {
+                    destination.optVelocityX = deltaX/fallTime;
                     return true;
                 }
 
@@ -415,13 +416,13 @@ public static class Pathfinder
         return FindPath(map[startPos], map[endPos], agentBody, jumpForce, maxVelocityX);
     }
 
-    //(направление движения по оси X, сила прыжка по оси Y)
+    //(рекомендованная скорость движения по оси X, сила прыжка по оси Y)
     public static (float, float) GetPathInstructions(LinkedListNode<PathNode> targetNode)
     {
         float direction = targetNode.Value.pos.x - targetNode.Previous.Value.pos.x > 0 ? 1 : -1;
         if (targetNode.Value.jumpNode)
         {
-            return (direction, targetNode.Value.optJumpForce);
+            return (direction*targetNode.Value.optVelocityX, targetNode.Value.optJumpForce);
         }
         return (direction, 0f);
     }

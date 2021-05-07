@@ -9,21 +9,28 @@ public class PlayerStats : MonoBehaviour
 
     public int maxHealth;
 
+    [HideInInspector]
+    public InGameUIController ingameUI;
 
     void Start()
     {
         health = maxHealth;
+
+        if (!ingameUI)
+        {
+            ingameUI = FindObjectOfType<InGameUIController>();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void OnHit(GameObject source, int damage)
     {
         int deltaHP = health - damage;
+        ingameUI.UpdateHP(deltaHP, maxHealth);
         if (deltaHP > 0)
         {
             health = deltaHP;
