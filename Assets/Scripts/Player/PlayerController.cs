@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     public Transform cameraTarget;
     public Footsteps footsteps;
     public GameObject wall;
-    public GameObject wallClone;
+    GameObject wallClone;
     
     //2^(ИД слоя), поэтому 256
     public int groundLayer = 256;
@@ -26,14 +26,13 @@ public class PlayerController : MonoBehaviour
 
     //характеристики Dash
     public float dashForce = 5000.0f;
-    public  bool isDashAllowed = true;
+    bool isDashAllowed = true;
 
 
     //характеристики Stopm
-    public static bool isStompAllowed = true;
-
+    bool isStompAllowed = true;
     //Характеристики Hit
-    public static bool isHitAllowed = true;
+    bool isHitAllowed = true;
 
     WorldSwitcher worldSwitcher;
 
@@ -57,7 +56,6 @@ public class PlayerController : MonoBehaviour
     Vector3 CameraDownPosistion = new Vector3(0, -3);
     Vector2 _currentVelocity;
     bool movementInput = false;
-    bool flag = false;
 
     enum TargetPosition
     {
@@ -116,30 +114,6 @@ public class PlayerController : MonoBehaviour
         {
             footsteps = GetComponent<Footsteps>();
         }
-    }
-
-    //TODO: Доделать анимацию, когда персонаж стоит на маленьком ящике, нет анимации передвижения
-
-    public void OnTriggerStay2D(Collider2D collision)
-    {
-        if ((collision.gameObject.tag == "Boxes") && (collision.gameObject.transform.GetChild(0).position.y > middle_ground.position.y))
-        {
-            print(middle_ground.position.y);
-            print(collision.gameObject.transform.GetChild(0).localPosition.y);
-            flag = true;
-        }
-            
-    }
-
-    public void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Boxes")
-        {
-            print(middle_ground.position.y);
-            print(collision.gameObject.transform.GetChild(0).localPosition.y);
-            flag = false;
-        }
-            
     }
 
     //Реализация абилки Stopm
@@ -212,11 +186,7 @@ public class PlayerController : MonoBehaviour
            
             if (InputManager.GetKey(KeyAction.MoveLeft))
             {
-                if (flag)
-                    horizontalDirection = -0.6f;
-                else
-                    horizontalDirection = -1.0f;
-
+                horizontalDirection = -1.0f;
                 animator.SetFloat(475924382, horizontalDirection); //по сути animator.SetFloat("Horizontal", horizontalDirection);
                                                                   //TODO: movementInput это костыль. Надо убрать.
                 movementInput = true;
@@ -228,11 +198,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (InputManager.GetKey(KeyAction.MoveRight))
             {
-                if (flag)
-                    horizontalDirection = 0.6f;
-                else
-                    horizontalDirection = 1.0f;
-
+                horizontalDirection = 1.0f;
                 animator.SetFloat(475924382, horizontalDirection);
                 movementInput = true;
                 if (IsOnGround())
@@ -289,7 +255,7 @@ public class PlayerController : MonoBehaviour
                 ResetCamera(TargetPosition.Down);
             }
 
-            if (InputManager.GetKey(KeyAction.Jump) && !jumping && IsOnGround())
+            if (InputManager.GetKey(KeyAction.Jump) && !jumping && IsOnGround() && !GameplayState.IsMovingBox)
             {
                 Jump();
                 ResetCamera();
@@ -370,8 +336,6 @@ public class PlayerController : MonoBehaviour
             }
             GameplayState.isLoaded = false;
         }
-        
-
     }
 
     void ResetStep()
@@ -434,8 +398,7 @@ public class PlayerController : MonoBehaviour
             cameraTarget.localPosition = Vector3.zero;
         }
     }
-
-    bool IsOnGround()
+    public bool IsOnGround()
     {
         if (isInAir)
         {
