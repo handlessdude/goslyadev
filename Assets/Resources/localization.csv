@@ -179,3 +179,8 @@
 "menu_controls_stomp","STOMP","СТЕНА",""
 
 
+
+"warning_yes","YES","ДА",""
+"warning_no","NO","НЕТ",""
+"warning_message","SAVE KEYBINDINGS?","СОХРАНИТЬ НАСТРОЙКИ?",""
+"controls_reset","RESET","ВЕРНУТЬ",""

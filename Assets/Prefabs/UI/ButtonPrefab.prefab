@@ -148,7 +148,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMeshProText: {fileID: 0}
-  text: UNLOCALIZED
+  text:
+    key: UNLOCALIZED
 --- !u!1 &812001866347858863
 GameObject:
   m_ObjectHideFlags: 0

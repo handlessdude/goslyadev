@@ -95,9 +95,14 @@ public class KeySwitcher : MonoBehaviour
     void Start()
     {
         Image = gameObject.GetComponent<Image>();
+    }
+
+    private void Update()
+    {
         //Проверяет нужна ли большая подложка для кнопки
         if (LargeButtons.Contains(InputManager.bindings[KeyActions[Key].Item1].Item1))
             LargeButton(gameObject);
+        else SmallButton(gameObject);
     }
 
     public void OnGUI()
@@ -113,10 +118,6 @@ public class KeySwitcher : MonoBehaviour
                     Event.keyCode = KeyCode.Mouse1;
                 if (!DeprecatedKeys.Contains(Event.keyCode))
                 {
-                    if (LargeButtons.Contains(Event.keyCode))
-                        LargeButton(gameObject);
-                    else
-                        SmallButton(gameObject);
                     //Находит все кнопки, которые имею такой же бинд как и нажатая кнопка
                     foreach (var x in InputManager.bindings.Where(x => x.Value.Item1 == Event.keyCode && x.Key != KeyActions[Key].Item1).ToArray())
                     {
@@ -127,11 +128,11 @@ public class KeySwitcher : MonoBehaviour
                         //Ищет объект(кнопку с биндом None), далее изменяет подложку и размеры и обновляет текст на кнопке. 
                         var NoneButton = GameObject.Find(NoneKey.Value.Item2);
                         NoneButton.transform.GetChild(0).GetComponent<KeywordTextLocalizer>().UpdateLocalization();
-                        LargeButton(NoneButton);
                     }
                     InputManager.bindings[KeyActions[Key].Item1] = new Tuple<KeyCode, KeyCode>(Event.keyCode, InputManager.bindings[KeyActions[Key].Item1].Item2);
                     KeywordsReplacer.patterns[KeyActions[Key].Item2] = InputManager.GetPrimaryBinding(KeyActions[Key].Item1).ToString;
                     localizer.UpdateLocalization();
+                    GameplayState.isBindingsSaved = false;
                     Deselect();
                 }
             }
@@ -150,10 +151,8 @@ public class KeySwitcher : MonoBehaviour
         {
             var key = GameObject.Find(x);
             key.transform.GetChild(0).GetComponent<KeywordTextLocalizer>().UpdateLocalization();
-            if (LargeButtons.Contains(InputManager.bindings[KeyActions[key.GetComponent<KeySwitcher>().Key].Item1].Item1))
-                LargeButton(key);
-            else SmallButton(key);
         }
+        GameplayState.isBindingsSaved = false;
     }
 
     /// <summary>

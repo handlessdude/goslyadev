@@ -7,6 +7,7 @@ public class OptionsMenu : MonoBehaviour
 {
     public GameObject mainMenu;
     public GameObject controlsMenu;
+    public GameObject warningMenu;
     public MainMenu mainMenuScript;
     public AudioMixer audioMixer;
     public UnityEngine.UI.Slider SFXSlider;
@@ -59,11 +60,35 @@ public class OptionsMenu : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void SaveBindings() => SaveSystem.SaveKeys();
+    public void SaveBindings()
+    {
+        SaveSystem.SaveKeys();
+        foreach (var x in GameObject.FindGameObjectsWithTag("Hint"))
+            x.GetComponentInChildren<KeywordTextLocalizer>().UpdateLocalization();
+        GameplayState.isBindingsSaved = true;
+    }
+
+    public void Yes()
+    {
+        SaveBindings();
+        warningMenu.SetActive(false);
+        gameObject.SetActive(true);
+    }
+
+    public void No()
+    {
+        SaveSystem.LoadKeys();
+        warningMenu.SetActive(false);
+        gameObject.SetActive(true);
+    }
+        
     public void ExitControls()
     {
         controlsMenu.SetActive(false);
-        gameObject.SetActive(true);
+        if (GameplayState.isBindingsSaved)
+            gameObject.SetActive(true);
+        else
+            warningMenu.SetActive(true);
     }
 
     public void ChangeSFXVolume(float value)

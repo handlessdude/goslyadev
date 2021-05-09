@@ -16,6 +16,7 @@ public static class GameplayState
     public static int feededBarrels;
     public static bool isPreparationEnded;
 
+    public static bool isBindingsSaved = true;
     public static Vector3 NewPositionPlayer;
 
     public static bool IsOnClick;
