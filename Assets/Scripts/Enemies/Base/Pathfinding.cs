@@ -160,12 +160,12 @@ public static class Pathfinder
             ascendTime = (-optimal_velocityY + Mathf.Sqrt(optimal_velocityY * optimal_velocityY - 2 * gravity * deltaY)) / (-gravity);
             targetLevelVelocity = optimal_velocityY - gravity * ascendTime;
             destination.optJumpForce = optimal_velocityY / Time.fixedDeltaTime;
-            destination.optVelocityX = maxVelocityX;
+            destination.optVelocityX = maxVelocityX * 0.8f;
             if (deltaX < 2*Pathfinder.cellSize)
             {
                 //чтобы не было проблем с перепрыгиванием простых препятствий
                 destination.optJumpForce = 1.1f * destination.optJumpForce;
-                destination.optVelocityX = destination.optVelocityX * 0.8f;
+                destination.optVelocityX = destination.optVelocityX * 0.6f;
             }
             
             float parabola_height = targetLevelVelocity * targetLevelVelocity / (2 * gravity);

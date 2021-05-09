@@ -101,7 +101,7 @@ public class Enemy : MonoBehaviour {
     {
 		if (followPath)
         {
-			if (Pathfinder.IsNodeReached(transform.position, currentPathNode.Value))
+			if (Pathfinder.IsNodeReached(transform.position, currentPathNode.Value) && Mathf.Abs(rb.velocity.y) < 0.01f)
 			{
 				currentPathNode = currentPathNode.Next;
 				if (currentPathNode == null)
