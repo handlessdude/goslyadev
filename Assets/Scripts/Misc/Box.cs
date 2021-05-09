@@ -66,7 +66,7 @@ public class Box : Interactable
             countAction = 0;
             hinge.enabled = false;
             GameplayState.IsMovingBox = false;
-            Invoke("Freeze", 0.25f);
+            Invoke("Freeze", 0.1f);
             animator.SetBool("MovingBoxLeft", false);
             animator.SetBool("MovingBoxRight", false);
         }
