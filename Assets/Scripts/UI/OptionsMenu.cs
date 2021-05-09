@@ -35,18 +35,22 @@ public class OptionsMenu : MonoBehaviour
 
     //OPTIONS CONTROLS
 
+
     public void ChangeWindowed(int n)
     {
-        mainMenuScript.ShowNotImplementedWarning();
         Debug.Log("HERE");
-        /*if (n == 0)
-        {
-            Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-        }
-        else if (n == 1)
-        {
-            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-        }*/
+        //if (n == 0)
+        //{
+        //    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+        //}
+        //else if (n == 1)
+        //{
+        //    Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+        //}
+        //else if (n == 2)
+        //{
+        //    Screen.fullScreenMode = FullScreenMode.Windowed;
+        //}
     }
 
     public void Controls()

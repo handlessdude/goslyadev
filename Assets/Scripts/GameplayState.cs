@@ -20,6 +20,7 @@ public static class GameplayState
 
     public static bool IsOnClick;
 
+    public static bool isOnAction;
     public static bool IsMovingBox;
     public static bool isLoaded;
 

@@ -40,6 +40,9 @@ public class EnemyTrigger : MonoBehaviour
     }
 }
 
+#if UNITY_EDITOR
+
+
 [CustomEditor(typeof(EnemyTrigger))]
 public class EnemyTriggerEditor : Editor
 {
@@ -54,3 +57,4 @@ public class EnemyTriggerEditor : Editor
 
     }
 }
+#endif

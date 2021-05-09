@@ -49,9 +49,9 @@ public class Box : Interactable
     protected override void Action()
     {
         base.Action();
-        CancelInvoke("Freeze");
-        if (countAction == 0 && playerController.IsOnGround())
+        if (countAction == 0)
         {
+            CancelInvoke("Freeze");
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             countAction += 1;
             hinge.enabled = true;
@@ -66,8 +66,7 @@ public class Box : Interactable
             countAction = 0;
             hinge.enabled = false;
             GameplayState.IsMovingBox = false;
-            Invoke("Freeze", 0.5f);
-            //Можно надо будет исправить
+            Invoke("Freeze", 0.25f);
             animator.SetBool("MovingBoxLeft", false);
             animator.SetBool("MovingBoxRight", false);
         }
