@@ -34,5 +34,7 @@ public class TextLocalizer : Localizer
     public override void UpdateLocalization()
     {
         textMeshProText.SetText(Localization.GetLocalizedString(text.key));
+        if (textMeshProText.text == "LOOK DOWN")
+            textMeshProText.alignment = TextAlignmentOptions.Justified;
     }
 }
