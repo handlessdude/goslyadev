@@ -94,7 +94,7 @@ public static class Pathfinder
         }
     }
 
-    static bool IsSpaceWalkable(Vector2 pos1, Vector2 pos2)
+    public static bool IsSpaceWalkable(Vector2 pos1, Vector2 pos2)
     {
         RaycastHit2D[] raycastHits = Physics2D.LinecastAll(pos1, pos2);
         return !raycastHits.Any(x => ((x.collider.isTrigger == false) && (x.transform.tag != "Enemy") && (x.transform.tag != "Player")));
@@ -104,7 +104,7 @@ public static class Pathfinder
     static bool UpdateOptimalJumpParameters(PathNode start, PathNode destination, Rigidbody2D agentBody, float jumpForce, float maxVelocityX)
     {
         float deltaY = destination.pos.y - start.pos.y;
-        float velocityY = jumpForce * Time.fixedDeltaTime;
+        float velocityY = jumpForce * Time.fixedDeltaTime/agentBody.mass;
         float gravity = - Physics2D.gravity.y * agentBody.gravityScale;
         float maxJumpHeight = velocityY * velocityY / (2 * gravity);
         if (deltaY > maxJumpHeight)
@@ -113,7 +113,9 @@ public static class Pathfinder
         }
 
         float jumpTime;
-        float deltaX = Mathf.Abs(destination.pos.x - start.pos.x); 
+        float deltaX = Mathf.Abs(destination.pos.x - start.pos.x);
+        float direction = start.pos.x - destination.pos.x > 0 ? -1f : 1f;
+        float optimal_time = deltaX / maxVelocityX;
         if (deltaY <= 0)
         {
             jumpTime = 2 * velocityY / gravity;
@@ -122,7 +124,6 @@ public static class Pathfinder
 
             if (deltaX < maxVelocityX * (jumpTime + fallTime))
             {
-                float optimal_time = deltaX / maxVelocityX;
                 float optimal_velocityY = (gravity * optimal_time * optimal_time + 2 * deltaY) / (2 * optimal_time);
                 if (optimal_velocityY < 0)
                 {
@@ -141,7 +142,7 @@ public static class Pathfinder
                 float parabola_height = optimal_velocityY * optimal_velocityY / (2 * gravity);
                 jumpTime = 2 * optimal_velocityY / gravity;
                 float parabola_half_len = jumpTime * destination.optVelocityX / 2;
-                Vector2 parabola_top_point = new Vector2(start.pos.x + parabola_half_len, start.pos.y + parabola_height);
+                Vector2 parabola_top_point = new Vector2(start.pos.x + direction*parabola_half_len, start.pos.y + parabola_height);
                 //эвристика, но пойдет. Лайнкастить что-то близкое к настоящей параболе дорого
                 return IsSpaceWalkable(start.pos, parabola_top_point) && IsSpaceWalkable(destination.pos, parabola_top_point);
             }
@@ -151,20 +152,26 @@ public static class Pathfinder
 
         float ascendTime = (-velocityY + Mathf.Sqrt(velocityY * velocityY - 2 * gravity * deltaY)) / (-gravity);
         float targetLevelVelocity = velocityY - gravity * ascendTime;
-        jumpTime = targetLevelVelocity / gravity;
-
+        jumpTime = 2 * targetLevelVelocity / gravity;
         if (deltaX < maxVelocityX * (jumpTime + ascendTime))
         {
-            float optimal_time = deltaX / maxVelocityX;
-            float optimal_velocityY = gravity * optimal_time;
+            
+            float optimal_velocityY = (gravity*optimal_time*optimal_time+2*deltaY)/(2*optimal_time);
             ascendTime = (-optimal_velocityY + Mathf.Sqrt(optimal_velocityY * optimal_velocityY - 2 * gravity * deltaY)) / (-gravity);
             targetLevelVelocity = optimal_velocityY - gravity * ascendTime;
             destination.optJumpForce = optimal_velocityY / Time.fixedDeltaTime;
             destination.optVelocityX = maxVelocityX;
+            if (deltaX < 2*Pathfinder.cellSize)
+            {
+                //чтобы не было проблем с перепрыгиванием простых препятствий
+                destination.optJumpForce = 1.1f * destination.optJumpForce;
+                destination.optVelocityX = destination.optVelocityX * 0.8f;
+            }
+            
             float parabola_height = targetLevelVelocity * targetLevelVelocity / (2 * gravity);
             float parabolaTime = 2 * targetLevelVelocity / gravity;
             float parabola_half_len = parabolaTime * destination.optVelocityX / 2;
-            Vector2 parabola_top_point = new Vector2(destination.pos.x - parabola_half_len, start.pos.y + parabola_height);
+            Vector2 parabola_top_point = new Vector2(destination.pos.x - direction*parabola_half_len, destination.pos.y + parabola_height);
             return IsSpaceWalkable(start.pos, parabola_top_point) && IsSpaceWalkable(destination.pos, parabola_top_point);
         }
         else
@@ -409,10 +416,35 @@ public static class Pathfinder
         CheckInit();
         Vector2Int startPos = ConvertToIntCoords(agentPos);
         Vector2Int endPos = ConvertToIntCoords(targetPos);
-        if (!map.ContainsKey(startPos) || !map.ContainsKey(endPos))
+
+        //ужасно! но попробуйте сделать лучше
+        if (!map.ContainsKey(endPos))
+        {
+            endPos = endPos + Vector2Int.left;
+            if (!map.ContainsKey(endPos))
+            {
+                endPos = endPos + 2 * Vector2Int.right;
+                if (!map.ContainsKey(endPos))
+                    return null;
+            }
+        }
+
+        if (!map.ContainsKey(startPos))
+        {
+            startPos = startPos + Vector2Int.left;
+            if (!map.ContainsKey(startPos))
+            {
+                startPos = startPos + 2 * Vector2Int.right;
+                if (!map.ContainsKey(startPos))
+                    return null;
+            }
+        }
+
+        if (startPos == endPos)
         {
             return null;
         }
+
         return FindPath(map[startPos], map[endPos], agentBody, jumpForce, maxVelocityX);
     }
 
@@ -420,8 +452,9 @@ public static class Pathfinder
     public static (float, float) GetPathInstructions(LinkedListNode<PathNode> targetNode)
     {
         float direction = targetNode.Value.pos.x - targetNode.Previous.Value.pos.x > 0 ? 1 : -1;
-        if (targetNode.Value.jumpNode)
+        if (targetNode.Value.landingNode)
         {
+            Debug.Log(targetNode.Value.optJumpForce);
             return (direction*targetNode.Value.optVelocityX, targetNode.Value.optJumpForce);
         }
         return (direction, 0f);

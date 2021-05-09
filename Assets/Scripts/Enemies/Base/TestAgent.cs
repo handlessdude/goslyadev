@@ -25,14 +25,17 @@ public class TestAgent : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        foreach (var t in Pathfinder.map)
+        if (Pathfinder.map != null)
         {
-            Vector2 v = Pathfinder.GetCellCenter(t.Key);
-            //Gizmos.DrawIcon(v, "sv_icon_dot" + t.Value.children.Count() + "_pix16_gizmo", true);
-            //Gizmos.DrawIcon(v, "sv_icon_dot7_pix16_gizmo", true);
-            foreach (var child in t.Value.children)
+            foreach (var t in Pathfinder.map)
             {
-                Gizmos.DrawLine(v, Pathfinder.GetCellCenter(child.pos));
+                Vector2 v = Pathfinder.GetCellCenter(t.Key);
+                //Gizmos.DrawIcon(v, "sv_icon_dot" + t.Value.children.Count() + "_pix16_gizmo", true);
+                //Gizmos.DrawIcon(v, "sv_icon_dot7_pix16_gizmo", true);
+                foreach (var child in t.Value.children)
+                {
+                    Gizmos.DrawLine(v, Pathfinder.GetCellCenter(child.pos));
+                }
             }
         }
         if (path != null)
@@ -56,7 +59,7 @@ public class TestAgent : MonoBehaviour
     {
         if (targetPos != new Vector2Int(Mathf.FloorToInt(target.transform.position.x), Mathf.FloorToInt(target.transform.position.y)))
         {
-            path = Pathfinder.FindPath(transform.position, target.transform.position, rb, 700f, 6);
+            path = Pathfinder.FindPath(transform.position, target.transform.position, rb, 800f, 6);
             //Debug.Log("Here " + (path == null));
             targetPos = new Vector2Int(Mathf.FloorToInt(target.transform.position.x), Mathf.FloorToInt(target.transform.position.y));
         }

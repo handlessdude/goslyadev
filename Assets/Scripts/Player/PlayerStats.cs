@@ -9,7 +9,7 @@ public class PlayerStats : MonoBehaviour
 
     public int maxHealth;
 
-    [HideInInspector]
+    //[HideInInspector]
     public InGameUIController ingameUI;
 
     void Start()
@@ -29,6 +29,7 @@ public class PlayerStats : MonoBehaviour
 
     public void OnHit(GameObject source, int damage)
     {
+        Debug.Log("HIT");
         int deltaHP = health - damage;
         ingameUI.UpdateHP(deltaHP, maxHealth);
         if (deltaHP > 0)

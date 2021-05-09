@@ -11,6 +11,8 @@ public class InGameUIController : MonoBehaviour
     public GameObject UIFX;
     public RectTransform HPBarContentMask;
 
+    public bool showHPBar;
+
     private float hpMaskMaxWidth;
 
     void Start()
@@ -20,11 +22,15 @@ public class InGameUIController : MonoBehaviour
             pauseMenu = transform.Find("PauseMenu").gameObject;
         }
 
-        if (!HPBarContentMask)
+        if (showHPBar)
         {
-            HPBarContentMask = transform.Find("HPBar").Find("Mask").GetComponent<RectTransform>();
+            if (!HPBarContentMask)
+            {
+                HPBarContentMask = transform.Find("HPBar").Find("Mask").GetComponent<RectTransform>();
+            }
+            hpMaskMaxWidth = HPBarContentMask.rect.width;
         }
-        hpMaskMaxWidth = HPBarContentMask.rect.width;
+        
     }
 
     void Update()
@@ -80,8 +86,12 @@ public class InGameUIController : MonoBehaviour
 
     public void UpdateHP(int hp, int maxhp)
     {
-        float fill_ratio = (float)maxhp / hp;
-        float width = hpMaskMaxWidth / fill_ratio;
-        HPBarContentMask.sizeDelta = new Vector2(width, HPBarContentMask.rect.height);
+        if (showHPBar)
+        {
+            float fill_ratio = (float)maxhp / hp;
+            float width = hpMaskMaxWidth / fill_ratio;
+            HPBarContentMask.sizeDelta = new Vector2(width, HPBarContentMask.rect.height);
+        }
+        
     }
 }
