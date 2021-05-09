@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public Transform middle_ground2;
     public Transform cameraTarget;
     public Footsteps footsteps;
+    public AbilitySound abilitySound;
     public GameObject wall;
     GameObject wallClone;
     
@@ -114,11 +115,17 @@ public class PlayerController : MonoBehaviour
         {
             footsteps = GetComponent<Footsteps>();
         }
+
+        if (!abilitySound)
+        {
+            abilitySound = GetComponent<AbilitySound>();
+        }
     }
 
     //Реализация абилки Stopm
     void Stomp()
     {
+        abilitySound.Sound("Stomp");
         animator.SetBool("Stomp", true);
         Invoke("CreateClone", 0.2f);
         GameplayState.controllability = PlayerControllability.InDialogue;
@@ -149,6 +156,7 @@ public class PlayerController : MonoBehaviour
     {
         if (horizontalDirection != 0.0f)
         {
+            abilitySound.Sound("Dash");
             animator.SetBool("Dash", true);
             if (horizontalDirection > 0)
                 rb.AddForce(new Vector2(dashForce, 0));
@@ -168,6 +176,7 @@ public class PlayerController : MonoBehaviour
     
     void Hit()
     {
+        abilitySound.Sound("Hit");
         animator.SetBool("Hit", true);
         Invoke("StopHit", 0.5f);
         isHitAllowed = false;
@@ -180,10 +189,8 @@ public class PlayerController : MonoBehaviour
     //
     void Update()
     {
-        //rb.velocity = Vector2.zero; //---------------------------------------------------------------если че убрать
         if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
         {
-           
             if (InputManager.GetKey(KeyAction.MoveLeft))
             {
                 horizontalDirection = -1.0f;
@@ -220,17 +227,17 @@ public class PlayerController : MonoBehaviour
                 horizontalDirection = 0.0f;
             }
 
-            if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping && isStompAllowed)
+            if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping && isStompAllowed && !GameplayState.isPaused)
             {
                 Stomp();
             }
 
-            if (InputManager.GetKeyDown(KeyAction.Dash) && isDashAllowed)
+            if (InputManager.GetKeyDown(KeyAction.Dash) && isDashAllowed && !GameplayState.isPaused) 
             {
                 Dash();
             }
 
-            if (InputManager.GetKeyDown(KeyAction.Hit) && isHitAllowed)
+            if (InputManager.GetKeyDown(KeyAction.Hit) && isHitAllowed && !GameplayState.isPaused)
             {
                 Hit();
             }

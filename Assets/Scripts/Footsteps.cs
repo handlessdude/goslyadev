@@ -19,7 +19,12 @@ public class Footsteps : MonoBehaviour
 
     public void Step()
     {
-        source.clip = stepClips[Random.Range(0, stepClips.Length)];
-        source.Play();
+        
+        if (!GameplayState.isPaused)
+        {
+            source.clip = stepClips[Random.Range(0, stepClips.Length)];
+            source.Play();
+        }
+            
     }
 }
