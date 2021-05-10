@@ -38,11 +38,24 @@ public class EnemyTrigger : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            if (isAttackTrigger)
+            {
+                parent.OnLeaveAttackRange(collision.gameObject);
+            }
+            else
+            {
+                parent.OnLeaveSenseRange(collision.gameObject, sense);
+            }
+        }
+    }
 }
 
 #if UNITY_EDITOR
-
-
 [CustomEditor(typeof(EnemyTrigger))]
 public class EnemyTriggerEditor : Editor
 {
@@ -57,4 +70,5 @@ public class EnemyTriggerEditor : Editor
 
     }
 }
+
 #endif

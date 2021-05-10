@@ -10,12 +10,27 @@ public class InGameUIController : MonoBehaviour
     public GameObject FPSCounter;
     public GameObject UIFX;
     public GameObject Inventory;
+    public RectTransform HPBarContentMask;
+
+    public bool showHPBar;
+
+    private float hpMaskMaxWidth;
     void Start()
     {
         if (!pauseMenu)
         {
             pauseMenu = transform.Find("PauseMenu").gameObject;
         }
+
+        if (showHPBar)
+        {
+            if (!HPBarContentMask)
+            {
+                HPBarContentMask = transform.Find("HPBar").Find("Mask").GetComponent<RectTransform>();
+            }
+            hpMaskMaxWidth = HPBarContentMask.rect.width;
+        }
+        
     }
 
     void Update()
@@ -77,5 +92,16 @@ public class InGameUIController : MonoBehaviour
         Cursor.visible = false;
         Time.timeScale = 1.0f;
         GameplayState.isPaused = false;
+    }
+
+    public void UpdateHP(int hp, int maxhp)
+    {
+        if (showHPBar)
+        {
+            float fill_ratio = (float)maxhp / hp;
+            float width = hpMaskMaxWidth / fill_ratio;
+            HPBarContentMask.sizeDelta = new Vector2(width, HPBarContentMask.rect.height);
+        }
+        
     }
 }
