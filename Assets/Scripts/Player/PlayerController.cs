@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
 
     //характеристики Dash
-    public float dashForce = 5000.0f;
+    float dashForce = 5000.0f;
     bool isDashAllowed = true;
 
 
@@ -158,6 +158,8 @@ public class PlayerController : MonoBehaviour
         {
             abilitySound.Sound("Dash");
             animator.SetBool("Dash", true);
+            if (WorldSwitcher.currentWorld == WorldSwitcher.World.cyan)
+                dashForce = 10000;
             if (horizontalDirection > 0)
                 rb.AddForce(new Vector2(dashForce, 0));
             if (horizontalDirection < 0)
@@ -165,6 +167,7 @@ public class PlayerController : MonoBehaviour
             Invoke("StopDash", 0.5f);
             isDashAllowed = false;
             Invoke("DashCoolDown", 2.0f);
+            dashForce = 5000;
         }
     }
 
@@ -189,7 +192,7 @@ public class PlayerController : MonoBehaviour
     //
     void Update()
     {
-        if ((GameplayState.controllability == PlayerControllability.Full) || (GameplayState.controllability == PlayerControllability.FirstDialog))
+        if ((GameplayState.controllability == PlayerControllability.Full || GameplayState.controllability == PlayerControllability.FirstDialog) && !GameplayState.isPaused)
         {
             if (InputManager.GetKey(KeyAction.MoveLeft))
             {
@@ -227,21 +230,24 @@ public class PlayerController : MonoBehaviour
                 horizontalDirection = 0.0f;
             }
 
-            if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping && isStompAllowed && !GameplayState.isPaused)
+            if (SceneManager.GetSceneByBuildIndex(2) != SceneManager.GetActiveScene())
             {
-                Stomp();
-            }
+                if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping && isStompAllowed)
+                {
+                    Stomp();
+                }
 
-            if (InputManager.GetKeyDown(KeyAction.Dash) && isDashAllowed && !GameplayState.isPaused) 
-            {
-                Dash();
-            }
+                if (InputManager.GetKeyDown(KeyAction.Dash) && isDashAllowed)
+                {
+                    Dash();
+                }
 
-            if (InputManager.GetKeyDown(KeyAction.Hit) && isHitAllowed && !GameplayState.isPaused)
-            {
-                Hit();
+                if (InputManager.GetKeyDown(KeyAction.Hit) && isHitAllowed)
+                {
+                    Hit();
+                }
             }
-
+            
             if (InputManager.GetKey(KeyAction.LookUp) && !jumping && !movementInput)
             {
                 LookUp();

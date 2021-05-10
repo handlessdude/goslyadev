@@ -18,7 +18,7 @@ public class WorldSwitcher : MonoBehaviour
 
     ChromaticAberration aberration;
 
-    World currentWorld = World.none;
+    public static World currentWorld = World.none;
 
     public GameObject cyanGlow;
     public GameObject magentaGlow;
@@ -27,7 +27,7 @@ public class WorldSwitcher : MonoBehaviour
 
     Dictionary<World, GameObject[]> objects;
 
-    enum World
+    public enum World
     {
         none,
         cyan,
@@ -67,39 +67,43 @@ public class WorldSwitcher : MonoBehaviour
 
     void Update()
     {
-        if (InputManager.GetKeyDown(KeyAction.WorldGreen))
+        if (!GameplayState.isPaused)
         {
-            if (currentWorld == World.green)
+            if (InputManager.GetKeyDown(KeyAction.WorldGreen))
             {
-                DefaultWorld();
+                if (currentWorld == World.green)
+                {
+                    DefaultWorld();
+                }
+                else
+                {
+                    GreenWorld();
+                }
             }
-            else
+            else if (InputManager.GetKeyDown(KeyAction.WorldCyan))
             {
-                GreenWorld();
+                if (currentWorld == World.cyan)
+                {
+                    DefaultWorld();
+                }
+                else
+                {
+                    CyanWorld();
+                }
+            }
+            else if (InputManager.GetKeyDown(KeyAction.WorldMagenta))
+            {
+                if (currentWorld == World.magenta)
+                {
+                    DefaultWorld();
+                }
+                else
+                {
+                    MagentaWorld();
+                }
             }
         }
-        else if (InputManager.GetKeyDown(KeyAction.WorldCyan))
-        {
-            if (currentWorld == World.cyan)
-            {
-                DefaultWorld();
-            }
-            else
-            {
-                CyanWorld();
-            }
-        }
-        else if (InputManager.GetKeyDown(KeyAction.WorldMagenta))
-        {
-            if (currentWorld == World.magenta)
-            {
-                DefaultWorld();
-            }
-            else
-            {
-                MagentaWorld();
-            }
-        }
+       
     }
 
     void FixedUpdate()
