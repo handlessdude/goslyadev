@@ -379,7 +379,7 @@ public static class Pathfinder
                 }
             }
             openSet.Remove(currentNode);
-            if (num_iterations++ > 1000)
+            if (num_iterations++ > 200)
             {
                 return null;
             }
@@ -394,27 +394,6 @@ public static class Pathfinder
                 PathNode neighbour = (PathNode)_neighbour;
 
                 neighbour.landingNode = !_neighbour.IsAdjacent(currentNode.mapPathNode);
-
-                float ground_modifier = neighbour.landingNode ? 1.0f : 1.2f;
-
-                neighbour.parent = currentNode;
-                neighbour.gCost = currentNode.gCost + heuristic_cost_estimate(currentNode, neighbour);
-                neighbour.hCost = heuristic_cost_estimate(neighbour, (PathNode)endNode)*ground_modifier;
-                neighbour.fCost = neighbour.hCost + neighbour.gCost;
-
-                bool breaker = false;
-                foreach (PathNode openNode in openSet)
-                {
-                    if ((openNode.mapPathNode == neighbour.mapPathNode) && (neighbour.gCost > openNode.gCost))
-                    {
-                        breaker = true;
-                        break;
-                    }
-                }
-                if (breaker)
-                {
-                    continue;
-                }
 
                 if (neighbour.landingNode)
                 {
@@ -439,8 +418,29 @@ public static class Pathfinder
 
                         jd[pair] = (neighbour.optVelocityX, neighbour.optJumpForce);
                     }
-                    
-                    
+
+
+                }
+
+                float ground_modifier = neighbour.landingNode ? 1.0f : 1.2f;
+
+                neighbour.parent = currentNode;
+                neighbour.gCost = currentNode.gCost + heuristic_cost_estimate(currentNode, neighbour);
+                neighbour.hCost = heuristic_cost_estimate(neighbour, (PathNode)endNode)*ground_modifier;
+                neighbour.fCost = neighbour.hCost + neighbour.gCost;
+
+                bool breaker = false;
+                foreach (PathNode openNode in openSet)
+                {
+                    if ((openNode.mapPathNode == neighbour.mapPathNode) && (neighbour.gCost > openNode.gCost))
+                    {
+                        breaker = true;
+                        break;
+                    }
+                }
+                if (breaker)
+                {
+                    continue;
                 }
 
                 openSet.Add(neighbour);

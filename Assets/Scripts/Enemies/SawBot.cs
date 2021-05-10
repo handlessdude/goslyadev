@@ -57,6 +57,13 @@ public class SawBot : Enemy
                     if (followPath == false)
                     {
                         StartFollowingPath(target.transform.position);
+                        if (followPath == false)
+                        {
+                            bool isSignificantX = Mathf.Abs(target.transform.position.x - transform.position.x) > 0.2f;
+                            UpdateDirectionX(target.transform.position.x - transform.position.x > 0f ? 1f : -1f, isSignificantX);
+                            physicalAction = PhysicalAction.Run;
+                            return;
+                        }
                     }
 
                     if (isAttackAnimationPlaying || !followPath)
