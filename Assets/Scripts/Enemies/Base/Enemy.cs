@@ -66,6 +66,7 @@ public class Enemy : MonoBehaviour {
 	protected LinkedListNode<PathNode> currentPathNode;
 	protected bool followPath = false;
 	protected int ticksSpentOnNode = 0;
+	protected float sqrMagnitudeToNode = float.MaxValue;
 
 	//КОМПОНЕНТЫ
 	protected Animator animator;
@@ -101,6 +102,8 @@ public class Enemy : MonoBehaviour {
     {
 		if (followPath)
         {
+			bool isSignificantX = Mathf.Abs(currentPathNode.Value.pos.x - transform.position.x) > 0.2f;
+			UpdateDirectionX(currentPathNode.Value.pos.x - transform.position.x > 0f ? 1f : -1f, isSignificantX);
 			if (Pathfinder.IsNodeReached(transform.position, currentPathNode.Value) && Mathf.Abs(rb.velocity.y) < 0.01f)
 			{
 				currentPathNode = currentPathNode.Next;
@@ -109,22 +112,39 @@ public class Enemy : MonoBehaviour {
 					OnPathCompleted();
 					return;
 				}
+				sqrMagnitudeToNode = ((Vector2)transform.position - currentPathNode.Value.pos).sqrMagnitude;
 				ProcessPathInstructions();
 			}
 			else
 			{
-				ticksSpentOnNode += 1;
-				if (ticksSpentOnNode > 250)
+				ticksSpentOnNode += 1; //предотвращает застревание
+				if (ticksSpentOnNode > 80)
 				{
 					ticksSpentOnNode = 0;
 					OnFailedToFollowPath();
+					return;
 				}
+
+				//костыль!
+				//исправляет ситуацию, когда моб промахнулся с прыжком и пытается
+				//горизонтальным движением дойти до нужной ноды, но не может
+				if (!isSignificantX && Mathf.Abs(currentPathNode.Value.pos.y - transform.position.y) > 2.5f)
+                {
+					OnFailedToFollowPath();
+                }
+
+				//заставляет пересчитать путь, если перескочили ноду
+				/*if (((Vector2)transform.position - currentPathNode.Value.pos).sqrMagnitude > sqrMagnitudeToNode * 8)
+                {
+					OnFailedToFollowPath();
+					return;
+                }*/
 			}
 		}
 
 		if (jumpSteer)
         {
-			rb.velocity = new Vector2(jumpSteerVelocityX, rb.velocity.y);
+			rb.velocity = new Vector2(jumpSteerVelocityX * directionX, rb.velocity.y);
 		}
 		else
         {
@@ -182,7 +202,10 @@ public class Enemy : MonoBehaviour {
 
 	protected virtual void DealDamage()
     {
-		target.GetComponent<PlayerStats>().OnHit(gameObject, damage);
+		if (isPlayerInAttackRange)
+        {
+			target.GetComponent<PlayerStats>().OnHit(gameObject, damage);
+		}
 	}
 
 	protected virtual void OnAttackAnimationEnd()
@@ -218,17 +241,12 @@ public class Enemy : MonoBehaviour {
     {
 		(float, float) instructions = Pathfinder.GetPathInstructions(currentPathNode);
 		float new_directionX = instructions.Item1 > 0 ? 1f : -1f;
-		if (new_directionX != directionX)
-        {
-			directionX = new_directionX;
-			//это можно было бы делать через spriteRenderer.flipX,
-			//но тогда были бы беды с триггерами
-			transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-        }
+		UpdateDirectionX(new_directionX);
 
-		if (instructions.Item2 != 0f && !jumpSteer)
+		if (instructions.Item2 != 0f)
 		{
-			jumpSteerVelocityX = instructions.Item1;
+			jumpSteerVelocityX = Mathf.Abs(instructions.Item1);
+			Debug.Log(jumpSteerVelocityX);
 			jumpSteer = true;
 			rb.AddForce(new Vector2(0.0f, instructions.Item2));
 		}
@@ -238,11 +256,26 @@ public class Enemy : MonoBehaviour {
         }
 	}
 
+	protected virtual void UpdateDirectionX(float new_directionX, bool isSignificant = true)
+    {
+		if (new_directionX != directionX)
+		{
+			directionX = new_directionX;
+		}
+		//это можно было бы делать через spriteRenderer.flipX,
+		//но тогда были бы беды с триггерами
+		if (isSignificant)
+		{
+			transform.localScale = new Vector3(-directionX*Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+		}
+	}
+
 	protected virtual void AbandonPath()
     {
 		followPath = false;
 		jumpSteer = false;
 		currentPathNode = null;
+		physicalAction = PhysicalAction.Stay;
 	}
 
 	protected virtual void OnPathCompleted()

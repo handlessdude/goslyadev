@@ -37,13 +37,21 @@ public class SawBot : Enemy
         {
             case (Goal.Chase):
                 {
-                    if (isPlayerInSenseRange.Count == 0)
+                    if (!jumpSteer)
                     {
-                        OnLostTarget();
-                    }
-                    else if (isPlayerInAttackRange && !isAttackOnCooldown)
-                    {
-                        Attack();
+                        if (isPlayerInSenseRange.Count == 0)
+                        {
+                            OnLostTarget();
+                        }
+                        else if (isPlayerInAttackRange && !isAttackOnCooldown)
+                        {
+                            Attack();
+                        }
+
+                        if (ticksSpentOnPath > 60)
+                        {
+                            StartFollowingPath(target.transform.position);
+                        }
                     }
 
                     if (followPath == false)
@@ -60,10 +68,6 @@ public class SawBot : Enemy
                         physicalAction = PhysicalAction.Run;
                     }
 
-                    if (ticksSpentOnPath > 60)
-                    {
-                        StartFollowingPath(target.transform.position);
-                    }
                     break;
                 }
             case (Goal.Investigate):
@@ -72,6 +76,10 @@ public class SawBot : Enemy
                     {
                         physicalAction = PhysicalAction.Walk;
                     }
+                    else
+                    {
+                        goal = Goal.Patrol;
+                    }
                     
                     break;
                 }
@@ -79,7 +87,7 @@ public class SawBot : Enemy
                 {
                     if (followPath == false && !isThinkingAboutLife)
                     {
-                        bool should_think_about_life = Random.Range(0, 10) > 4;
+                        bool should_think_about_life = Random.Range(0, 10) > 6;
                         if (!should_think_about_life)
                         {
                             int _direction = Random.Range(0, 2) * 2 - 1; //либо -1 либо 1

@@ -5,6 +5,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+using JumpDict = System.Collections.Generic.Dictionary<(MapPathNode, MapPathNode), (float, float)?>;
+
 //используется конкретно для A*. эти ноды одноразовые для каждого пути
 public class PathNode
 {
@@ -77,12 +79,15 @@ public static class Pathfinder
 
     static int _initFor = -1;
 
+    static Dictionary<Rigidbody2D, JumpDict> JumpParameters;
+
     public static void Init()
     {
         areaMarkers = GameObject.FindGameObjectsWithTag("AreaMarker").Select(x => x.transform.position).ToArray();
 
         map = new Dictionary<Vector2Int, MapPathNode>();
         _initFor = SceneManager.GetActiveScene().buildIndex;
+        JumpParameters = new Dictionary<Rigidbody2D, JumpDict>();
         InitializeMap();
     }
 
@@ -160,19 +165,28 @@ public static class Pathfinder
             ascendTime = (-optimal_velocityY + Mathf.Sqrt(optimal_velocityY * optimal_velocityY - 2 * gravity * deltaY)) / (-gravity);
             targetLevelVelocity = optimal_velocityY - gravity * ascendTime;
             destination.optJumpForce = optimal_velocityY / Time.fixedDeltaTime;
-            destination.optVelocityX = maxVelocityX * 0.8f;
-            if (deltaX < 2*Pathfinder.cellSize)
-            {
-                //чтобы не было проблем с перепрыгиванием простых препятствий
-                destination.optJumpForce = 1.1f * destination.optJumpForce;
-                destination.optVelocityX = destination.optVelocityX * 0.6f;
-            }
+            destination.optVelocityX = maxVelocityX;
+
+            Vector2 ascendPoint = new Vector2(start.pos.x + direction * destination.optVelocityX * ascendTime,
+                start.pos.y + optimal_velocityY*ascendTime-gravity*ascendTime*ascendTime/2);
             
             float parabola_height = targetLevelVelocity * targetLevelVelocity / (2 * gravity);
             float parabolaTime = 2 * targetLevelVelocity / gravity;
             float parabola_half_len = parabolaTime * destination.optVelocityX / 2;
             Vector2 parabola_top_point = new Vector2(destination.pos.x - direction*parabola_half_len, destination.pos.y + parabola_height);
-            return IsSpaceWalkable(start.pos, parabola_top_point) && IsSpaceWalkable(destination.pos, parabola_top_point);
+
+            if (deltaX < 2 * Pathfinder.cellSize)
+            {
+                //чтобы не было проблем с перепрыгиванием простых препятствий
+                destination.optJumpForce = 1.1f * destination.optJumpForce;
+                destination.optVelocityX = destination.optVelocityX * 0.6f;
+                return IsSpaceWalkable(start.pos, parabola_top_point) && IsSpaceWalkable(destination.pos, parabola_top_point);
+            }
+            else
+            {
+                return IsSpaceWalkable(start.pos, ascendPoint) &&
+                IsSpaceWalkable(ascendPoint, parabola_top_point) && IsSpaceWalkable(destination.pos, parabola_top_point);
+            }
         }
         else
             return false;
@@ -342,7 +356,14 @@ public static class Pathfinder
     {
         Debug.Log("Search started");
         List<PathNode> openSet = new List<PathNode>();
-        
+
+        JumpDict jd;
+        if (!JumpParameters.ContainsKey(agentBody))
+        {
+            JumpParameters[agentBody] = new JumpDict();
+        }
+        jd = JumpParameters[agentBody];
+
         int num_iterations = 0;
         openSet.Add((PathNode)startNode);
         while (openSet.Count != 0)
@@ -365,7 +386,6 @@ public static class Pathfinder
 
             if (currentNode.mapPathNode == endNode)
             {
-                Debug.Log("FOUND! " + ConstructPath(currentNode, startNode, agentBody, jumpForce, maxVelocityX).Count());
                 return ConstructPath(currentNode, startNode, agentBody, jumpForce, maxVelocityX);
             }
 
@@ -398,11 +418,29 @@ public static class Pathfinder
 
                 if (neighbour.landingNode)
                 {
-                    bool success = UpdateOptimalJumpParameters(currentNode, neighbour, agentBody, jumpForce, maxVelocityX);
-                    if (!success)
+                    (MapPathNode, MapPathNode) pair = (currentNode.mapPathNode, neighbour.mapPathNode);
+                    if (jd.ContainsKey(pair))
                     {
-                        continue;
+                        if (jd[pair] == null)
+                        {
+                            continue;
+                        }
+                        neighbour.optJumpForce = jd[pair].Value.Item2;
+                        neighbour.optVelocityX = jd[pair].Value.Item1;
                     }
+                    else
+                    {
+                        bool success = UpdateOptimalJumpParameters(currentNode, neighbour, agentBody, jumpForce, maxVelocityX);
+                        if (!success)
+                        {
+                            jd[pair] = null;
+                            continue;
+                        }
+
+                        jd[pair] = (neighbour.optVelocityX, neighbour.optJumpForce);
+                    }
+                    
+                    
                 }
 
                 openSet.Add(neighbour);
@@ -454,7 +492,6 @@ public static class Pathfinder
         float direction = targetNode.Value.pos.x - targetNode.Previous.Value.pos.x > 0 ? 1 : -1;
         if (targetNode.Value.landingNode)
         {
-            Debug.Log(targetNode.Value.optJumpForce);
             return (direction*targetNode.Value.optVelocityX, targetNode.Value.optJumpForce);
         }
         return (direction, 0f);
@@ -462,6 +499,6 @@ public static class Pathfinder
 
     public static bool IsNodeReached(Vector2 pos, PathNode targetNode)
     {
-        return (Mathf.Abs(pos.x - targetNode.pos.x) < 0.05f) && (Mathf.Abs(pos.y - targetNode.pos.y) < 0.5f);
+        return (Mathf.Abs(pos.x - targetNode.pos.x) < 0.05f) && (Mathf.Abs(pos.y - targetNode.pos.y) < 0.2f);
     }
 }
