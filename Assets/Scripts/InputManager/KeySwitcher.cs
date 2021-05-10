@@ -92,6 +92,7 @@ public class KeySwitcher : MonoBehaviour
         KeyCode.None,
     };
 
+  
     void Start()
     {
         Image = gameObject.GetComponent<Image>();
