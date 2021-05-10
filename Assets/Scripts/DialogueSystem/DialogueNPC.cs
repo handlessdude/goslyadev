@@ -206,16 +206,45 @@ public class DialogueNPC : Interactable
         }
         return length / 4.5f;
     }
+
+    int CalculateNumberOfLines(string text)
+    {
+        return text.Length / 32 + 1;
+    }
+
     IEnumerator StretchBar(string text)
     {
         dialogueState = DialogueState.DrawingBox;
         float length = CalculateLineLength(text);
+        int lines = CalculateNumberOfLines(text);
+        
         RectTransform rtMain = currentDialogueBox.transform.Find("Background").GetComponent<RectTransform>();
         RectTransform rtLeft = currentDialogueBox.transform.Find("Leftbackground").GetComponent<RectTransform>();
         RectTransform rtRight = currentDialogueBox.transform.Find("Rightbackground").GetComponent<RectTransform>();
         rtMain.sizeDelta = new Vector2(0, rtMain.sizeDelta.y);
+        
         rtLeft.localPosition = new Vector2(0, rtLeft.localPosition.y);
         rtRight.localPosition = new Vector2(0, rtRight.localPosition.y);
+
+        //если больше 2-х строк, то пора растягивать баббл
+        //проблема в том, что пиксели в баббле растягиваются
+        //мелочь, но надо бы переделать эту систему
+        if (lines > 2)
+        {
+            float height_multiplier = 1.1f + (lines - 2) / 2f;
+            rtMain.localScale = new Vector3(rtMain.localScale.x, rtMain.localScale.y * height_multiplier, rtMain.localScale.z);
+            rtLeft.localScale = new Vector3(rtLeft.localScale.x, rtLeft.localScale.y * height_multiplier, rtLeft.localScale.z);
+            rtRight.localScale = new Vector3(rtRight.localScale.x, rtRight.localScale.y * height_multiplier, rtRight.localScale.z);
+            textComponent.rectTransform.anchorMax = new Vector2(0.5f, 0.5f*height_multiplier);
+        }
+        else
+        {
+            rtMain.localScale = Vector3.one;
+            rtLeft.localScale = Vector3.one;
+            rtRight.localScale = Vector3.one;
+            textComponent.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        }
+
         while (rtMain.sizeDelta.x < length-0.6f)
         {
             float width = rtMain.sizeDelta.x + 0.6f;

@@ -9,7 +9,7 @@ public class PlayerStats : MonoBehaviour
 
     public int maxHealth;
 
-    //[HideInInspector]
+    [HideInInspector]
     public InGameUIController ingameUI;
 
     void Start()
