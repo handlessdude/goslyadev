@@ -10,12 +10,16 @@ public class ThiefRobot : DialogueNPC
         if (!GameplayState.isThiefRobotDialogEnded)
         {
             selfBubbleHeight = 2.3f;
-            currentDialogElement = new SequentialDialogueElement("ask_rob_bout_board", false,
-                new SequentialDialogueElement("ask_rob_bout_board2", false,
+            currentDialogElement = new SequentialDialogueElement("ask_rob_bout_board1", true,
+                new SequentialDialogueElement("ask_rob_bout_board2", true,
+                new SequentialDialogueElement("ask_rob_bout_board3", true,
+                new SequentialDialogueElement("ask_rob_bout_board4", true,
+                new SequentialDialogueElement("ask_rob_bout_board5", true,
+                new SequentialDialogueElement("ask_rob_bout_board6", true,
                 new SequentialDialogueElement("robot_panic", false,
                 new SequentialDialogueElement("k_demands_plate", true,
-                new SequentialDialogueElement("rob_gives_board", false, new DialogueEndElement()))
-                )));
+                new SequentialDialogueElement("rob_gives_board", false, 
+                new DialogueEndElement())))))))));
         }
                 
     }

@@ -22,12 +22,14 @@ public class MainRobot : DialogueNPC
                 new SequentialDialogueElement("no_words", false,
                 new SequentialDialogueElement("error", false,
                 new SequentialDialogueElement("tin_can", true,
-                new SequentialDialogueElement("lets_fix_mech", false,
+                new SequentialDialogueElement("lets_fix_mech1", false,
+                new SequentialDialogueElement("lets_fix_mech2", false,
                 new SequentialDialogueElement("how_fix", true,
                 new SequentialDialogueElement("find_boards1", false,
                 new SequentialDialogueElement("find_boards2", false,
+                new SequentialDialogueElement("find_boards3", false,
                 new SequentialDialogueElement("clear", true,
-                new DialogueEndElement()))))))))))))))))));
+                new DialogueEndElement()))))))))))))))))))));
         }
     }
 

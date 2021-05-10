@@ -12,15 +12,20 @@ public class StartDialog : DialogueNPC
         if (!GameplayState.isStartedDialogEnded)
         {
             selfBubbleHeight = 2.3f;
-            currentDialogElement = new SequentialDialogueElement("misterk_wake_up", true,
+            currentDialogElement = new SequentialDialogueElement("misterk_wake_up1", true,
+                new SequentialDialogueElement("misterk_wake_up2", true,
                 new SequentialDialogueElement("q_son", true,
                 new SequentialDialogueElement("son_asked_about_sleep", true,
                 new SequentialDialogueElement("son_know", true,
-                new SequentialDialogueElement("had_dream", true,
-                new SequentialDialogueElement("again_body", true,
-                new SequentialDialogueElement("will_be_healthy", true,
+                new SequentialDialogueElement("had_dream1", true,
+                new SequentialDialogueElement("had_dream2", true,
+                new SequentialDialogueElement("again_body1", true,
+                new SequentialDialogueElement("again_body2", true,
+                new SequentialDialogueElement("will_be_healthy1", true,
+                new SequentialDialogueElement("will_be_healthy2", true,
                 new SequentialDialogueElement("go_work", true,
-                new SequentialDialogueElement("call_later", true, new DialogueEndElement())))))))));
+                new SequentialDialogueElement("call_later", true, 
+                new DialogueEndElement())))))))))))));
         }
         else
             Box.enabled = false;
