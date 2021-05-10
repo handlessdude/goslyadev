@@ -9,7 +9,7 @@ public class FixererBot : DialogueNPC
     {
         if (!GameplayState.isFixererDiaglolEnded)
         {
-            selfBubbleHeight = 2.3f;
+            selfBubbleHeight = 2f;
             currentDialogElement = new SequentialDialogueElement("meets_fixer", true,
                 new SequentialDialogueElement("fixer_meets_k", false,
                 new SequentialDialogueElement("remember_why1", true,

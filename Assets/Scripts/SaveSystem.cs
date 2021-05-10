@@ -45,6 +45,7 @@ public class SaveSystem : MonoBehaviour
             data.savedDeletedList = GameplayState.deletedObjectsList;
 
             data.savedisStartedDialogEnded = GameplayState.isStartedDialogEnded;
+            data.savedisFixererDiaglolEnded = GameplayState.isFixererDiaglolEnded;
 
             (data.savedPlayerPosX, data.savedPlayerPosY, data.savedPlayerPosZ) = (player.transform.position.x, player.transform.position.y, player.transform.position.z);
 
@@ -83,6 +84,8 @@ public class SaveSystem : MonoBehaviour
                 GameplayState.isThiefRobotDialogEnded = data.savedisThiefRobotDialogEnded;
 
                 GameplayState.isMainRobotDialogEnded = data.savedisMainRobotDialogEnded;
+
+                GameplayState.isFixererDiaglolEnded = data.savedisFixererDiaglolEnded;
 
                 GameplayState.feededboards = data.savedFeededboards;
 
@@ -144,6 +147,7 @@ public class SaveData
     public Dictionary<string, Func<string>> savedPatterns = new Dictionary<string, Func<string>>();
     public List<string> savedDeletedList;
     public bool savedisDialogEnded;
+    public bool savedisFixererDiaglolEnded;
     public bool savepreparationended;
     public int savedfeededbarrels;
     public int savedbarrels;

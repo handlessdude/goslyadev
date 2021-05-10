@@ -48,6 +48,12 @@ public class InGameUIController : MonoBehaviour
             Inventory.SetActive(false);
         FPSCounter.SetActive(false);  // Отключает счетчик FPS при открытии меню
         pauseMenu.SetActive(true);
+        foreach (Transform child in transform.GetChild(2))
+        {
+            if (child.name == "MainMenu")
+                child.gameObject.SetActive(true);
+            else child.gameObject.SetActive(false);
+        }
         Cursor.visible = true;
         Time.timeScale = 0.0f;
         GameplayState.isPaused = true;

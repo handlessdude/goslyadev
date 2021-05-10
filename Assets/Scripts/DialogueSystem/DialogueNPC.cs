@@ -42,10 +42,14 @@ public class DialogueNPC : Interactable
     protected override void Action()
     {
         base.Action();
-        if (currentDialogElement.GetType() != typeof(DialogueEndElement))
+        try
         {
-            DialogueEnter();
+            if (currentDialogElement.GetType() != typeof(DialogueEndElement))
+            {
+                DialogueEnter();
+            }
         }
+        catch { };
     }
 
     void DialogueEnter()
