@@ -11,6 +11,8 @@ TagManager:
   - Barrles
   - Elevator
   - Hint
+  - AreaMarker
+  - Enemy
   layers:
   - Default
   - TransparentFX

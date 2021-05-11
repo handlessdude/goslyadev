@@ -81,8 +81,9 @@
 
 "call_from_hosp","Hello? Mr.  K? This is St. George's Hospital.","Алло? Мистер К? Это больница святого Георгия.","Hallo? Herr K? Dies ist das St. George's Hospital."
 "meets_hosp","Yes? This is Mr K.","Да? Это Мистер К.","Ja? Das ist Herr K."
-"news_bout_son1","Your son. He has a serious deterioration. The attending physician","Ваш сын. У него серьезное ухудшение. Лечащий врач сказал,","Dein Sohn. Er hat eine ernsthafte Verschlechterung. Der behandelnde Arzt sagte,"
-"news_bout_son2","said that he may not make it until tomorrow. Could you come...","что он может не дотянуть до завтра. Вы не могли бы приех...","dass er es möglicherweise erst morgen schaffen werde. Könnten Sie kommen..."
+"news_bout_son1","Your son. He has a serious deterioration.","Ваш сын. У него серьезное ухудшение.","Dein Sohn. Er hat eine ernsthafte Verschlechterung. Der behandelnde Arzt sagte,"
+"news_bout_son2","The attending physician said that he may not","Лечащий врач сказал, что он может не дотянуть до завтра. Вы не могли бы приех...","dass er es möglicherweise erst morgen schaffen werde. Könnten Sie kommen..."
+"news_bout_son3","live until tomorrow. Could you come...","до завтра. Вы не могли бы приех...","dass er es möglicherweise erst morgen schaffen werde. Könnten Sie kommen..."
 
 "hung_up","*hung up*","*повесил трубку*","*aufgehangen*"
 "have_no_time1","Why so soon?? I have no time left at all! Of the options,","Почему так скоро?? У меня совсем не осталось времени! Из вариантов","Warum so früh?? Ich habe überhaupt keine Zeit mehr! Von den"

@@ -12,7 +12,6 @@ public class TestAgent : MonoBehaviour
     public Rigidbody2D rb;
     public Vector2Int targetPos = Vector2Int.zero;
     LinkedList<PathNode> path;
-    Pathfinder p;
 
     // Start is called before the first frame update
     void Start()
@@ -21,15 +20,14 @@ public class TestAgent : MonoBehaviour
         {
             rb = GetComponent<Rigidbody2D>();
         }
-        p = new Pathfinder(areaMarkers);
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        if (p != null)
+        if (Pathfinder.map != null)
         {
-            foreach (var t in p.map)
+            foreach (var t in Pathfinder.map)
             {
                 Vector2 v = Pathfinder.GetCellCenter(t.Key);
                 //Gizmos.DrawIcon(v, "sv_icon_dot" + t.Value.children.Count() + "_pix16_gizmo", true);
@@ -61,7 +59,7 @@ public class TestAgent : MonoBehaviour
     {
         if (targetPos != new Vector2Int(Mathf.FloorToInt(target.transform.position.x), Mathf.FloorToInt(target.transform.position.y)))
         {
-            path = p.FindPath(transform.position, target.transform.position, rb, 700f, 6);
+            path = Pathfinder.FindPath(transform.position, target.transform.position, rb, 800f, 6);
             //Debug.Log("Here " + (path == null));
             targetPos = new Vector2Int(Mathf.FloorToInt(target.transform.position.x), Mathf.FloorToInt(target.transform.position.y));
         }

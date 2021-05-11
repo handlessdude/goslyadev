@@ -34,7 +34,6 @@ public static class GameplayState
     public static bool isStartedDialogEnded;
 
     public static bool isFixererDiaglolEnded;
-
     public static bool isUnderElevator;
 
     public static int boards;
