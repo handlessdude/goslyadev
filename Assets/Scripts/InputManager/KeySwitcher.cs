@@ -106,6 +106,8 @@ public class KeySwitcher : MonoBehaviour
         else SmallButton(gameObject);
     }
 
+    public void EnableButton() => gameObject.GetComponent<Button>().enabled = true;
+
     public void OnGUI()
     {
         Event Event = Event.current;
@@ -113,9 +115,13 @@ public class KeySwitcher : MonoBehaviour
         {
             if (Event.isKey || Event.isMouse)
             {
-                if (Event.button == 0 && Event.isMouse)
+                if (Input.GetKeyDown(KeyCode.Mouse0))
+                {
                     Event.keyCode = KeyCode.Mouse0;
-                else if (Event.button == 1 && Event.isMouse)
+                    gameObject.GetComponent<Button>().enabled = false;
+                    Invoke("EnableButton", 0.1f);
+                }
+                else if (Input.GetKeyDown(KeyCode.Mouse1))
                     Event.keyCode = KeyCode.Mouse1;
                 if (!DeprecatedKeys.Contains(Event.keyCode))
                 {
