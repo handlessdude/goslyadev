@@ -38,6 +38,11 @@ public class InGameUIController : MonoBehaviour
             stompCooldown = transform.Find("StompCooldownIcon")?.GetComponent<Image>();
             UpdateStompCooldownBar(0f);
         }
+
+        if (!FPSCounter)
+        {
+            FPSCounter = transform.Find("FPSCounter").gameObject;
+        }
         
     }
 

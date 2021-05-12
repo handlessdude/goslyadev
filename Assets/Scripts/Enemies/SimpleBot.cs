@@ -173,6 +173,12 @@ public class SimpleBot : Enemy
         isThinkingAboutLife = false;
     }
 
+    protected override void DealDamage()
+    {
+        base.DealDamage();
+        target.GetComponent<PlayerController>().rb.AddForce(new Vector2(directionX * 800f, 0f));
+    }
+
     protected override void OnLostTarget()
     {
         base.OnLostTarget();

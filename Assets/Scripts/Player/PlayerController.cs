@@ -145,6 +145,7 @@ public class PlayerController : MonoBehaviour
     void StompCoolDown() => isStompAllowed = true;
     void StompCooledDown()
     {
+        isStompAllowed = true;
         ingameUI.UpdateStompCooldownBar(0f);
     }
 
@@ -178,7 +179,7 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(new Vector2(-dashForce, 0));
             Invoke("StopDash", 0.5f);
             isDashAllowed = false;
-            Invoke("DashCoolDown", 2.0f);
+            Invoke("DashCoolDown", 0.5f);
             dashForce = 5000;
         }
     }
@@ -195,7 +196,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Hit", true);
         Invoke("StopHit", 0.5f);
         isHitAllowed = false;
-        Invoke("HitCoolDown", 2.0f);
+        Invoke("HitCoolDown", 0.5f);
     }
 
     void HitCoolDown() => isHitAllowed = true;
