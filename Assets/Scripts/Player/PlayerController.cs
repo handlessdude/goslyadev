@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public Footsteps footsteps;
     public AbilitySound abilitySound;
     public GameObject wall;
+    public InGameUIController ingameUI;
     GameObject wallClone;
     
     //2^(ИД слоя), поэтому 256
@@ -32,6 +33,8 @@ public class PlayerController : MonoBehaviour
 
     //характеристики Stopm
     bool isStompAllowed = true;
+    float stompTimeLeft = 0f; //в секундах
+    float stompCooldown = 4f;
     //Характеристики Hit
     bool isHitAllowed = true;
 
@@ -67,6 +70,10 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        if (!ingameUI)
+        {
+            ingameUI = FindObjectOfType<InGameUIController>();
+        }
         if (!rb)
         {
             rb = GetComponent<Rigidbody2D>();
@@ -131,10 +138,15 @@ public class PlayerController : MonoBehaviour
         GameplayState.controllability = PlayerControllability.InDialogue;
         Invoke("DeleteClone", 1f);
         isStompAllowed = false;
-        Invoke("StompCoolDown", 4.0f);
+        stompTimeLeft = stompCooldown;
+        ingameUI.UpdateStompCooldownBar(1f);
     }
 
     void StompCoolDown() => isStompAllowed = true;
+    void StompCooledDown()
+    {
+        ingameUI.UpdateStompCooldownBar(0f);
+    }
 
     void DeleteClone()
     {
@@ -297,6 +309,15 @@ public class PlayerController : MonoBehaviour
     //TODO: навести порядок во всех системах, которые затрагивает FixedUpdate, они все сделаны плохо
     private void FixedUpdate()
     {
+
+        //обработка кулдаунов
+        stompTimeLeft -= Time.fixedDeltaTime;
+        ingameUI.UpdateStompCooldownBar(stompTimeLeft/stompCooldown);
+        if (stompTimeLeft < Time.fixedDeltaTime)
+        {
+            StompCooledDown();
+        }
+
         //float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;
 
         //rb.position = Vector2.SmoothDamp(rb.position, new Vector2(targetPos, rb.position.y), ref _currentVelocity, 0.05f);

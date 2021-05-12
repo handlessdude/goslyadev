@@ -10,7 +10,13 @@ public class PlayerStats : MonoBehaviour
     public int maxHealth;
 
     [HideInInspector]
+    SpriteRenderer spriteRenderer;
+
+    [HideInInspector]
     public InGameUIController ingameUI;
+
+    Material default_material;
+    Material hit_material;
 
     void Start()
     {
@@ -20,6 +26,13 @@ public class PlayerStats : MonoBehaviour
         {
             ingameUI = FindObjectOfType<InGameUIController>();
         }
+
+        if (!spriteRenderer)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+        default_material = spriteRenderer.material;
+        hit_material = Resources.Load<Material>("HitMaterial");
     }
 
     // Update is called once per frame
@@ -40,6 +53,14 @@ public class PlayerStats : MonoBehaviour
         {
             OnDeath();
         }
+        CancelInvoke("RestoreDefaultMaterial");
+        spriteRenderer.material = hit_material;
+        Invoke("RestoreDefaultMaterial", 0.1f);
+    }
+
+    void RestoreDefaultMaterial()
+    {
+        spriteRenderer.material = default_material;
     }
 
     public void OnDeath()

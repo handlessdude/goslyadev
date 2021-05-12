@@ -13,6 +13,15 @@ public class OptionsMenu : MonoBehaviour
     public UnityEngine.UI.Slider SFXSlider;
     public UnityEngine.UI.Slider MusicSlider;
 
+    //строка - "16:9" например
+    Dictionary<string, List<(int, int)>> standard_resolutions = new Dictionary<string, List<(int, int)>>()
+    {
+        { "4:3", new List<(int, int)> {(640, 480), (800, 600), (1024, 768), (1280, 960), (1600,1200), (1920, 1440)} },
+        { "16:10", new List<(int, int)> {(1280, 800), (1440, 900), (1680, 1050), (1920, 1200), (2560, 1600)} },
+        { "16:9", new List<(int, int)> {(1024, 576), (1280, 720), (1366, 768), (1600, 900), (1920, 1080), (2560, 1440), (3840, 2160) } },
+        { "21:9", new List<(int, int)> {(2560, 1080), (3440, 1440)} }
+    };
+
     void Start()
     {
         if (!SFXSlider)

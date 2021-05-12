@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InGameUIController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class InGameUIController : MonoBehaviour
     public GameObject FPSCounter;
     public GameObject UIFX;
     public GameObject Inventory;
+    public Image stompCooldown;
     public RectTransform HPBarContentMask;
 
     public bool showHPBar;
@@ -29,6 +31,12 @@ public class InGameUIController : MonoBehaviour
                 HPBarContentMask = transform.Find("HPBar").Find("Mask").GetComponent<RectTransform>();
             }
             hpMaskMaxWidth = HPBarContentMask.rect.width;
+        }
+
+        if (!stompCooldown)
+        {
+            stompCooldown = transform.Find("StompCooldownIcon")?.GetComponent<Image>();
+            UpdateStompCooldownBar(0f);
         }
         
     }
@@ -103,5 +111,14 @@ public class InGameUIController : MonoBehaviour
             HPBarContentMask.sizeDelta = new Vector2(width, HPBarContentMask.rect.height);
         }
         
+    }
+
+    //progress от 0f до 1f
+    public void UpdateStompCooldownBar(float progress)
+    {
+        if (stompCooldown)
+        {
+            stompCooldown.fillAmount = progress;
+        }
     }
 }
