@@ -102,7 +102,10 @@ public class Enemy : MonoBehaviour {
 
     protected virtual void Update()
 	{
-		OnAI();
+		if (!isDead)
+        {
+			OnAI();
+		}
 	}
 
 	protected virtual void FixedUpdate()
@@ -185,6 +188,7 @@ public class Enemy : MonoBehaviour {
     {
 		health = 0;
 		isDead = true;
+		physicalAction = PhysicalAction.Stay;
 		OnDeath(killer);
 	}
 
@@ -195,7 +199,7 @@ public class Enemy : MonoBehaviour {
 
 	protected virtual void OnDeath(GameObject killer)
 	{
-		isDead = true;
+		
 	}
 
 	protected virtual void Attack()
@@ -303,18 +307,22 @@ public class Enemy : MonoBehaviour {
 
 	public virtual void OnHit(GameObject player, int damage)
 	{
-		int deltaHP = health - damage;
-		if (deltaHP > 0) {
-			health = deltaHP;
-		}
-		else
-		{
-			Die(player);
-		}
+		if (!isDead)
+        {
+			int deltaHP = health - damage;
+			if (deltaHP > 0)
+			{
+				health = deltaHP;
+			}
+			else
+			{
+				Die(player);
+			}
 
-		CancelInvoke("RestoreDefaultMaterial");
-		spriteRenderer.material = hit_material;
-		Invoke("RestoreDefaultMaterial", 0.1f);
+			CancelInvoke("RestoreDefaultMaterial");
+			spriteRenderer.material = hit_material;
+			Invoke("RestoreDefaultMaterial", 0.1f);
+		}
 	}
 
 	void RestoreDefaultMaterial()

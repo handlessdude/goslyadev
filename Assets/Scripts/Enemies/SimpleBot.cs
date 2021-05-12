@@ -171,7 +171,6 @@ public class SimpleBot : Enemy
     protected override void OnDeath(GameObject killer)
     {
         base.OnDeath(killer);
-        Destroy(gameObject);
     }
 
     void RealizeLifeIsPointless()
