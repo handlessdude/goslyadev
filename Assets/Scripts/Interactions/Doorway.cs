@@ -17,16 +17,20 @@ public class Doorway : Interactable
     protected override void Action()
     {
         base.Action();
-        if (Plate.isTriggered)
+        if (Plate)
         {
-            if (!cooldown)
-            {
-                CancelInvoke();
-                fade.FadeTransition(out float halfTime);
-                Invoke("Teleport", halfTime);
-                cooldown = true;
-            }
-        }    
+            if (!cooldown && Plate.isTriggered)
+                Doorways();
+        }
+        else Doorways();
+    }   
+
+    void Doorways()
+    {
+        CancelInvoke();
+        fade.FadeTransition(out float halfTime);
+        Invoke("Teleport", halfTime);
+        cooldown = true;
     }
 
     void Teleport()
