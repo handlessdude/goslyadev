@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed = 6.0f;
     public float jumpForce = 700.0f;
 
+    int damage = 20;
 
     //характеристики Dash
     float dashForce = 5000.0f;
@@ -55,11 +56,16 @@ public class PlayerController : MonoBehaviour
 
     TargetPosition cameraTargetPosition = TargetPosition.OnCharacter;
 
-    //объекты создаются здесь, чтобы потом не создавать их каждый раз
     Vector3 CameraUpPosition = new Vector3(0, 3);
     Vector3 CameraDownPosistion = new Vector3(0, -3);
     Vector2 _currentVelocity;
     bool movementInput = false;
+
+    //надо бы на одно нормальную структуру данных заменить
+    List<Enemy> enemies_on_the_left = new List<Enemy>();
+    List<Enemy> enemies_on_the_right = new List<Enemy>();
+
+    float nonzero_horizontal_direction = 0f;
 
     enum TargetPosition
     {
@@ -173,9 +179,9 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("Dash", true);
             if (WorldSwitcher.currentWorld == WorldSwitcher.World.cyan)
                 dashForce = 10000;
-            if (horizontalDirection > 0)
+            if (nonzero_horizontal_direction > 0)
                 rb.AddForce(new Vector2(dashForce, 0));
-            if (horizontalDirection < 0)
+            if (nonzero_horizontal_direction < 0)
                 rb.AddForce(new Vector2(-dashForce, 0));
             Invoke("StopDash", 0.5f);
             isDashAllowed = false;
@@ -196,6 +202,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Hit", true);
         Invoke("StopHit", 0.5f);
         isHitAllowed = false;
+        Invoke("DealDamage", 1 / 6f);
         Invoke("HitCoolDown", 0.5f);
     }
 
@@ -205,6 +212,7 @@ public class PlayerController : MonoBehaviour
     //
     void Update()
     {
+        nonzero_horizontal_direction = horizontalDirection == 0f ? nonzero_horizontal_direction : horizontalDirection;
         if ((GameplayState.controllability == PlayerControllability.Full || GameplayState.controllability == PlayerControllability.FirstDialog) && !GameplayState.isPaused)
         {
             if (InputManager.GetKey(KeyAction.MoveLeft))
@@ -459,6 +467,55 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, 0);
         jumping = false;
         isInAir = false; 
+    }
+
+
+    public void OnEnterAttackRange(Enemy enemy, PlayerAttackRange.AttackSide side)
+    {
+        if (side == PlayerAttackRange.AttackSide.Left)
+        {
+            enemies_on_the_left.Add(enemy);
+        }
+        else
+        {
+            enemies_on_the_right.Add(enemy);
+        }
+    }
+
+    public void OnLeaveAttackRange(Enemy enemy, PlayerAttackRange.AttackSide side)
+    {
+        if (side == PlayerAttackRange.AttackSide.Left)
+        {
+            enemies_on_the_left.Remove(enemy);
+        }
+        else
+        {
+            enemies_on_the_right.Remove(enemy);
+        }
+    }
+
+    void DealDamage()
+    {
+        int _damage = damage;
+        if (WorldSwitcher.currentWorld == WorldSwitcher.World.magenta)
+        {
+            _damage = Mathf.FloorToInt((float)damage * 1.5f);
+        }
+
+        if (nonzero_horizontal_direction < 0f)
+        {
+            foreach(Enemy e in enemies_on_the_left)
+            {
+                e.OnHit(gameObject, _damage);
+            }
+        }
+        else
+        {
+            foreach (Enemy e in enemies_on_the_right)
+            {
+                e.OnHit(gameObject, _damage);
+            }
+        }
     }
 }
 

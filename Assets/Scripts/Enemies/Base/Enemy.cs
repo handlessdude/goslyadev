@@ -73,6 +73,10 @@ public class Enemy : MonoBehaviour {
 	protected Rigidbody2D rb;
 	protected SpriteRenderer spriteRenderer;
 
+	//РЕСУРСЫ
+	Material default_material;
+	Material hit_material;
+
 	protected virtual void Start()
     {
 		health = maxHealth;
@@ -91,6 +95,9 @@ public class Enemy : MonoBehaviour {
         {
 			spriteRenderer = GetComponent<SpriteRenderer>();
 		}
+
+		default_material = spriteRenderer.material;
+		hit_material = Resources.Load<Material>("HitMaterial");
 	}
 
     protected virtual void Update()
@@ -188,7 +195,7 @@ public class Enemy : MonoBehaviour {
 
 	protected virtual void OnDeath(GameObject killer)
 	{
-
+		isDead = true;
 	}
 
 	protected virtual void Attack()
@@ -304,6 +311,15 @@ public class Enemy : MonoBehaviour {
 		{
 			Die(player);
 		}
+
+		CancelInvoke("RestoreDefaultMaterial");
+		spriteRenderer.material = hit_material;
+		Invoke("RestoreDefaultMaterial", 0.1f);
+	}
+
+	void RestoreDefaultMaterial()
+	{
+		spriteRenderer.material = default_material;
 	}
 
 	public virtual void OnEnterAttackRange(GameObject player)
