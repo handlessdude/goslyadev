@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour {
 
 	//СТАТЫ
 	
-	public List<Sense> senses = new List<Sense>();
+	public List<Sense> senses = new List<Sense>() { Sense.Hearing, Sense.Sight };
 
 	public int maxHealth = 50;
 	public int damage = 5;
@@ -274,6 +274,7 @@ public class Enemy : MonoBehaviour {
     {
 		followPath = false;
 		jumpSteer = false;
+		ticksSpentOnNode = 0;
 		currentPathNode = null;
 		physicalAction = PhysicalAction.Stay;
 	}
@@ -319,10 +320,11 @@ public class Enemy : MonoBehaviour {
 
 	public virtual void OnEnterSenseRange(GameObject player, Sense s)
     {
+		target = player;
 		if (senses.Contains(s))
         {
 			isPlayerInSenseRange[s] = true;
-			target = player;
+			
         }
     }
 

@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SawBot : Enemy
+public class SimpleBot : Enemy
 {
     public Vector2 lastKnownLocation;
 
     bool isThinkingAboutLife = false;
     int ticksSpentOnPath = 0;
 
+    new Collider2D collider;
+
     protected override void Start()
     {
+
+        animator = transform.Find("Sprite").GetComponent<Animator>();
+        spriteRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
         base.Start();
+        directionX = 1f;
         goal = Goal.Patrol;
+        collider = GetComponent<Collider2D>();
     }
 
     protected override void FixedUpdate()
@@ -27,6 +34,18 @@ public class SawBot : Enemy
     protected override void StartFollowingPath(Vector2 tpos)
     {
         base.StartFollowingPath(tpos);
+        ticksSpentOnPath = 0;
+    }
+
+    protected override void Attack()
+    {
+        base.Attack();
+        animator.Play("mobster_hit");
+    }
+
+    protected override void AbandonPath()
+    {
+        base.AbandonPath();
         ticksSpentOnPath = 0;
     }
 
@@ -62,6 +81,7 @@ public class SawBot : Enemy
                             bool isSignificantX = Mathf.Abs(target.transform.position.x - transform.position.x) > 0.2f;
                             UpdateDirectionX(target.transform.position.x - transform.position.x > 0f ? 1f : -1f, isSignificantX);
                             physicalAction = PhysicalAction.Run;
+                            animator.Play("mobster_run");
                             return;
                         }
                     }
@@ -69,10 +89,12 @@ public class SawBot : Enemy
                     if (isAttackAnimationPlaying || !followPath)
                     {
                         physicalAction = PhysicalAction.Stay;
+                        //animator.Play("mobster_idle");
                     }
                     else
                     {
                         physicalAction = PhysicalAction.Run;
+                        animator.Play("mobster_run");
                     }
 
                     break;
@@ -82,6 +104,7 @@ public class SawBot : Enemy
                     if (followPath)
                     {
                         physicalAction = PhysicalAction.Walk;
+                        animator.Play("mobster_run");
                     }
                     else
                     {
@@ -126,10 +149,12 @@ public class SawBot : Enemy
                     if (isThinkingAboutLife)
                     {
                         physicalAction = PhysicalAction.Stay;
+                        animator.Play("mobster_idle");
                     }
                     else
                     {
                         physicalAction = PhysicalAction.Walk;
+                        animator.Play("mobster_run");
                     }
                     
                     break;
@@ -137,6 +162,7 @@ public class SawBot : Enemy
             default:
                 {
                     physicalAction = PhysicalAction.Stay;
+                    animator.Play("mobster_idle");
                     break;
                 }
         }
@@ -158,6 +184,13 @@ public class SawBot : Enemy
     {
         base.OnPathCompleted();
 
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Physics2D.IgnoreCollision(collision.collider, collider);
+        }
     }
 
     public override void OnEnterSenseRange(GameObject player, Sense s)
