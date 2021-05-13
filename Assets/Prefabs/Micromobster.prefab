@@ -569,7 +569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   senses: 0100000000000000
   maxHealth: 50
-  damage: 5
+  damage: 15
   walkingSpeed: 4
   runningSpeed: 4
   maxJumpForce: 900

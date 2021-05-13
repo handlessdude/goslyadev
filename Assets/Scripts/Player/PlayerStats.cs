@@ -4,8 +4,28 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    [HideInInspector]
-    public int health;
+    int health;
+
+    public int Health
+    { get { return health; }
+        set {
+            if (value > maxHealth)
+            {
+                health = maxHealth;
+            }
+            else if (value <= 0)
+            {
+                health = 0;
+                OnDeath();
+            }
+            else
+            {
+                health = value;
+            }
+            ingameUI.UpdateHP(health, maxHealth);
+        } }
+
+
 
     public int maxHealth;
 
