@@ -213,7 +213,7 @@ public class Enemy : MonoBehaviour {
 
 	protected virtual void DealDamage()
     {
-		if (isPlayerInAttackRange)
+		if (isPlayerInAttackRange && !isDead)
         {
 			target.GetComponent<PlayerStats>().OnHit(gameObject, damage);
 		}

@@ -94,7 +94,15 @@ public class SimpleBot : Enemy
                     else
                     {
                         physicalAction = PhysicalAction.Run;
-                        animator.Play("mobster_run");
+                        if (jumpSteer)
+                        {
+                            animator.Play("mobster_jump");
+                        }
+                        else
+                        {
+                            animator.Play("mobster_run");
+                        }
+                        
                     }
 
                     break;
@@ -104,7 +112,14 @@ public class SimpleBot : Enemy
                     if (followPath)
                     {
                         physicalAction = PhysicalAction.Walk;
-                        animator.Play("mobster_run");
+                        if (jumpSteer)
+                        {
+                            animator.Play("mobster_jump");
+                        }
+                        else
+                        {
+                            animator.Play("mobster_run");
+                        }
                     }
                     else
                     {
@@ -171,6 +186,8 @@ public class SimpleBot : Enemy
     protected override void OnDeath(GameObject killer)
     {
         base.OnDeath(killer);
+        collider.attachedRigidbody.isKinematic = true;
+        collider.isTrigger = true;
     }
 
     void RealizeLifeIsPointless()
@@ -198,10 +215,12 @@ public class SimpleBot : Enemy
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
-        {
-            Physics2D.IgnoreCollision(collision.collider, collider);
-        }
+        //отключает коллизию между мобами
+        //проблема в том, что из-за особенностей поиска пути они сливаются в одного
+        //if (collision.gameObject.tag == "Enemy")
+        //{
+            //Physics2D.IgnoreCollision(collision.collider, collider);
+        //}
     }
 
     public override void OnEnterSenseRange(GameObject player, Sense s)
