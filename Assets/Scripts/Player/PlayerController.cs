@@ -174,6 +174,7 @@ public class PlayerController : MonoBehaviour
         var playerPos = gameObject.transform.position;
         //0.5 добавил из-за кривого спрайта
         wallClone = Instantiate(wall, new Vector3(playerPos.x, playerPos.y + 0.5f, 0), Quaternion.identity);
+        wallClone.transform.parent = transform;
     }
     //
 
