@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class SimpleBot : Enemy
 {
@@ -9,7 +10,12 @@ public class SimpleBot : Enemy
     bool isThinkingAboutLife = false;
     int ticksSpentOnPath = 0;
 
+    bool isInAir = false;
+    bool isLandingAnimationPlaying = false;
+
     new Collider2D collider;
+
+    Transform middleGround;
 
     protected override void Start()
     {
@@ -20,6 +26,11 @@ public class SimpleBot : Enemy
         directionX = 1f;
         goal = Goal.Patrol;
         collider = GetComponent<Collider2D>();
+
+        if (!middleGround)
+        {
+            middleGround = transform.Find("MiddleGround");
+        }
     }
 
     protected override void FixedUpdate()
@@ -29,11 +40,31 @@ public class SimpleBot : Enemy
         {
             ticksSpentOnPath++;
         }
+
+        if (isInAir)
+        {
+            //как в PlayerController
+            isInAir = !Physics2D.OverlapCircleAll(middleGround.position, 0.05f, 256).Any();
+            if (!isInAir)
+            {
+                animator.speed = 1f;
+                isLandingAnimationPlaying = true;
+                Invoke("StopLandingAnimation", 0.25f);
+            }
+        }
+    }
+
+    void StopLandingAnimation()
+    {
+        isLandingAnimationPlaying = false;
     }
 
     protected override void StartFollowingPath(Vector2 tpos)
     {
         base.StartFollowingPath(tpos);
+        CancelInvoke("StopLandingAnimation");
+        isInAir = false;
+        isLandingAnimationPlaying = false;
         ticksSpentOnPath = 0;
     }
 
@@ -46,9 +77,13 @@ public class SimpleBot : Enemy
     protected override void AbandonPath()
     {
         base.AbandonPath();
+        isLandingAnimationPlaying = false;
+        isInAir = false;
         ticksSpentOnPath = 0;
     }
 
+    //проигрывание анимаций (и куча флагов типа isInAir и isLandingAnimationPlaying) 
+    //запутывает сильно, надо рефакторить
     protected override void OnAI()
     {
         
@@ -81,7 +116,11 @@ public class SimpleBot : Enemy
                             bool isSignificantX = Mathf.Abs(target.transform.position.x - transform.position.x) > 0.2f;
                             UpdateDirectionX(target.transform.position.x - transform.position.x > 0f ? 1f : -1f, isSignificantX);
                             physicalAction = PhysicalAction.Run;
-                            animator.Play("mobster_run");
+                            if (!isLandingAnimationPlaying)
+                            {
+                                animator.Play("mobster_run");
+                            }
+                            
                             return;
                         }
                     }
@@ -96,11 +135,14 @@ public class SimpleBot : Enemy
                         physicalAction = PhysicalAction.Run;
                         if (jumpSteer)
                         {
-                            animator.Play("mobster_jump");
+                            
                         }
                         else
                         {
-                            animator.Play("mobster_run");
+                            if (!isLandingAnimationPlaying)
+                            {
+                                animator.Play("mobster_run");
+                            }
                         }
                         
                     }
@@ -112,6 +154,10 @@ public class SimpleBot : Enemy
                     if (followPath)
                     {
                         physicalAction = PhysicalAction.Walk;
+                        if (isLandingAnimationPlaying)
+                        {
+                            return;
+                        }
                         if (jumpSteer)
                         {
                             animator.Play("mobster_jump");
@@ -214,6 +260,42 @@ public class SimpleBot : Enemy
         base.OnPathCompleted();
 
     }
+
+    protected override void ProcessPathInstructions()
+    {
+        (float, float) instructions = Pathfinder.GetPathInstructions(currentPathNode);
+        float new_directionX = instructions.Item1 > 0 ? 1f : -1f;
+        UpdateDirectionX(new_directionX);
+
+        if (instructions.Item2 != 0f)
+        {
+            jumpSteerVelocityX = Mathf.Abs(instructions.Item1);
+            jumpSteer = true;
+            animator.speed = 1f;
+            isLandingAnimationPlaying = false;
+            animator.Play("mobster_jump");
+            StartCoroutine(Jump(instructions.Item2));
+        }
+        else
+        {
+            jumpSteer = false;
+        }
+    }
+
+    private IEnumerator Jump(float jumpForce)
+    {
+        yield return new WaitForSeconds(0.1f);
+        Debug.LogWarning("Coroutine Started");
+        Invoke("StopAnimator", 8*Time.fixedDeltaTime);
+        rb.AddForce(new Vector2(0.0f, jumpForce));
+    }
+
+    private void StopAnimator()
+    {
+        isInAir = true;
+        animator.speed = 0f;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //отключает коллизию между мобами
