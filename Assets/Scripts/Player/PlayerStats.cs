@@ -85,6 +85,6 @@ public class PlayerStats : MonoBehaviour
 
     public void OnDeath()
     {
-
+        ingameUI.DisplayDeathScreen();
     }
 }
