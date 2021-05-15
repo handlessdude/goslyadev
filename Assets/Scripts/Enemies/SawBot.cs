@@ -7,9 +7,11 @@ public class SawBot : Enemy
     public Vector2 lastKnownLocation;
 
     public static int specialAttackDamage = 20;
-    public static float specialAttackCooldown = 1f;
-    public static float specialAttackAnimationDuration = 0.5f;
-    public static float specialAttackTelegraphDuration = 0.3f;
+    public static float specialAttackCooldown = 1.2f;
+    public static float specialAttackAnimationDuration = 0.833333f;
+    public static float specialAttackTelegraphDuration = 0.33f;
+
+    new Collider2D collider;
 
     bool isPlayerInSpecialAttackRange = false;
     bool isSpecialAttackOnCooldown = false;
@@ -20,7 +22,10 @@ public class SawBot : Enemy
 
     protected override void Start()
     {
+        animator = transform.Find("Sprite").GetComponent<Animator>();
+        spriteRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
         base.Start();
+        collider = GetComponent<Collider2D>();
         goal = Goal.Patrol;
     }
 
@@ -46,14 +51,10 @@ public class SawBot : Enemy
         {
             case (Goal.Chase):
                 {
-                    if (isAttackAnimationPlaying || !isSpecialAttackAnimationPlaying)
+                    if (isAttackAnimationPlaying || isSpecialAttackAnimationPlaying)
                     {
                         physicalAction = PhysicalAction.Stay;
                         return;
-                    }
-                    else
-                    {
-                        physicalAction = PhysicalAction.Run;
                     }
 
                     if (isPlayerInSenseRange.Count == 0)
@@ -63,22 +64,26 @@ public class SawBot : Enemy
                     else if (isPlayerInAttackRange && !isAttackOnCooldown)
                     {
                         Attack();
+                        return;
                     }
                     else if (isPlayerInSpecialAttackRange && !isSpecialAttackOnCooldown)
                     {
                         SpecialAttack();
+                        return;
                     }
 
                     if (target.transform.position.y - transform.position.y > 4f && 
                         Mathf.Abs(target.transform.position.x - transform.position.x) < 4f)
                     {
                         //если игрок слишком высоко, то глупо пытаться стать прямо под него
+                        animator.Play("boss_idle");
                         physicalAction = PhysicalAction.Stay;
                         return;
                     }
 
                     bool isSignificantX = Mathf.Abs(target.transform.position.x - transform.position.x) > 0.2f;
                     UpdateDirectionX(target.transform.position.x - transform.position.x > 0f ? 1f : -1f, isSignificantX);
+                    animator.Play("boss_walk");
                     physicalAction = PhysicalAction.Run;
 
                     break;
@@ -87,6 +92,7 @@ public class SawBot : Enemy
                 {
                     if (followPath)
                     {
+                        animator.Play("boss_walk");
                         physicalAction = PhysicalAction.Walk;
                     }
                     else
@@ -131,10 +137,12 @@ public class SawBot : Enemy
                     
                     if (isThinkingAboutLife)
                     {
+                        animator.Play("boss_idle");
                         physicalAction = PhysicalAction.Stay;
                     }
                     else
                     {
+                        animator.Play("boss_walk");
                         physicalAction = PhysicalAction.Walk;
                     }
                     
@@ -142,6 +150,7 @@ public class SawBot : Enemy
                 }
             default:
                 {
+                    animator.Play("boss_idle");
                     physicalAction = PhysicalAction.Stay;
                     break;
                 }
@@ -157,12 +166,31 @@ public class SawBot : Enemy
         Invoke("OnSpecialAttackAnimationEnd", specialAttackAnimationDuration);
     }
 
+    protected override void OnDeath(GameObject killer)
+    {
+        base.OnDeath(killer);
+        animator.Play("boss_death");
+    }
+
+    protected override void DealDamage()
+    {
+        base.DealDamage();
+        //spriteRenderer.sortingOrder = 11;
+    }
+
     protected virtual void DealSpecialDamage()
     {
         if (isPlayerInSpecialAttackRange)
         {
             target.GetComponent<PlayerStats>().OnHit(gameObject, specialAttackDamage);
         }
+    }
+
+    protected override void Attack()
+    {
+        base.Attack();
+        animator.Play("boss_hit");
+        
     }
 
     protected virtual void OnSpecialAttackAnimationEnd()
@@ -209,5 +237,14 @@ public class SawBot : Enemy
     public virtual void OnLeaveSpecialAttackRange(GameObject player)
     {
         isPlayerInSpecialAttackRange = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //отключает коллизию с игроком
+        if (collision.gameObject.tag == "Player")
+        {
+            Physics2D.IgnoreCollision(collision.collider, collider);
+        }
     }
 }
