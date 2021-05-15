@@ -63,6 +63,8 @@ public class PlayerStats : MonoBehaviour
     public void OnHit(GameObject source, int damage)
     {
         Debug.Log("HIT");
+        if (GameplayState.controllability == PlayerControllability.InDialogue)
+            return;
         int deltaHP = health - damage;
         ingameUI.UpdateHP(deltaHP, maxHealth);
         if (deltaHP > 0)

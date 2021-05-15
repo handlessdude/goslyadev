@@ -6,7 +6,7 @@ public class Parallax : MonoBehaviour
 {
     public float parallaxAmount = 0.0f;
 
-    float spriteLength = 26.25f;
+    float spriteLength = 35f;
     float posX;
 
     void Start()

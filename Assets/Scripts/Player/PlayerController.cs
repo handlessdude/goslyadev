@@ -337,7 +337,7 @@ public class PlayerController : MonoBehaviour
                 if (stompTimePassed < stompDuration)
                 {
                     //постепенно восстанавливает 10 ХП или около того
-                    if (stompTimePassed % (1f/stompDuration/10f) < Time.fixedDeltaTime)
+                    if (stompTimePassed % (1f/stompDuration/20f) < Time.fixedDeltaTime)
                     {
                         playerStats.Health += 1;
                     }
