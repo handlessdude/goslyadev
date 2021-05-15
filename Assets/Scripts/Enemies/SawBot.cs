@@ -7,15 +7,16 @@ public class SawBot : Enemy
     public Vector2 lastKnownLocation;
 
     public static int specialAttackDamage = 20;
-    public static float specialAttackCooldown = 1.2f;
-    public static float specialAttackAnimationDuration = 0.833333f;
-    public static float specialAttackTelegraphDuration = 0.33f;
+    public static float specialAttackCooldown = 2f;
+    public static float specialAttackAnimationDuration = 1.375f;
+    public static float specialAttackTelegraphDuration = 0.375f;
 
     new Collider2D collider;
 
     bool isPlayerInSpecialAttackRange = false;
     bool isSpecialAttackOnCooldown = false;
     bool isSpecialAttackAnimationPlaying = false;
+    bool isSpecialSpecialAttackActive = false;
 
     bool isThinkingAboutLife = false;
     int ticksSpentOnPath = 0;
@@ -61,16 +62,17 @@ public class SawBot : Enemy
                     {
                         OnLostTarget();
                     }
-                    else if (isPlayerInAttackRange && !isAttackOnCooldown)
-                    {
-                        Attack();
-                        return;
-                    }
                     else if (isPlayerInSpecialAttackRange && !isSpecialAttackOnCooldown)
                     {
                         SpecialAttack();
                         return;
                     }
+                    else if (isPlayerInAttackRange && !isAttackOnCooldown)
+                    {
+                        Attack();
+                        return;
+                    }
+                    
 
                     if (target.transform.position.y - transform.position.y > 4f && 
                         Mathf.Abs(target.transform.position.x - transform.position.x) < 4f)
@@ -161,6 +163,7 @@ public class SawBot : Enemy
     {
         isSpecialAttackOnCooldown = true;
         isSpecialAttackAnimationPlaying = true;
+        animator.Play("boss_hit2");
         Invoke("ResetSpecialAttackCooldown", specialAttackCooldown);
         Invoke("DealSpecialDamage", specialAttackTelegraphDuration);
         Invoke("OnSpecialAttackAnimationEnd", specialAttackAnimationDuration);
@@ -175,6 +178,7 @@ public class SawBot : Enemy
     protected override void DealDamage()
     {
         base.DealDamage();
+        
         //spriteRenderer.sortingOrder = 11;
     }
 
@@ -184,6 +188,12 @@ public class SawBot : Enemy
         {
             target.GetComponent<PlayerStats>().OnHit(gameObject, specialAttackDamage);
         }
+        isSpecialSpecialAttackActive = true;
+    }
+
+    protected virtual void ResetSpecialAttackCooldown()
+    {
+        isSpecialAttackOnCooldown = false;
     }
 
     protected override void Attack()
@@ -196,6 +206,7 @@ public class SawBot : Enemy
     protected virtual void OnSpecialAttackAnimationEnd()
     {
         isSpecialAttackAnimationPlaying = false;
+        isSpecialSpecialAttackActive = false;
     }
 
     void RealizeLifeIsPointless()
@@ -232,6 +243,10 @@ public class SawBot : Enemy
         Debug.Log("PLAYER IN ATTACK RANGE");
         isPlayerInSpecialAttackRange = true;
         target = player;
+        if (isSpecialSpecialAttackActive)
+        {
+            DealSpecialDamage();
+        }
     }
 
     public virtual void OnLeaveSpecialAttackRange(GameObject player)
