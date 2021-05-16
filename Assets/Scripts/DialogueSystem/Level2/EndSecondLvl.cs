@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class EndSecondLvl : DialogueNPC
 {
-    
+    public ScreenFader screenFader;
 
     void Start()
     {
@@ -27,8 +27,13 @@ public class EndSecondLvl : DialogueNPC
     protected override void DialogueExit()
     {
         base.DialogueExit();
-        SceneManager.LoadScene(0);
-        Cursor.visible = true;
+        screenFader.fadeState = ScreenFader.FadeState.In;
+        Invoke("LoadScene", 5.0f);
+    }
+
+    void LoadScene()
+    {
+        SceneManager.LoadScene(3);
     }
 
 

@@ -80,4 +80,9 @@ public class MainMenu : SaveSystem
     {
         notImplementedWarning.SetActive(false);
     }
+
+    public void JumpToLevel3()
+    {
+        SceneManager.LoadScene(3);
+    }
 }

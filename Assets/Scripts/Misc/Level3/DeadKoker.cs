@@ -27,10 +27,12 @@ public class DeadKoker : DialogueNPC
         base.DialogueExit();
         screenFader.fadeState = ScreenFader.FadeState.In;
         Invoke("LoadScene", 5.0f);
+        
     }
 
     void LoadScene()
     {
         SceneManager.LoadScene(0);
+        Cursor.visible = true;
     }
 }
