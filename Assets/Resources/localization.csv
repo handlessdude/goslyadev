@@ -206,3 +206,4 @@
 "hint_press_attack","Press <HitKey> to attack","Нажмите <HitKey>, чтобы атаковать","Drücken Sie <HitKey>, um anzugreifen"
 "hint_press_stomp","Press <GreenKey> and <StompKey> to heal","Нажмите <GreenKey> и <StompKey>, чтобы вылечиться","Drücken <GreenKey> y <StompKey>, um anzugreifen"
 "hint_press_dash","Press <DashKey> to dash across the gape","Нажмите <DashKey>, чтобы перепрыгнуть через дыру","Drücken <DashKey>, um Grube"
+"gamesaved_options","game saved...","игра сохранена...",""
