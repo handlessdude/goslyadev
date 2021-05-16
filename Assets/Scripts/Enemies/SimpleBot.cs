@@ -118,10 +118,7 @@ public class SimpleBot : Enemy
                             bool isSignificantX = Mathf.Abs(target.transform.position.x - transform.position.x) > 0.2f;
                             UpdateDirectionX(target.transform.position.x - transform.position.x > 0f ? 1f : -1f, isSignificantX);
                             physicalAction = PhysicalAction.Run;
-                            if (!isLandingAnimationPlaying)
-                            {
-                                animator.Play("mobster_run");
-                            }
+                            animator.Play("mobster_run");
                             
                             return;
                         }
@@ -141,10 +138,7 @@ public class SimpleBot : Enemy
                         }
                         else
                         {
-                            if (!isLandingAnimationPlaying)
-                            {
-                                animator.Play("mobster_run");
-                            }
+                            animator.Play("mobster_run");
                         }
                         
                     }
@@ -156,10 +150,6 @@ public class SimpleBot : Enemy
                     if (followPath)
                     {
                         physicalAction = PhysicalAction.Walk;
-                        if (isLandingAnimationPlaying)
-                        {
-                            return;
-                        }
                         if (jumpSteer)
                         {
                             animator.Play("mobster_jump");
@@ -298,7 +288,7 @@ public class SimpleBot : Enemy
     private void StopAnimator()
     {
         isInAir = true;
-        animator.speed = 0f;
+        animator.speed = 1f;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
