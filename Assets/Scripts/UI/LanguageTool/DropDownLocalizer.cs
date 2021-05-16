@@ -30,6 +30,7 @@ public class DropDownLocalizer : Localizer
 
     public override void UpdateLocalization()
     {
+        int cur_opt = dropdown.value;
         //TODO: выглядит плохо
         int ctr = dropdown.options.Count;
         dropdown.options.Clear();
@@ -37,5 +38,6 @@ public class DropDownLocalizer : Localizer
         {
             dropdown.options.Add(new TMP_Dropdown.OptionData(Localization.GetLocalizedString(text[i].value)));
         }
+        dropdown.SetValueWithoutNotify(cur_opt);
     }
 }

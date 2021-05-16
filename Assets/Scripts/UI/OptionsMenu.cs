@@ -99,12 +99,12 @@ public class OptionsMenu : MonoBehaviour
     {
         if (n == 0)
         {
-            Screen.fullScreen = false;
+            //Screen.fullScreen = false;
             Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
         }
         else if (n == 1)
         {
-            Screen.fullScreen = true;
+            //Screen.fullScreen = true;
             Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
         }
         else if (n == 2)
@@ -185,10 +185,13 @@ public class OptionsMenu : MonoBehaviour
 
     public void InitializeFullscreenDropdown()
     {
+        
         switch (Screen.fullScreenMode)
         {
+            
             case FullScreenMode.FullScreenWindow:
                 {
+                    
                     fullscreenDropdown.value = 0;
                     break;
                 }
@@ -199,6 +202,7 @@ public class OptionsMenu : MonoBehaviour
                 }
             case FullScreenMode.Windowed:
                 {
+                    //mainMenuScript.ShowNotImplementedWarning();
                     fullscreenDropdown.value = 2;
                     break;
                 }
@@ -208,7 +212,6 @@ public class OptionsMenu : MonoBehaviour
                     break;
                 }
         }
-
     }
 
     public void Controls()

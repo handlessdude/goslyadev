@@ -5373,10 +5373,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3509c7c1bd42c44b8896b75117b9518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenu: {fileID: 0}
+  mainMenu: {fileID: 1208371137}
   controlsMenu: {fileID: 926605884}
   warningMenu: {fileID: 469541337}
-  mainMenuScript: {fileID: 0}
+  mainMenuScript: {fileID: 1721908453}
   audioMixer: {fileID: 24100000, guid: 440b2db749ebfe149a336051d2d72343, type: 2}
   SFXSlider: {fileID: 0}
   MusicSlider: {fileID: 0}
@@ -5693,6 +5693,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b8a262068179424aa8d7433112bc252, type: 3}
+--- !u!1 &1577000781 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6004991236770329509, guid: a9b05d5878e367e44a7295c082412b0f, type: 3}
+  m_PrefabInstance: {fileID: 727616944}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1581742373
 GameObject:
   m_ObjectHideFlags: 0
@@ -6409,7 +6414,8 @@ MonoBehaviour:
   player: {fileID: 0}
   Menu: {fileID: 0}
   NoSaveWarning: {fileID: 1430887937}
-  notImplementedWarning: {fileID: 0}
+  Hint: {fileID: 0}
+  notImplementedWarning: {fileID: 1577000781}
   mainMenu: {fileID: 0}
   optionsMenu: {fileID: 0}
 --- !u!224 &1750764166 stripped
