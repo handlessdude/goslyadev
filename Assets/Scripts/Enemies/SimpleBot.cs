@@ -17,6 +17,8 @@ public class SimpleBot : Enemy
 
     Transform middleGround;
 
+    public AudioClip attackSound;
+
     protected override void Start()
     {
 
@@ -235,6 +237,7 @@ public class SimpleBot : Enemy
         collider.attachedRigidbody.isKinematic = true;
         collider.isTrigger = true;
         animator.Play("mobster_death");
+        
     }
 
     void RealizeLifeIsPointless()
@@ -246,6 +249,8 @@ public class SimpleBot : Enemy
     {
         base.DealDamage();
         target.GetComponent<PlayerController>().rb.AddForce(new Vector2(directionX * 800f, 0f));
+        audioSource.clip = attackSound;
+        audioSource.Play();
     }
 
     protected override void OnLostTarget()

@@ -2534,7 +2534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2392687386566298050, guid: 89ef1e4dd9b43bd4e8d2ea2307bee9f3, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2392687386566298050, guid: 89ef1e4dd9b43bd4e8d2ea2307bee9f3, type: 3}
       propertyPath: m_AnchorMax.x
@@ -11674,9 +11674,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilityClips:
-  - {fileID: 8300000, guid: 4bdaee07fa7de144d9ada32c551335a7, type: 3}
-  - {fileID: 8300000, guid: 4bdaee07fa7de144d9ada32c551335a7, type: 3}
-  - {fileID: 8300000, guid: 4bdaee07fa7de144d9ada32c551335a7, type: 3}
+  - {fileID: 8300000, guid: 0a1a840e8da45674992862d86cfb298c, type: 3}
+  - {fileID: 8300000, guid: 2a586cf190d73d3468e4f7806f209df8, type: 3}
+  - {fileID: 8300000, guid: 4ed74749aea27df41a5bb5fc761f1635, type: 3}
   source: {fileID: 930717258}
 --- !u!82 &930717258
 AudioSource:
@@ -11932,6 +11932,7 @@ MonoBehaviour:
   groundLayer: 256
   movementSpeed: 5
   jumpForce: 700
+  areAbilitiesAllowed: 1
 --- !u!61 &930717263
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15957,7 +15958,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2392687386566298050, guid: 89ef1e4dd9b43bd4e8d2ea2307bee9f3, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2392687386566298050, guid: 89ef1e4dd9b43bd4e8d2ea2307bee9f3, type: 3}
       propertyPath: m_AnchorMax.x

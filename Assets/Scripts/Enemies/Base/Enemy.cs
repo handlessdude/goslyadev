@@ -72,6 +72,7 @@ public class Enemy : MonoBehaviour {
 	protected Animator animator;
 	protected Rigidbody2D rb;
 	protected SpriteRenderer spriteRenderer;
+	protected AudioSource audioSource;
 
 	//РЕСУРСЫ
 	Material default_material;
@@ -95,6 +96,11 @@ public class Enemy : MonoBehaviour {
         {
 			spriteRenderer = GetComponent<SpriteRenderer>();
 		}
+
+		if (!audioSource)
+        {
+			audioSource = GetComponent<AudioSource>();
+        }
 
 		default_material = spriteRenderer.material;
 		hit_material = Resources.Load<Material>("HitMaterial");
