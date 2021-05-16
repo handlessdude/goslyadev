@@ -127,11 +127,15 @@ public class OptionsMenu : MonoBehaviour
             if (Screen.fullScreen)
             {
                 //еще одна причина не уважать Юнити - причина написания этого куска
-                FullScreenMode prev_mod = Screen.fullScreenMode;
-                Screen.fullScreenMode = FullScreenMode.Windowed;
-                resolution = Screen.currentResolution;
-                Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
-                Screen.fullScreenMode = prev_mod;
+                //но он все равно не работает так, как надо
+                
+                //FullScreenMode prev_mod = Screen.fullScreenMode;
+                //Screen.fullScreenMode = FullScreenMode.Windowed;
+                resolution = new Resolution();
+                resolution.width = Display.displays[0].systemWidth;
+                resolution.height = Display.displays[0].systemHeight;
+                Screen.SetResolution(Display.displays[0].systemWidth, Display.displays[0].systemHeight, Screen.fullScreen);
+                //Screen.fullScreenMode = prev_mod;
             }
             else
             {
@@ -158,7 +162,6 @@ public class OptionsMenu : MonoBehaviour
 
     public void InitializeResolutionDropdowns()
     {
-        //Resolution t = Screen.currentResolution;
         (int, int) resolution = (Screen.width, Screen.height);
         currentAspectRatio = "";
         foreach (var kv in standard_resolutions)
@@ -190,17 +193,22 @@ public class OptionsMenu : MonoBehaviour
         {
             case FullScreenMode.FullScreenWindow:
                 {
-                    fullscreenDropdown.SetValueWithoutNotify(0);
+                    fullscreenDropdown.value = 0;
                     break;
                 }
             case FullScreenMode.ExclusiveFullScreen:
                 {
-                    fullscreenDropdown.SetValueWithoutNotify(1);
+                    fullscreenDropdown.value = 1;
                     break;
                 }
             case FullScreenMode.Windowed:
                 {
-                    fullscreenDropdown.SetValueWithoutNotify(2);
+                    fullscreenDropdown.value = 2;
+                    break;
+                }
+            default:
+                {
+                    fullscreenDropdown.value = 0;
                     break;
                 }
         }
