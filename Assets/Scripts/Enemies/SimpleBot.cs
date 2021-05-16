@@ -298,12 +298,12 @@ public class SimpleBot : Enemy
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //отключает коллизию между мобами
-        //проблема в том, что из-за особенностей поиска пути они сливаются в одного
-        //if (collision.gameObject.tag == "Enemy")
-        //{
-            //Physics2D.IgnoreCollision(collision.collider, collider);
-        //}
+
+        if (collision.gameObject.tag == "CyanWorld" || collision.gameObject.tag == "MagentaWorld" ||
+            collision.gameObject.tag == "GreenWorld")
+        {
+            Physics2D.IgnoreCollision(collision.collider, collider);
+        }
     }
 
     public override void OnEnterSenseRange(GameObject player, Sense s)

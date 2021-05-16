@@ -261,5 +261,11 @@ public class SawBot : Enemy
         {
             Physics2D.IgnoreCollision(collision.collider, collider);
         }
+
+        if (collision.gameObject.tag == "CyanWorld" || collision.gameObject.tag == "MagentaWorld" ||
+            collision.gameObject.tag == "GreenWorld")
+        {
+            Physics2D.IgnoreCollision(collision.collider, collider);
+        }
     }
 }
