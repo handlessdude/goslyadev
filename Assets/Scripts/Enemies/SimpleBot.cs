@@ -236,8 +236,8 @@ public class SimpleBot : Enemy
         base.OnDeath(killer);
         collider.attachedRigidbody.isKinematic = true;
         collider.isTrigger = true;
-        animator.Play("mobster_death");
-        
+
+        animator.Play("mobster_death");    
     }
 
     void RealizeLifeIsPointless()

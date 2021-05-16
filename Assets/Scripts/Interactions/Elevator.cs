@@ -40,7 +40,6 @@ public class Elevator : MonoBehaviour
             onLift = false;
     }
 
-    
     private void FixedUpdate()
     {
         if (onLift)

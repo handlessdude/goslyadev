@@ -560,6 +560,7 @@ MonoBehaviour:
   lastKnownLocation: {x: 0, y: 0}
   deathSound: {fileID: 8300000, guid: 1ae521825e152ca40b606a1e818b8ea8, type: 3}
   attackSound: {fileID: 8300000, guid: 9472ac27d32eeb44e9e105c3d23c2a55, type: 3}
+  specialattackSound: {fileID: 8300000, guid: e5185f0a6a246fa49818afde8d81acbd, type: 3}
 --- !u!60 &3719419019516331841
 PolygonCollider2D:
   m_ObjectHideFlags: 0

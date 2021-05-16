@@ -205,7 +205,7 @@ public class Enemy : MonoBehaviour {
 
 	protected virtual void OnDeath(GameObject killer)
 	{
-		
+		GameplayState.killedEnemy.Add(gameObject.name);
 	}
 
 	protected virtual void Attack()

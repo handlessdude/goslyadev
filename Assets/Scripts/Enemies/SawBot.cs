@@ -23,7 +23,8 @@ public class SawBot : Enemy
 
     public AudioClip deathSound;
     public AudioClip attackSound;
-
+    public AudioClip specialattackSound;
+    
     protected override void Start()
     {
         animator = transform.Find("Sprite").GetComponent<Animator>();
@@ -194,6 +195,8 @@ public class SawBot : Enemy
         {
             target.GetComponent<PlayerStats>().OnHit(gameObject, specialAttackDamage);
         }
+        audioSource.clip = specialattackSound;
+        audioSource.Play();
         isSpecialSpecialAttackActive = true;
     }
 
@@ -206,7 +209,6 @@ public class SawBot : Enemy
     {
         base.Attack();
         animator.Play("boss_hit");
-        
     }
 
     protected virtual void OnSpecialAttackAnimationEnd()

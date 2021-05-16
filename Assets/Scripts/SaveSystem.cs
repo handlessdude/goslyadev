@@ -17,8 +17,17 @@ public class SaveSystem : MonoBehaviour
         {
             player = GameObject.FindWithTag("Player");
         }
+        foreach (var x in GameplayState.killedEnemy)
+            StartCoroutine(KillKilledEnemy(x, 0.15f));
     }
-
+    IEnumerator KillKilledEnemy(string x, float time)
+    {
+        yield return new WaitForSeconds(time);
+        if (x != "Boss")
+            GameObject.Find(x).GetComponent<SimpleBot>().Die(GameObject.FindWithTag("Player"));
+        else
+            GameObject.Find(x).GetComponent<SawBot>().Die(GameObject.FindWithTag("Player"));
+    }
     public void ShowNoSaveWarning()
     {
         NoSaveWarning.SetActive(true);
@@ -37,6 +46,8 @@ public class SaveSystem : MonoBehaviour
         using (FileStream fs = new FileStream(Application.persistentDataPath + "/saved.dat", FileMode.Create))
         {
             SaveData data = new SaveData();
+
+            data.savedKillsMobs = GameplayState.killedEnemy;
             data.savedsceneInd = SceneManager.GetActiveScene().buildIndex;
             //Первый лвл
             data.savedbarrels = GameplayState.barrels;
@@ -102,6 +113,8 @@ public class SaveSystem : MonoBehaviour
 
                 GameplayState.feededboards = data.savedFeededboards;
 
+                GameplayState.killedEnemy = data.savedKillsMobs;
+
                 GameplayState.BoxesPosition = data.savedBoxesPosition;
 
                 GameplayState.boards = data.savedboards;
@@ -155,6 +168,7 @@ public class SaveSystem : MonoBehaviour
 [Serializable]
 public class SaveData
 {
+    public HashSet<string> savedKillsMobs;
     public Dictionary<string, Tuple<float, float>> savedBoxesPosition = new Dictionary<string, Tuple<float, float>>();
     public Dictionary<KeyAction, Tuple<KeyCode, KeyCode>> savedKeyBindings = new Dictionary<KeyAction, Tuple<KeyCode, KeyCode>>();
     public Dictionary<string, Func<string>> savedPatterns = new Dictionary<string, Func<string>>();
