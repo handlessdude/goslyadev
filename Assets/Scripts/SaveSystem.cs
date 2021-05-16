@@ -9,7 +9,8 @@ using static UnityEngine.SceneManagement.SceneManager;
 public class SaveSystem : MonoBehaviour
 {
     public GameObject player;
-
+    public MainMenu Menu;
+    public GameObject NoSaveWarning;
     void Start()
     {
         if (!player)
@@ -18,10 +19,22 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
+    public void ShowNoSaveWarning()
+    {
+        NoSaveWarning.SetActive(true);
+        CancelInvoke("HideNoSaveWarning");
+        Invoke("HideNoSaveWarning", 1.5f);
+    }
+
+    void HideNoSaveWarning()
+    {
+        NoSaveWarning.SetActive(false);
+    }
+
     public void SaveGame()
     {
         BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = new FileStream(Application.persistentDataPath + "/Saved.dat", FileMode.Create))
+        using (FileStream fs = new FileStream(Application.persistentDataPath + "/saved.dat", FileMode.Create))
         {
             SaveData data = new SaveData();
             data.savedsceneInd = SceneManager.GetActiveScene().buildIndex;
@@ -62,7 +75,7 @@ public class SaveSystem : MonoBehaviour
         try
         {
             BinaryFormatter bf = new BinaryFormatter();
-            using (FileStream fs = new FileStream(Application.persistentDataPath + "/Saved.dat", FileMode.Open))
+            using (FileStream fs = new FileStream(Application.persistentDataPath + "/saved.dat", FileMode.Open))
             {
                 SaveData data = (SaveData)bf.Deserialize(fs);
                 Cursor.visible = false;
@@ -99,9 +112,9 @@ public class SaveSystem : MonoBehaviour
             Debug.Log("Game data loaded!");
 
         }
-        catch (Exception e)
+        catch
         {
-            Debug.LogError(e);
+            ShowNoSaveWarning();
         }
     }
 

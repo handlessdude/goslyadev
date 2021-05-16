@@ -213,7 +213,7 @@ public class Enemy : MonoBehaviour {
 
 	protected virtual void DealDamage()
     {
-		if (isPlayerInAttackRange)
+		if (isPlayerInAttackRange && !isDead)
         {
 			target.GetComponent<PlayerStats>().OnHit(gameObject, damage);
 		}
@@ -257,7 +257,6 @@ public class Enemy : MonoBehaviour {
 		if (instructions.Item2 != 0f)
 		{
 			jumpSteerVelocityX = Mathf.Abs(instructions.Item1);
-			Debug.Log(jumpSteerVelocityX);
 			jumpSteer = true;
 			rb.AddForce(new Vector2(0.0f, instructions.Item2));
 		}

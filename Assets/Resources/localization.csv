@@ -188,3 +188,6 @@
 "warning_no","NO","НЕТ",""
 "warning_message","SAVE KEYBINDINGS?","СОХРАНИТЬ НАСТРОЙКИ?",""
 "controls_reset","RESET","ВЕРНУТЬ",""
+"restart_level","RESTART LEVEL","УРОВЕНЬ ЗАНОВО","LEVEL NEUSTARTEN"
+"you_died","YOU DIED","ВЫ УМЕРЛИ","DU BIST TOT"
+"no_game_saves","NO GAME SAVES","НЕТ СОХРАНЕНИЙ ИГРЫ",""

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InGameUIController : MonoBehaviour
 {
     public GameObject pauseMenu;
+    public GameObject deathScreen;
     public GameObject PauseVolume;
     public GameObject LightBuble;
     public GameObject FPSCounter;
@@ -124,6 +125,26 @@ public class InGameUIController : MonoBehaviour
         if (stompCooldown)
         {
             stompCooldown.fillAmount = progress;
+        }
+    }
+
+    public void DisplayDeathScreen()
+    {
+        if (deathScreen)
+        {
+            if (PauseVolume)
+            {
+                PauseVolume.SetActive(true);
+            }
+            deathScreen.SetActive(true);
+            Cursor.visible = true;
+            Time.timeScale = 0.0f;
+            GameplayState.isPaused = true;
+            FPSCounter.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("Death Screen not set up!");
         }
     }
 }

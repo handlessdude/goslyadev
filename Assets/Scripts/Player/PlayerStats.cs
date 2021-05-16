@@ -4,8 +4,28 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    [HideInInspector]
-    public int health;
+    int health;
+
+    public int Health
+    { get { return health; }
+        set {
+            if (value > maxHealth)
+            {
+                health = maxHealth;
+            }
+            else if (value <= 0)
+            {
+                health = 0;
+                OnDeath();
+            }
+            else
+            {
+                health = value;
+            }
+            ingameUI.UpdateHP(health, maxHealth);
+        } }
+
+
 
     public int maxHealth;
 
@@ -43,6 +63,8 @@ public class PlayerStats : MonoBehaviour
     public void OnHit(GameObject source, int damage)
     {
         Debug.Log("HIT");
+        if (GameplayState.controllability == PlayerControllability.InDialogue)
+            return;
         int deltaHP = health - damage;
         ingameUI.UpdateHP(deltaHP, maxHealth);
         if (deltaHP > 0)
@@ -65,6 +87,6 @@ public class PlayerStats : MonoBehaviour
 
     public void OnDeath()
     {
-
+        ingameUI.DisplayDeathScreen();
     }
 }

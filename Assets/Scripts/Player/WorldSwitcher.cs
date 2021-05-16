@@ -37,6 +37,7 @@ public class WorldSwitcher : MonoBehaviour
 
     void Start()
     {
+        
         if (!aberrationProfile)
         {
             aberrationProfile = FindObjectsOfType<Volume>().First(x => x.name == "AberrationVolume").profile;
@@ -63,6 +64,7 @@ public class WorldSwitcher : MonoBehaviour
                 go.SetActive(false);
             }
         }
+        currentWorld = World.none;
     }
 
     void Update()

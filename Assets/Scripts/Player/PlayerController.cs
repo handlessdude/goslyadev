@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public AbilitySound abilitySound;
     public GameObject wall;
     public InGameUIController ingameUI;
+    PlayerStats playerStats;
     GameObject wallClone;
     
     //2^(ИД слоя), поэтому 256
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
 
     //характеристики Stopm
     bool isStompAllowed = true;
+    float stompDuration = 1f;
     float stompTimeLeft = 0f; //в секундах
     float stompCooldown = 4f;
     //Характеристики Hit
@@ -133,6 +135,11 @@ public class PlayerController : MonoBehaviour
         {
             abilitySound = GetComponent<AbilitySound>();
         }
+
+        if (!playerStats)
+        {
+            playerStats = GetComponent<PlayerStats>();
+        }
     }
 
     //Реализация абилки Stopm
@@ -142,7 +149,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Stomp", true);
         Invoke("CreateClone", 0.2f);
         GameplayState.controllability = PlayerControllability.InDialogue;
-        Invoke("DeleteClone", 1f);
+        Invoke("DeleteClone", stompDuration);
         isStompAllowed = false;
         stompTimeLeft = stompCooldown;
         ingameUI.UpdateStompCooldownBar(1f);
@@ -167,6 +174,7 @@ public class PlayerController : MonoBehaviour
         var playerPos = gameObject.transform.position;
         //0.5 добавил из-за кривого спрайта
         wallClone = Instantiate(wall, new Vector3(playerPos.x, playerPos.y + 0.5f, 0), Quaternion.identity);
+        wallClone.transform.parent = transform;
     }
     //
 
@@ -315,17 +323,39 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat(475924382, (position.x - transform.position.x)/1000f);
     }
 
+    void ProcessStompCooldown()
+    {
+        if (!isStompAllowed)
+        {
+            stompTimeLeft -= Time.fixedDeltaTime;
+            ingameUI.UpdateStompCooldownBar(stompTimeLeft / stompCooldown);
+
+            float stompTimePassed = stompCooldown - stompTimeLeft;
+
+            if (WorldSwitcher.currentWorld == WorldSwitcher.World.green)
+            {
+                if (stompTimePassed < stompDuration)
+                {
+                    //постепенно восстанавливает 10 ХП или около того
+                    if (stompTimePassed % (1f/stompDuration/20f) < Time.fixedDeltaTime)
+                    {
+                        playerStats.Health += 1;
+                    }
+                }
+            }
+
+            if (stompTimeLeft < Time.fixedDeltaTime)
+            {
+                StompCooledDown();
+            }
+        }
+    }
+
     //TODO: навести порядок во всех системах, которые затрагивает FixedUpdate, они все сделаны плохо
     private void FixedUpdate()
     {
 
-        //обработка кулдаунов
-        stompTimeLeft -= Time.fixedDeltaTime;
-        ingameUI.UpdateStompCooldownBar(stompTimeLeft/stompCooldown);
-        if (stompTimeLeft < Time.fixedDeltaTime)
-        {
-            StompCooledDown();
-        }
+        ProcessStompCooldown();
 
         //float targetPos = rb.position.x + horizontalDirection * movementSpeed * Time.deltaTime;
 
