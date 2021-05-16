@@ -17,6 +17,8 @@ public class SimpleBot : Enemy
 
     Transform middleGround;
 
+    public AudioClip attackSound;
+
     protected override void Start()
     {
 
@@ -235,6 +237,7 @@ public class SimpleBot : Enemy
         collider.attachedRigidbody.isKinematic = true;
         collider.isTrigger = true;
         animator.Play("mobster_death");
+        
     }
 
     void RealizeLifeIsPointless()
@@ -246,6 +249,8 @@ public class SimpleBot : Enemy
     {
         base.DealDamage();
         target.GetComponent<PlayerController>().rb.AddForce(new Vector2(directionX * 800f, 0f));
+        audioSource.clip = attackSound;
+        audioSource.Play();
     }
 
     protected override void OnLostTarget()
@@ -298,12 +303,12 @@ public class SimpleBot : Enemy
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //отключает коллизию между мобами
-        //проблема в том, что из-за особенностей поиска пути они сливаются в одного
-        //if (collision.gameObject.tag == "Enemy")
-        //{
-            //Physics2D.IgnoreCollision(collision.collider, collider);
-        //}
+
+        if (collision.gameObject.tag == "CyanWorld" || collision.gameObject.tag == "MagentaWorld" ||
+            collision.gameObject.tag == "GreenWorld")
+        {
+            Physics2D.IgnoreCollision(collision.collider, collider);
+        }
     }
 
     public override void OnEnterSenseRange(GameObject player, Sense s)

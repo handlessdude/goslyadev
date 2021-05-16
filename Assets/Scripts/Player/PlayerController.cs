@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour
 
     int damage = 20;
 
+    public bool areAbilitiesAllowed = false;
+
     //характеристики Dash
     float dashForce = 5000.0f;
     bool isDashAllowed = true;
@@ -261,19 +263,22 @@ public class PlayerController : MonoBehaviour
 
             if (SceneManager.GetSceneByBuildIndex(2) != SceneManager.GetActiveScene())
             {
-                if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping && isStompAllowed)
+                if (areAbilitiesAllowed)
                 {
-                    Stomp();
-                }
+                    if (InputManager.GetKeyDown(KeyAction.Stomp) && !jumping && isStompAllowed)
+                    {
+                        Stomp();
+                    }
 
-                if (InputManager.GetKeyDown(KeyAction.Dash) && isDashAllowed)
-                {
-                    Dash();
-                }
+                    if (InputManager.GetKeyDown(KeyAction.Dash) && isDashAllowed)
+                    {
+                        Dash();
+                    }
 
-                if (InputManager.GetKeyDown(KeyAction.Hit) && isHitAllowed)
-                {
-                    Hit();
+                    if (InputManager.GetKeyDown(KeyAction.Hit) && isHitAllowed)
+                    {
+                        Hit();
+                    }
                 }
             }
             

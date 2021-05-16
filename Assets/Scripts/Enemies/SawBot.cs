@@ -21,6 +21,9 @@ public class SawBot : Enemy
     bool isThinkingAboutLife = false;
     int ticksSpentOnPath = 0;
 
+    public AudioClip deathSound;
+    public AudioClip attackSound;
+
     protected override void Start()
     {
         animator = transform.Find("Sprite").GetComponent<Animator>();
@@ -173,12 +176,15 @@ public class SawBot : Enemy
     {
         base.OnDeath(killer);
         animator.Play("boss_death");
+        audioSource.clip = deathSound;
+        audioSource.Play();
     }
 
     protected override void DealDamage()
     {
         base.DealDamage();
-        
+        audioSource.clip = attackSound;
+        audioSource.Play();
         //spriteRenderer.sortingOrder = 11;
     }
 
@@ -258,6 +264,12 @@ public class SawBot : Enemy
     {
         //отключает коллизию с игроком
         if (collision.gameObject.tag == "Player")
+        {
+            Physics2D.IgnoreCollision(collision.collider, collider);
+        }
+
+        if (collision.gameObject.tag == "CyanWorld" || collision.gameObject.tag == "MagentaWorld" ||
+            collision.gameObject.tag == "GreenWorld")
         {
             Physics2D.IgnoreCollision(collision.collider, collider);
         }
