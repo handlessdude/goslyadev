@@ -39,6 +39,8 @@ public static class GameplayState
     public static int boards;
     public static int feededboards;
     public static Dictionary<string, Tuple<float, float>> BoxesPosition = new Dictionary<string, Tuple<float, float>>();
+
+    public static bool isAccessToFatherGranted = false;
     public static void LevelStart()
     {
         isPaused = false;

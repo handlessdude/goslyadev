@@ -8,8 +8,9 @@ public class SpecialMob : DialogueNPC
 
     bool death_processed = false;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         if (!self)
         {
             self = GetComponent<SimpleBot>();
@@ -26,7 +27,9 @@ public class SpecialMob : DialogueNPC
             SpecialMobStats.bots_killed += 1;
             if (SpecialMobStats.bots_killed == 2)
             {
-                Debug.LogWarning("action");
+                
+                player = self.target;
+                Debug.LogWarning(player);
                 Action();
             }
         }

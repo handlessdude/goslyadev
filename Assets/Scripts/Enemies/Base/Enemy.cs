@@ -52,8 +52,8 @@ public class Enemy : MonoBehaviour {
 	protected bool isDead = false;
 	protected bool isAttackOnCooldown = false;
 	protected bool isAttackAnimationPlaying = false;
-	protected GameObject target;
-	protected Goal goal = Goal.Idle;
+	public GameObject target;
+	public Goal goal = Goal.Idle;
 	protected List<Modifier> modifiers = new List<Modifier>();
 	protected bool isPlayerInAttackRange = false;
 	protected Dictionary<Sense, bool> isPlayerInSenseRange = new Dictionary<Sense, bool>();

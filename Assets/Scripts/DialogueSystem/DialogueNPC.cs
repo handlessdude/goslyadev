@@ -49,7 +49,9 @@ public class DialogueNPC : Interactable
                 DialogueEnter();
             }
         }
-        catch { };
+        catch (UnityException e){
+            Debug.LogWarning(e.Message);
+        };
     }
 
     void DialogueEnter()
@@ -82,7 +84,7 @@ public class DialogueNPC : Interactable
         }
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         if (currentDialogElement == null)
         {
@@ -90,7 +92,7 @@ public class DialogueNPC : Interactable
         }
     }
 
-    void DeserializeDialogueFile()
+    protected void DeserializeDialogueFile()
     {
         if (!dialogueFile)
         {
