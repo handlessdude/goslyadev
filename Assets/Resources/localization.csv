@@ -203,3 +203,6 @@
 "after_boss","And there was so much empty pathos. We need to open the room as soon as possible.","А столько пустого пафоса было. Нужно скорее открыть комнату.","Und es gab so viel leeres Pathos. Wir müssen den Raum so schnell wie möglich öffnen."
 "too_late1","...","...","..."
 "too_late2","I'm too late...","Не успел...","Hatte keine Zeit..."
+"hint_press_attack","Press <HitKey> to attack","Нажмите <HitKey>, чтобы атаковать","Drücken Sie <HitKey>, um anzugreifen"
+"hint_press_stomp","Press <GreenKey> and <StompKey> to heal","Нажмите <GreenKey> и <StompKey>, чтобы вылечиться","Drücken <GreenKey> y <StompKey>, um anzugreifen"
+"hint_press_dash","Press <DashKey> to dash across the gape","Нажмите <DashKey>, чтобы перепрыгнуть через дыру","Drücken <DashKey>, um Grube"
