@@ -48,7 +48,6 @@
 "te546","1","2","3"
 "te12313","","",""
 "te1231===234","1","2","3"
-<<<<<<< HEAD
 
 "ask_rob_bout_board1","№4568? We've lost the board here. I remember that","№4568? У нас тут плата пропала. Пару раз","№4568? Haben wir das Board hier verloren? Ich erinnere mich, dass wir einige Male bereits"
 "ask_rob_bout_board2","a couple of times we already lost boards, and","у нас уже пропадали платы, и каждый раз","Gebühren verloren haben und jedes Mal herausfanden, dass sie für einige Rituale bei Ihnen waren. "
@@ -90,7 +89,6 @@
 "have_no_time2","I have only this left. They won't forgive me for that...","у меня осталось только это. Они мне этого не простят...","Optionen habe ich nur noch diese. Sie werden mir das nicht verzeihen..."
 
 
-=======
 "misterk_wake_up1","Overworked  again. Eh ... if I had more time,","Снова заработался. Эх... было бы у меня больше времени,","Es hat wieder funktioniert. Eh ... wenn ich mehr Zeit"
 "misterk_wake_up2","this dream would be much easier to bring to life.","этот сон было бы намного проще воплотить в жизнь.","hätte, wäre dieser Traum viel einfacher zu verwirklichen."
 
@@ -136,7 +134,6 @@
 
 
 
-=======
 "ask_rob_bout_board4","Would you like to accidentally make","Не хочешь случайно принести","Möchten Sie versehentlich ein großes Opfer für Ihr Ritual bringen,"
 "ask_rob_bout_board5","a great sacrifice for your ritual by","великую жертву для своего ритуала,","Möchten Sie versehentlich ein großes Opfer für Ihr Ritual bringen,"
 "ask_rob_bout_board6","going to the smelter for recycling?","отправившись в плавильную печь для переработки?","indem Sie zum Recycling in die Schmelze gehen?"
@@ -207,3 +204,4 @@
 "hint_press_stomp","Press <GreenKey> and <StompKey> to heal","Нажмите <GreenKey> и <StompKey>, чтобы вылечиться","Drücken <GreenKey> y <StompKey>, um anzugreifen"
 "hint_press_dash","Press <DashKey> to dash across the gape","Нажмите <DashKey>, чтобы перепрыгнуть через дыру","Drücken <DashKey>, um Grube"
 "level_3","LEVEL 3","УРОВЕНЬ 3","STUFE 3"
+"gamesaved_options","game saved...","игра сохранена...",""

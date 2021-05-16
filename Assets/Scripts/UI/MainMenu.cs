@@ -8,7 +8,7 @@ public class MainMenu : SaveSystem
     public GameObject notImplementedWarning;
     public GameObject mainMenu;
     public GameObject optionsMenu;
-    private void Start()
+    void Start()
     {
         if (!notImplementedWarning)
         {

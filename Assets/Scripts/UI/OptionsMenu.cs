@@ -45,8 +45,6 @@ public class OptionsMenu : MonoBehaviour
             MusicSlider = transform.Find("MusicVolume").GetComponent<UnityEngine.UI.Slider>();
         }
 
-        
-
         if (audioMixer)
         {
             float val;
@@ -54,9 +52,7 @@ public class OptionsMenu : MonoBehaviour
             SFXSlider.value = Mathf.Pow(10, val/20);
             audioMixer.GetFloat("MusicVolume", out val);
             MusicSlider.value = Mathf.Pow(10, val/20);
-        }
-
-        
+        }  
     }
 
     private void OnEnable()

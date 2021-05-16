@@ -11,12 +11,18 @@ public class SaveSystem : MonoBehaviour
     public GameObject player;
     public MainMenu Menu;
     public GameObject NoSaveWarning;
+    public GameObject Hint;
     void Start()
     {
         if (!player)
         {
             player = GameObject.FindWithTag("Player");
         }
+        /*if (!Hint)
+        {
+            Hint = GameObject.Find("GameSaved");
+            Hint.SetActive(false);
+        }*/
         foreach (var x in GameplayState.killedEnemy)
             StartCoroutine(KillKilledEnemy(x, 0.15f));
     }
@@ -38,6 +44,18 @@ public class SaveSystem : MonoBehaviour
     void HideNoSaveWarning()
     {
         NoSaveWarning.SetActive(false);
+    }
+
+    public void ShowHint()
+    {
+        Hint.SetActive(true);
+        CancelInvoke("HideHint");
+        Invoke("HideHint", 1.5f);
+    }
+
+    void HideHint()
+    {
+        Hint.SetActive(false);
     }
 
     public void SaveGame()
@@ -78,6 +96,7 @@ public class SaveSystem : MonoBehaviour
             data.savedPatterns = KeywordsReplacer.patterns;
             bf.Serialize(fs, data);
         }
+        ShowHint();
         Debug.Log("Game data saved!");
     }
     //TODO: Сделать сериализацию ящиков.
