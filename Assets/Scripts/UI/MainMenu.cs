@@ -85,5 +85,6 @@ public class MainMenu : SaveSystem
     {
         SceneManager.LoadScene(3);
         Cursor.visible = false;
+        GameplayState.controllability = PlayerControllability.Full;
     }
 }
