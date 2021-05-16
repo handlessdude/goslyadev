@@ -8,7 +8,7 @@
 "options_music","music volume","громкость музыки","Musik-Lautstärke"
 "options_sfx","SFX volume","громкость эффектов","SFX-Lautstärke"
 "options_windowed","windowed","оконный","Fenstermodus"
-"options_fullscreen","fullscreen","полноэкранный","Vollbildmodus"
+"options_fullscreen","fullscreen","полноэкранный","vollbildmodus"
 "not_implemented_warning","not implemented yet!","данная функция ещё не добавлена!"," Diese Funktion ist noch nicht implementiert"
 "pause_resume_game","RESUME","ПРОДОЛЖИТЬ","FORTSETZEN"
 "pause_save_game","SAVE GAME","СОХРАНИТЬ","SPIEL SPEICHERN"
@@ -191,3 +191,4 @@
 "restart_level","RESTART LEVEL","УРОВЕНЬ ЗАНОВО","LEVEL NEUSTARTEN"
 "you_died","YOU DIED","ВЫ УМЕРЛИ","DU BIST TOT"
 "no_game_saves","NO GAME SAVES","НЕТ СОХРАНЕНИЙ ИГРЫ",""
+"options_borderless","borderless","безрамочный","randlos"
