@@ -84,5 +84,6 @@ public class MainMenu : SaveSystem
     public void JumpToLevel3()
     {
         SceneManager.LoadScene(3);
+        Cursor.visible = false;
     }
 }
