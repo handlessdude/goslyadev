@@ -294,6 +294,18 @@ public static class Pathfinder
                                 }
                             }
 
+                            if (column.Any(f => (f.pos.x == last_row_node.Value.pos.x + 1) && (f.pos.y == last_row_node.Key) && 
+                            last_row_node.Key > column_node.pos.y))
+                            {
+                                continue;
+                            }
+
+                            if (lastInRow.Any(f => (column_node.pos.x == f.Value.pos.x+1)
+                            && (column_node.pos.y == f.Value.pos.y)) && (last_row_node.Value.pos.y < column_node.pos.y))
+                            {
+                                continue;
+                            }
+
                             last_row_node.Value.children.Add(column_node);
                             column_node.children.Add(last_row_node.Value);
                         }
