@@ -24,7 +24,7 @@ public class SaveSystem : MonoBehaviour
             Hint.SetActive(false);
         }*/
         foreach (var x in GameplayState.killedEnemy)
-            StartCoroutine(KillKilledEnemy(x,-1));
+            StartCoroutine(KillKilledEnemy(x, 0.15f));
     }
 
 
@@ -35,7 +35,7 @@ public class SaveSystem : MonoBehaviour
         if (!enemy.GetComponent<Enemy>().IsDead())
         {
             enemy.GetComponent<Enemy>().Die(GameObject.FindWithTag("Player"));
-            enemy.transform.position = new Vector2(x.Value.Item1, x.Value.Item2);
+            
         } 
     }
 
