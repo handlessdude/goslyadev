@@ -18,6 +18,7 @@ public class DeathScreen : SaveSystem
     {
         Time.timeScale = 1.0f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        GameplayState.killedEnemy = new Dictionary<string, System.Tuple<float, float>>();
         GameplayState.isPaused = false;
     }
 }

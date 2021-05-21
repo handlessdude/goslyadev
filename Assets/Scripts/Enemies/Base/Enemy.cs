@@ -205,7 +205,11 @@ public class Enemy : MonoBehaviour {
 
 	protected virtual void OnDeath(GameObject killer)
 	{
-		GameplayState.killedEnemy.Add(gameObject.name);
+		if (!GameplayState.killedEnemy.ContainsKey(gameObject.name))
+        {
+			var pos = gameObject.transform.position;
+			GameplayState.killedEnemy.Add(gameObject.name, new System.Tuple<float, float>(pos.x, pos.y));
+		}
 	}
 
 	protected virtual void Attack()

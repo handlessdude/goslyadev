@@ -11,7 +11,7 @@ public static class GameplayState
 {
     public static PlayerControllability controllability = PlayerControllability.Full;
     public static List<string> deletedObjectsList = new List<string>();
-    public static HashSet<string> killedEnemy = new HashSet<string>();
+    public static Dictionary<string, Tuple<float, float>> killedEnemy = new Dictionary<string, Tuple<float, float>>(); 
     public static bool isPaused;
     public static int barrels;
     public static int feededBarrels;
